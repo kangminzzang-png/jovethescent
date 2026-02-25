@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — Parfumeur</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --fg: #e8e4df;
+    --fg-dim: rgba(232, 228, 223, 0.4);
+    --fg-subtle: rgba(232, 228, 223, 0.15);
+    --gold: rgba(180, 160, 120, 0.6);
+    --serif: 'Cormorant Garamond', serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(232,228,223,0.15) transparent;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--serif);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    transition: background 0.4s;
+  }
+
+  nav .nav-logo img {
+    height: 22px;
+    
+  }
+
+  nav .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  nav .nav-links a {
+    color: var(--fg-dim);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  nav .nav-links a:hover { color: var(--fg); }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(180, 160, 120, 0.04) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    animation: heroFade 3s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes heroFade {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-sub {
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    margin-bottom: 3rem;
+  }
+
+  .hero-tagline {
+    font-size: 1.1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(232, 228, 223, 0.55);
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  .scroll-indicator span {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--fg-subtle), transparent);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* ── SECTION COMMON ── */
+  section {
+    padding: 8rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin-bottom: 2rem;
+  }
+
+  .section-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--fg-subtle);
+    margin: 0 auto 4rem;
+  }
+
+  /* ── PHILOSOPHY ── */
+  .philosophy {
+    text-align: center;
+    padding: 10rem 3rem;
+  }
+
+  .philosophy blockquote {
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    color: rgba(232, 228, 223, 0.75);
+  }
+
+  .philosophy .attribution {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+  }
+
+  /* ── COLLECTION ── */
+  .collection {
+    text-align: center;
+  }
+
+  .collection h2 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .collection-desc {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--fg-dim);
+    max-width: 550px;
+    margin: 0 auto 4rem;
+    line-height: 1.8;
+  }
+
+  .fragrances {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .fragrance-card {
+    border: 1px solid var(--fg-subtle);
+    padding: 3rem 2rem;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fragrance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(180,160,120,0.03), transparent);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .fragrance-card:hover::before { opacity: 1; }
+
+  .fragrance-card:hover {
+    border-color: rgba(232, 228, 223, 0.3);
+  }
+
+  .fragrance-number {
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+    margin-bottom: 1.5rem;
+  }
+
+  .fragrance-name {
+    font-size: 1.4rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .fragrance-latin {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--fg-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .fragrance-desc {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: rgba(232,228,223,0.35);
+    line-height: 1.7;
+  }
+
+  /* ── WORLD ── */
+  .world {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .world-side {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    cursor: pointer;
+  }
+
+  .world-lion {
+    background: linear-gradient(135deg, #0f0f0e, #1a1916);
+    border-right: 1px solid var(--fg-subtle);
+  }
+
+  .world-serpent {
+    background: linear-gradient(135deg, #0a0a0a, #0d0b09);
+  }
+
+  .world-side:hover { background: rgba(180,160,120,0.03); }
+
+  .world-icon {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.6;
+  }
+
+  .world-title {
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .world-subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+    margin-bottom: 2rem;
+  }
+
+  .world-text {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: rgba(232,228,223,0.4);
+    max-width: 280px;
+    line-height: 1.8;
+  }
+
+  /* ── NEWSLETTER ── */
+  .newsletter {
+    text-align: center;
+    padding: 10rem 3rem;
+  }
+
+  .newsletter h2 {
+    font-size: 1.6rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .newsletter p {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  .newsletter-form {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  .newsletter-form input {
+    flex: 1;
+    padding: 0.8rem 1.2rem;
+    background: transparent;
+    border: 1px solid var(--fg-subtle);
+    color: var(--fg);
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .newsletter-form input::placeholder {
+    color: rgba(232,228,223,0.25);
+  }
+
+  .newsletter-form input:focus {
+    border-color: rgba(232,228,223,0.4);
+  }
+
+  .newsletter-form button {
+    padding: 0.8rem 2rem;
+    background: transparent;
+    border: 1px solid var(--fg-subtle);
+    color: var(--fg);
+    font-family: var(--serif);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s;
+  }
+
+  .newsletter-form button:hover {
+    background: rgba(232,228,223,0.06);
+    border-color: rgba(232,228,223,0.4);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--fg-subtle);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  footer .footer-logo img {
+    height: 18px;
+    
+    opacity: 0.5;
+  }
+
+  footer .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  footer .footer-links a {
+    color: rgba(232,228,223,0.3);
+    text-decoration: none;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  footer .footer-links a:hover { color: var(--fg-dim); }
+
+  footer .copyright {
+    font-size: 0.6rem;
+    color: rgba(232,228,223,0.2);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── FADE IN ON SCROLL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    nav .nav-links { gap: 1.5rem; }
+    section { padding: 5rem 1.5rem; }
+    .fragrances { grid-template-columns: 1fr; gap: 2rem; }
+    .world { grid-template-columns: 1fr; }
+    .world-side { height: 60vh; }
+    .newsletter-form { flex-direction: column; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="logo-transparent.png" alt="JOVE"></a>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#world">World</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <h1>JOVE</h1>
+    <div class="hero-sub">Parfumeur</div>
+    <p class="hero-tagline">"What story do you want to leave behind?"</p>
+  </div>
+  <div class="scroll-indicator">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy reveal" id="story">
+  <div class="section-label">Philosophy</div>
+  <div class="section-divider"></div>
+  <blockquote>
+    We capture stories through scent,<br>
+    creating sensations meant to be<br>
+    remembered forever.
+  </blockquote>
+  <div class="attribution">— JOVE</div>
+</section>
+
+<!-- COLLECTION -->
+<section class="collection reveal" id="collection">
+  <div class="section-label">The Creation Series</div>
+  <div class="section-divider"></div>
+  <h2>Lion Collection</h2>
+  <p class="collection-desc">
+    Five fragrances born from the sacred side of creation.<br>
+    Each one, a scene frozen in eternity.
+  </p>
+  <div class="fragrances">
+    <div class="fragrance-card reveal">
+      <div class="fragrance-number">I</div>
+      <div class="fragrance-name">Genesis I</div>
+      <div class="fragrance-latin">Fiat Lux</div>
+      <div class="fragrance-desc">The birth of light. A first breath in infinite darkness.</div>
+    </div>
+    <div class="fragrance-card reveal">
+      <div class="fragrance-number">II</div>
+      <div class="fragrance-name">Breath of Eden</div>
+      <div class="fragrance-latin">Ortus Paradisi</div>
+      <div class="fragrance-desc">The garden before the fall. Green, alive, untouched.</div>
+    </div>
+    <div class="fragrance-card reveal">
+      <div class="fragrance-number">III</div>
+      <div class="fragrance-name">Hawa</div>
+      <div class="fragrance-latin">The Sacred Beginning</div>
+      <div class="fragrance-desc">Choice. Purity. The divine possibility of becoming.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL WORLD -->
+<div class="world reveal" id="world">
+  <div class="world-side world-lion">
+    <div class="world-icon">🦁</div>
+    <div class="world-title">Lion's World</div>
+    <div class="world-subtitle">The Sacred Side</div>
+    <p class="world-text">Light, divinity, purity. The silence before all things begin. Mystery as devotion.</p>
+  </div>
+  <div class="world-side world-serpent">
+    <div class="world-icon">🐍</div>
+    <div class="world-title">Serpent's World</div>
+    <div class="world-subtitle">The Temptation Side</div>
+    <p class="world-text">Shadow, depth, addiction. The beauty in what pulls you closer. Temptation as art.</p>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter reveal" id="contact">
+  <div class="section-label">Stay</div>
+  <div class="section-divider"></div>
+  <h2>Enter the World of JOVE</h2>
+  <p>Be the first to experience the Creation Series.</p>
+  <form class="newsletter-form" onsubmit="event.preventDefault()">
+    <input type="email" placeholder="Your email address">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo"><img src="logo-transparent.png" alt="JOVE"></a>
+  <ul class="footer-links">
+    <li><a href="#">Instagram</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+  </ul>
+  <div class="copyright">© 2026 JOVE. All rights reserved.</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

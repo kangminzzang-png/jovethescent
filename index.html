@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e8e4df;
+    font-family: 'Cormorant Garamond', serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ambient {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(180, 160, 120, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .marquee-wrap {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.04;
+  }
+
+  .marquee {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee 25s linear infinite;
+    font-size: 9vw;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #e8e4df;
+  }
+
+  .marquee span { margin-right: 0.6em; }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    animation: fadeIn 2.5s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .logo img {
+    height: 42px;
+  }
+
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: rgba(232, 228, 223, 0.2);
+  }
+
+  .choose {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(232, 228, 223, 0.4);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.75rem 2.8rem;
+    border: 1px solid rgba(232, 228, 223, 0.2);
+    background: transparent;
+    color: #e8e4df;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.5s ease;
+  }
+
+  .btn:hover {
+    background: rgba(232, 228, 223, 0.06);
+    border-color: rgba(232, 228, 223, 0.45);
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
+    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
+    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
+    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
+  </div>
+</div>
+
+<div class="content">
+  <div class="logo"><img src="logo-transparent.png" alt="JOVE"></div>
+  <div class="divider"></div>
+  <div class="choose">Select your region</div>
+  <div class="buttons">
+    <a href="home.html" class="btn">Korea</a>
+    <a href="home.html" class="btn">Global</a>
+  </div>
+</div>
+
+</body>
+</html>
