@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — Breath of Eden</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #060606; --fg: #e8e4df;
+    --fg-dim: rgba(232,228,223,0.45);
+    --fg-subtle: rgba(232,228,223,0.12);
+    --gold: #c4a96a;
+    --gold-dim: rgba(196,169,106,0.25);
+    --serif: 'Cormorant Garamond', serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--serif); line-height: 1.8; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(6,6,6,0.6);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196,169,106,0.06);
+    transition: background 0.4s, padding 0.4s;
+  }
+
+  nav.scrolled { background: rgba(6,6,6,0.92); padding: 1rem 3rem; }
+
+  .nav-left, .nav-right { flex: 1; }
+  .nav-right { text-align: right; }
+  .nav-center img { height: 24px; }
+
+  .nav-left a, .nav-right a {
+    color: var(--fg-dim); text-decoration: none;
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; transition: color 0.3s;
+  }
+
+  .nav-left a:hover, .nav-right a:hover { color: var(--fg); }
+  .hamburger { font-size: 1.2rem; cursor: pointer; color: var(--fg-dim); }
+
+  .product { max-width: 900px; margin: 0 auto; padding: 8rem 3rem 4rem; }
+
+  .product-back {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(196,169,106,0.3); text-decoration: none;
+    transition: color 0.3s; display: inline-block; margin-bottom: 3rem;
+  }
+
+  .product-back:hover { color: var(--gold); }
+
+  .product-meta {
+    font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold-dim); margin-bottom: 1.5rem;
+  }
+
+  .product h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 300; letter-spacing: 0.1em; margin-bottom: 0.3rem;
+  }
+
+  .product-latin {
+    font-size: 1rem; font-style: italic; font-weight: 300;
+    color: var(--fg-dim); letter-spacing: 0.15em; margin-bottom: 2.5rem;
+  }
+
+  .product-desc {
+    font-size: 0.95rem; font-weight: 300;
+    color: rgba(232,228,223,0.6); line-height: 2;
+    max-width: 600px; margin-bottom: 3rem;
+  }
+
+  .notes-label {
+    font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: rgba(196,169,106,0.3); margin-bottom: 1.5rem;
+  }
+
+  .notes-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; margin-bottom: 3rem;
+  }
+
+  .note-group h3 {
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--fg-dim); margin-bottom: 0.8rem; font-weight: 400;
+  }
+
+  .note-group p { font-size: 0.9rem; font-weight: 400; line-height: 1.8; }
+
+  .product-divider {
+    width: 100%; height: 1px;
+    background: linear-gradient(to right, rgba(196,169,106,0.1), transparent);
+    margin: 2.5rem 0;
+  }
+
+  .product-price {
+    font-size: 1.8rem; font-weight: 300;
+    letter-spacing: 0.05em; margin-bottom: 2rem;
+  }
+
+  .add-to-cart {
+    display: block; width: 100%; max-width: 400px;
+    padding: 1rem; text-align: center;
+    border: 1px solid rgba(196,169,106,0.2);
+    background: rgba(196,169,106,0.05);
+    color: var(--fg); font-size: 0.75rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.4s; text-decoration: none;
+  }
+
+  .add-to-cart:hover {
+    background: rgba(196,169,106,0.12);
+    border-color: rgba(196,169,106,0.4);
+    box-shadow: 0 0 40px rgba(196,169,106,0.08);
+  }
+
+  .shipping-info { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(196,169,106,0.06); }
+
+  .shipping-info p {
+    font-size: 0.75rem; color: var(--fg-dim); font-weight: 300; margin-bottom: 0.5rem;
+  }
+
+  footer {
+    border-top: 1px solid rgba(196,169,106,0.06); padding: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 900px; margin: 4rem auto 0;
+  }
+
+  footer .footer-logo img { height: 18px; opacity: 0.4; }
+  footer .copyright { font-size: 0.55rem; color: rgba(232,228,223,0.15); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .product { padding: 7rem 1.5rem 3rem; }
+    .notes-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left"><span class="hamburger">☰</span></div>
+  <a href="./" class="nav-center"><img src="logo-white.png" alt="JOVE"></a>
+  <div class="nav-right"><a href="#" style="margin-right:1.5rem">CART (0)</a><a href="../kr/breath-of-eden.html">KR</a></div>
+</nav>
+
+<div class="product">
+  <a href="./#collection" class="product-back">← Back to Collection</a>
+
+  <div class="product-meta">Eau de Parfum · 50ml</div>
+  <h1>Breath of Eden</h1>
+  <div class="product-latin">Ortus Paradisi</div>
+
+  <p class="product-desc">
+    The breath of Eden. A paradise from the beginning of time.
+    Top notes of Green Apple and Aldehydes, heart of Rose Absolute and Violet Leaf,
+    base of Sandalwood and Amber.
+  </p>
+
+  <div class="notes-label">Fragrance Notes</div>
+  <div class="notes-grid">
+    <div class="note-group"><h3>Top Notes</h3><p>Green Apple,<br>Aldehydes</p></div>
+    <div class="note-group"><h3>Heart Notes</h3><p>Rose Absolute,<br>Violet Leaf</p></div>
+    <div class="note-group"><h3>Base Notes</h3><p>Sandalwood,<br>Amber</p></div>
+  </div>
+
+  <div class="product-divider"></div>
+  <div class="product-price">$280</div>
+  <a href="#" class="add-to-cart">Add to Cart</a>
+
+  <div class="shipping-info">
+    <p>Free shipping on orders over $100</p>
+    <p>Complimentary gift wrapping</p>
+  </div>
+</div>
+
+<footer>
+  <a href="./" class="footer-logo"><img src="logo-white.png" alt="JOVE"></a>
+  <div class="copyright">© 2026 JOVE</div>
+</footer>
+
+<script>
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+  });
+</script>
+</body>
+</html>

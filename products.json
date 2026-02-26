@@ -1,0 +1,44 @@
+[
+  {
+    "id": "genesis-i",
+    "name": "Genesis I",
+    "latin": "Fiat Lux",
+    "number": "I",
+    "desc_en": "The first light. A moment of clarity emerging from the depths of the unknown.",
+    "desc_kr": "최초의 빛. 미지의 심연에서 솟아오르는 한 순간의 명징함.",
+    "top": "Bergamot, White Tea",
+    "heart": "Frankincense, Iris",
+    "base": "White Musk, Ambergris",
+    "price_kr": "₩340,000",
+    "price_en": "$280",
+    "size": "50ml"
+  },
+  {
+    "id": "breath-of-eden",
+    "name": "Breath of Eden",
+    "latin": "Ortus Paradisi",
+    "number": "II",
+    "desc_en": "The breath of Eden. Saffron, Cardamom, Orris, Incense, Sandalwood, and White Amber compose a paradise from the beginning of time.",
+    "desc_kr": "에덴의 숨결. Saffron, Cardamom, Orris, Incense, Sandalwood, White Amber의 조합으로 태초의 낙원을 담은 향수입니다.",
+    "top": "Green Apple, Aldehydes",
+    "heart": "Rose Absolute, Violet Leaf",
+    "base": "Sandalwood, Amber",
+    "price_kr": "₩340,000",
+    "price_en": "$280",
+    "size": "50ml"
+  },
+  {
+    "id": "hawa",
+    "name": "Hawa",
+    "latin": "Primam Femina",
+    "number": "III",
+    "desc_en": "Primam Femina — the first woman, the scent of Hawa. Fig Leaf, Pink Pepper, Jasmine Sambac, Rose de Mai, Oud, Vanilla Absolute cross the boundary between sensuality and divinity.",
+    "desc_kr": "Primam Femina — 최초의 여성, 하와의 향기. Fig Leaf, Pink Pepper, Jasmine Sambac, Rose de Mai, Oud, Vanilla Absolute의 조합으로 관능과 신성의 경계를 넘나드는 향수입니다.",
+    "top": "Fig Leaf, Pink Pepper",
+    "heart": "Jasmine Sambac, Rose de Mai",
+    "base": "Oud, Vanilla Absolute",
+    "price_kr": "₩340,000",
+    "price_en": "$280",
+    "size": "50ml"
+  }
+]

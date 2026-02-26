@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — Parfumeur</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+KR:wght@200;300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #060606;
+    --fg: #e8e4df;
+    --fg-dim: rgba(232,228,223,0.45);
+    --fg-subtle: rgba(232,228,223,0.12);
+    --gold: #c4a96a;
+    --gold-bright: #d4b97a;
+    --gold-dim: rgba(196,169,106,0.25);
+    --gold-glow: rgba(196,169,106,0.08);
+    --serif: 'Cormorant Garamond', serif;
+    --serif-kr: 'Noto Serif KR', serif;
+  }
+
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(196,169,106,0.1) transparent; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--serif-kr); line-height: 1.8; overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 3rem;
+    background: rgba(6,6,6,0.6);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196,169,106,0.06);
+    transition: background 0.4s, padding 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(6,6,6,0.92);
+    padding: 1rem 3rem;
+  }
+  .nav-left, .nav-right { flex: 1; }
+  .nav-right { text-align: right; }
+  .nav-center img { height: 24px; }
+  .nav-left a, .nav-right a {
+    color: var(--fg-dim); text-decoration: none;
+    font-family: var(--serif); font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-left a:hover, .nav-right a:hover { color: var(--fg); }
+  .hamburger { font-size: 1.2rem; cursor: pointer; color: var(--fg-dim); }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Dark marble/stone background via CSS */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: var(--bg);
+  }
+
+  /* Stone crack patterns - gold veins */
+  .hero-bg::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      /* Gold diagonal vein 1 */
+      linear-gradient(125deg, transparent 30%, rgba(196,169,106,0.06) 30.5%, rgba(196,169,106,0.12) 31%, rgba(196,169,106,0.06) 31.5%, transparent 32%),
+      /* Gold diagonal vein 2 */
+      linear-gradient(55deg, transparent 60%, rgba(196,169,106,0.05) 60.3%, rgba(196,169,106,0.1) 60.6%, rgba(196,169,106,0.05) 60.9%, transparent 61.2%),
+      /* Gold diagonal vein 3 */
+      linear-gradient(140deg, transparent 70%, rgba(196,169,106,0.04) 70.2%, rgba(196,169,106,0.08) 70.5%, rgba(196,169,106,0.04) 70.8%, transparent 71%),
+      /* Stone base gradient */
+      radial-gradient(ellipse at 20% 50%, rgba(30,28,24,1) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 40%, rgba(25,23,20,1) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(20,18,15,0.8) 0%, transparent 40%);
+  }
+
+  .hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    /* More gold veins - thinner */
+    background:
+      linear-gradient(110deg, transparent 45%, rgba(196,169,106,0.03) 45.1%, rgba(196,169,106,0.07) 45.3%, rgba(196,169,106,0.03) 45.5%, transparent 45.6%),
+      linear-gradient(160deg, transparent 25%, rgba(196,169,106,0.04) 25.2%, rgba(196,169,106,0.09) 25.4%, rgba(196,169,106,0.04) 25.6%, transparent 25.8%),
+      linear-gradient(80deg, transparent 75%, rgba(196,169,106,0.03) 75.1%, rgba(196,169,106,0.06) 75.3%, transparent 75.5%);
+  }
+
+  /* Noise texture */
+  .hero-noise {
+    position: absolute; inset: 0; opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 512px; pointer-events: none;
+  }
+
+  /* Central golden light rays */
+  .hero-rays {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; height: 100%; pointer-events: none; overflow: hidden;
+  }
+
+  .hero-rays::before {
+    content: ''; position: absolute;
+    bottom: -20%; left: 50%; transform: translateX(-50%);
+    width: 120%; height: 100%;
+    background:
+      conic-gradient(from 250deg at 50% 100%,
+        transparent 0deg,
+        rgba(212,185,122,0.06) 5deg,
+        transparent 10deg,
+        rgba(212,185,122,0.04) 20deg,
+        transparent 25deg,
+        rgba(212,185,122,0.08) 30deg,
+        transparent 40deg,
+        rgba(212,185,122,0.03) 50deg,
+        transparent 55deg,
+        rgba(212,185,122,0.06) 65deg,
+        transparent 75deg,
+        transparent 285deg,
+        rgba(212,185,122,0.06) 295deg,
+        transparent 305deg,
+        rgba(212,185,122,0.04) 315deg,
+        transparent 325deg,
+        rgba(212,185,122,0.07) 340deg,
+        transparent 350deg,
+        rgba(212,185,122,0.05) 355deg,
+        transparent 360deg
+      );
+    filter: blur(8px);
+  }
+
+  .hero-rays::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 40%;
+    background: radial-gradient(ellipse at 50% 100%, rgba(212,185,122,0.12), transparent 60%);
+    filter: blur(40px);
+  }
+
+  /* Golden bokeh particles */
+  .hero-bokeh {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+  }
+
+  .bokeh-particle {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,185,122,0.6), rgba(212,185,122,0.1) 60%, transparent 70%);
+    animation: bokehFloat linear infinite;
+  }
+
+  @keyframes bokehFloat {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+  }
+
+  /* Smoke/mist */
+  .hero-smoke {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+
+  .hero-smoke::before {
+    content: ''; position: absolute;
+    bottom: 10%; left: 30%; width: 40%; height: 40%;
+    background: radial-gradient(ellipse, rgba(212,185,122,0.05), transparent 60%);
+    filter: blur(60px);
+    animation: smokeDrift 8s ease-in-out infinite alternate;
+  }
+
+  .hero-smoke::after {
+    content: ''; position: absolute;
+    top: 30%; right: 15%; width: 35%; height: 35%;
+    background: radial-gradient(ellipse, rgba(180,160,120,0.03), transparent 60%);
+    filter: blur(50px);
+    animation: smokeDrift2 10s ease-in-out infinite alternate;
+  }
+
+  @keyframes smokeDrift {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    100% { transform: translate(30px, -20px) scale(1.15); opacity: 1; }
+  }
+  @keyframes smokeDrift2 {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+    100% { transform: translate(-20px, 15px) scale(1.2); opacity: 0.9; }
+  }
+
+  /* Hero content */
+  .hero-content {
+    position: relative; z-index: 10; text-align: center;
+    animation: heroFade 2.5s ease forwards; opacity: 0;
+  }
+
+  @keyframes heroFade {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-pretitle {
+    font-family: var(--serif-kr); font-size: 0.75rem;
+    letter-spacing: 0.3em; color: var(--gold);
+    margin-bottom: 2rem; font-weight: 300;
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(5rem, 14vw, 12rem);
+    font-weight: 300; letter-spacing: 0.08em;
+    line-height: 1; margin-bottom: 2.5rem;
+    text-shadow: 0 0 80px rgba(196,169,106,0.15), 0 0 160px rgba(196,169,106,0.05);
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem; font-weight: 300;
+    color: rgba(232,228,223,0.55); line-height: 2;
+    margin-bottom: 3rem; max-width: 450px; margin-left: auto; margin-right: auto;
+  }
+
+  .hero-cta {
+    display: inline-block; padding: 1rem 3rem;
+    border: 1px solid rgba(196,169,106,0.3);
+    background: rgba(196,169,106,0.05);
+    color: var(--fg); font-family: var(--serif-kr);
+    font-size: 0.8rem; letter-spacing: 0.15em;
+    text-decoration: none; transition: all 0.5s;
+  }
+
+  .hero-cta:hover {
+    background: rgba(196,169,106,0.12);
+    border-color: rgba(196,169,106,0.5);
+    box-shadow: 0 0 50px rgba(196,169,106,0.1);
+  }
+
+  .scroll-indicator {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 10; display: flex; flex-direction: column;
+    align-items: center; gap: 0.6rem;
+    animation: scrollFloat 3s ease-in-out infinite;
+  }
+
+  .scroll-indicator span {
+    font-family: var(--serif-kr); font-size: 0.6rem;
+    letter-spacing: 0.2em; color: rgba(232,228,223,0.3);
+  }
+
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(196,169,106,0.3), transparent);
+  }
+
+  @keyframes scrollFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
+    50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 9rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-family: var(--serif); font-size: 0.6rem;
+    letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--gold-dim); margin-bottom: 2rem; text-align: center;
+  }
+
+  .section-divider {
+    width: 50px; height: 1px; margin: 0 auto 4rem;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+
+  /* ── PHILOSOPHY ── */
+  .philosophy {
+    text-align: center; padding: 12rem 3rem; position: relative;
+  }
+
+  .philosophy::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--gold-glow), transparent);
+    pointer-events: none;
+  }
+
+  .philosophy blockquote {
+    font-size: clamp(1.3rem, 2.8vw, 2rem); font-weight: 300;
+    line-height: 2.4; max-width: 600px; margin: 0 auto 2.5rem;
+    color: rgba(232,228,223,0.7); position: relative;
+  }
+
+  .philosophy .attribution {
+    font-family: var(--serif); font-size: 0.65rem;
+    letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dim);
+  }
+
+  /* ── COLLECTION ── */
+  .collection { text-align: center; }
+
+  .collection h2 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 300;
+    letter-spacing: 0.15em; margin-bottom: 1rem;
+  }
+
+  .collection-desc {
+    font-size: 0.9rem; font-weight: 300; color: var(--fg-dim);
+    max-width: 500px; margin: 0 auto 5rem; line-height: 2;
+  }
+
+  .fragrances {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2rem; margin-top: 3rem;
+  }
+
+  a.fragrance-card {
+    text-decoration: none; color: inherit; display: block;
+    border: 1px solid rgba(196,169,106,0.08);
+    transition: all 0.6s ease; cursor: pointer;
+    position: relative; overflow: hidden;
+    background: linear-gradient(165deg, rgba(20,18,15,1), rgba(10,9,8,1));
+  }
+
+  a.fragrance-card:hover {
+    border-color: rgba(196,169,106,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(196,169,106,0.06);
+  }
+
+  .card-visual {
+    height: 240px; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(ellipse at 50% 40%, rgba(196,169,106,0.06), transparent 60%),
+      linear-gradient(135deg, rgba(25,22,18,1), rgba(12,11,9,1));
+  }
+
+  .card-visual .card-number {
+    font-family: var(--serif); font-size: 5rem; font-weight: 300;
+    color: rgba(196,169,106,0.08); letter-spacing: 0.1em;
+  }
+
+  .card-info { padding: 2rem 1.8rem 2.5rem; }
+
+  .card-meta {
+    font-family: var(--serif); font-size: 0.55rem;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold-dim); margin-bottom: 1rem;
+  }
+
+  .fragrance-name {
+    font-family: var(--serif); font-size: 1.5rem;
+    font-weight: 400; letter-spacing: 0.08em; margin-bottom: 0.3rem;
+  }
+
+  .fragrance-latin {
+    font-family: var(--serif); font-size: 0.8rem;
+    font-style: italic; color: var(--fg-dim); margin-bottom: 1.2rem;
+  }
+
+  .fragrance-desc {
+    font-size: 0.8rem; font-weight: 300;
+    color: rgba(232,228,223,0.35); line-height: 1.8; margin-bottom: 1.2rem;
+  }
+
+  .fragrance-notes {
+    padding-top: 1rem; border-top: 1px solid rgba(196,169,106,0.08); margin-bottom: 1.2rem;
+  }
+
+  .fragrance-notes span {
+    font-family: var(--serif); font-size: 0.7rem; font-style: italic;
+    color: rgba(196,169,106,0.35);
+  }
+
+  .fragrance-price {
+    font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
+    color: var(--fg); letter-spacing: 0.05em;
+  }
+
+  /* ── WORLD ── */
+  .world {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; max-width: 100%; margin: 0;
+  }
+
+  .world-side {
+    height: 85vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 4rem; text-align: center; position: relative;
+    overflow: hidden; transition: all 0.6s ease; cursor: pointer;
+  }
+
+  .world-lion {
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(196,169,106,0.05), transparent 60%),
+      linear-gradient(135deg, #12110f, #1a1816);
+    border-right: 1px solid rgba(196,169,106,0.06);
+  }
+
+  .world-serpent {
+    background:
+      radial-gradient(ellipse at 50% 70%, rgba(120,80,60,0.04), transparent 60%),
+      linear-gradient(135deg, #0c0b0a, #100e0c);
+  }
+
+  .world-side:hover { background: rgba(196,169,106,0.03); }
+  .world-icon { font-size: 3rem; margin-bottom: 2.5rem; opacity: 0.5; }
+
+  .world-title {
+    font-family: var(--serif); font-size: 1.8rem;
+    font-weight: 300; letter-spacing: 0.15em; margin-bottom: 0.5rem;
+  }
+
+  .world-subtitle {
+    font-family: var(--serif); font-size: 0.65rem;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold-dim); margin-bottom: 2.5rem;
+  }
+
+  .world-text {
+    font-size: 0.85rem; font-weight: 300;
+    color: rgba(232,228,223,0.35); max-width: 280px; line-height: 2;
+  }
+
+  /* ── NEWSLETTER ── */
+  .newsletter { text-align: center; padding: 12rem 3rem; position: relative; }
+
+  .newsletter::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, var(--gold-glow), transparent 60%);
+    pointer-events: none;
+  }
+
+  .newsletter h2 {
+    font-size: 1.5rem; font-weight: 300; letter-spacing: 0.12em;
+    margin-bottom: 1rem; position: relative;
+  }
+
+  .newsletter p {
+    font-size: 0.85rem; color: var(--fg-dim);
+    margin-bottom: 3rem; font-weight: 300; position: relative;
+  }
+
+  .newsletter-form {
+    display: flex; justify-content: center;
+    gap: 0; max-width: 450px; margin: 0 auto; position: relative;
+  }
+
+  .newsletter-form input {
+    flex: 1; padding: 1rem 1.4rem;
+    background: rgba(20,18,15,0.8);
+    border: 1px solid rgba(196,169,106,0.12); border-right: none;
+    color: var(--fg); font-family: var(--serif); font-size: 0.8rem;
+    letter-spacing: 0.1em; outline: none; transition: border-color 0.3s;
+  }
+
+  .newsletter-form input::placeholder { color: rgba(232,228,223,0.2); }
+  .newsletter-form input:focus { border-color: rgba(196,169,106,0.3); }
+
+  .newsletter-form button {
+    padding: 1rem 2rem; background: rgba(196,169,106,0.08);
+    border: 1px solid rgba(196,169,106,0.12);
+    color: var(--gold); font-family: var(--serif);
+    font-size: 0.7rem; letter-spacing: 0.25em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.4s;
+  }
+
+  .newsletter-form button:hover {
+    background: rgba(196,169,106,0.15);
+    border-color: rgba(196,169,106,0.3);
+  }
+
+  /* ── FOOTER ── */
+  .footer-main {
+    border-top: 1px solid rgba(196,169,106,0.08);
+    padding: 5rem 3rem 3rem;
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .footer-brand img { height: 28px; opacity: 0.7; margin-bottom: 1.5rem; display: block; }
+
+  .footer-brand p {
+    font-size: 0.8rem; font-weight: 300; color: rgba(232,228,223,0.35);
+    line-height: 1.9; max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: var(--serif-kr); font-size: 0.75rem;
+    font-weight: 400; margin-bottom: 1.5rem;
+    color: rgba(232,228,223,0.6);
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li { margin-bottom: 0.8rem; }
+
+  .footer-col ul a {
+    color: rgba(232,228,223,0.3); text-decoration: none;
+    font-size: 0.75rem; font-weight: 300; transition: color 0.3s;
+  }
+
+  .footer-col ul a:hover { color: var(--fg-dim); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(196,169,106,0.06);
+    padding: 2rem 3rem;
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .footer-bottom .copyright { font-size: 0.55rem; color: rgba(232,228,223,0.15); }
+
+  .footer-bottom-links { display: flex; gap: 2rem; }
+
+  .footer-bottom-links a {
+    color: rgba(232,228,223,0.2); text-decoration: none;
+    font-size: 0.55rem; letter-spacing: 0.1em; transition: color 0.3s;
+  }
+
+  .footer-bottom-links a:hover { color: var(--fg-dim); }
+
+  .footer-hebrew {
+    text-align: center; padding: 3rem 0 2rem;
+    overflow: hidden;
+  }
+
+  .footer-hebrew span {
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: rgba(232,228,223,0.04);
+    letter-spacing: 0.1em;
+    font-weight: 300;
+    display: block;
+  }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1.2s ease, transform 1.2s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .hero h1 { font-size: clamp(3.5rem, 16vw, 7rem); }
+    section { padding: 6rem 1.5rem; }
+    .fragrances { grid-template-columns: 1fr; gap: 2rem; max-width: 400px; margin: 3rem auto 0; }
+    .world { grid-template-columns: 1fr; }
+    .world-side { height: 65vh; }
+    .world-lion { border-right: none; border-bottom: 1px solid rgba(196,169,106,0.06); }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-form input { border-right: 1px solid rgba(196,169,106,0.12); }
+    .footer-main { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.5rem 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; padding: 1.5rem; }
+
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left"><span class="hamburger">☰</span></div>
+  <a href="./" class="nav-center"><img src="logo-white.png" alt="JOVE"></a>
+  <div class="nav-right"><a href="#" style="margin-right:1.5rem">장바구니 (0)</a><a href="../en/">EN</a></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-rays"></div>
+  <div class="hero-bokeh" id="bokeh"></div>
+  <div class="hero-smoke"></div>
+
+  <div class="hero-content">
+    <div class="hero-pretitle">니치 퍼퓨머리 · 서울</div>
+    <h1>JOVE</h1>
+    <p class="hero-subtitle">
+      기억이 보이지 않는 곳에서,<br>
+      기억되기를 선택한 자들을 위한 향.
+    </p>
+    <a href="#collection" class="hero-cta">컬렉션 보기</a>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>스크롤</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy reveal" id="story">
+  <div class="section-label">Philosophy</div>
+  <div class="section-divider"></div>
+  <blockquote>
+    우리는 향을 통해 이야기를 담아,<br>
+    영원히 기억될 감각을 창조합니다.
+  </blockquote>
+  <div class="attribution">— JOVE</div>
+</section>
+
+<!-- COLLECTION -->
+<section class="collection reveal" id="collection">
+  <div class="section-label">The Creation Series</div>
+  <div class="section-divider"></div>
+  <h2>Lion Collection</h2>
+  <p class="collection-desc">
+    창조의 신성한 면에서 태어난 다섯 가지 향.<br>
+    각각은 영원 속에 얼어붙은 하나의 장면.
+  </p>
+  <div class="fragrances">
+    <a href="genesis-i.html" class="fragrance-card reveal">
+      <div class="card-visual"><div class="card-number">I</div></div>
+      <div class="card-info">
+        <div class="card-meta">Eau de Parfum · 50ml</div>
+        <div class="fragrance-name">Genesis I</div>
+        <div class="fragrance-latin">Fiat Lux</div>
+        <div class="fragrance-desc">최초의 빛. 미지의 심연에서 솟아오르는 한 순간의 명징함.</div>
+        <div class="fragrance-notes"><span>Bergamot · White Tea · Frankincense · Iris</span></div>
+        <div class="fragrance-price">₩340,000</div>
+      </div>
+    </a>
+    <a href="breath-of-eden.html" class="fragrance-card reveal">
+      <div class="card-visual"><div class="card-number">II</div></div>
+      <div class="card-info">
+        <div class="card-meta">Eau de Parfum · 50ml</div>
+        <div class="fragrance-name">Breath of Eden</div>
+        <div class="fragrance-latin">Ortus Paradisi</div>
+        <div class="fragrance-desc">에덴의 숨결. 태초의 낙원을 담은 향수.</div>
+        <div class="fragrance-notes"><span>Green Apple · Aldehydes · Rose Absolute · Sandalwood</span></div>
+        <div class="fragrance-price">₩340,000</div>
+      </div>
+    </a>
+    <a href="hawa.html" class="fragrance-card reveal">
+      <div class="card-visual"><div class="card-number">III</div></div>
+      <div class="card-info">
+        <div class="card-meta">Eau de Parfum · 50ml</div>
+        <div class="fragrance-name">Hawa</div>
+        <div class="fragrance-latin">Primam Femina</div>
+        <div class="fragrance-desc">최초의 여성, 하와의 향기. 관능과 신성의 경계를 넘나드는 향수.</div>
+        <div class="fragrance-notes"><span>Fig Leaf · Pink Pepper · Jasmine Sambac · Oud</span></div>
+        <div class="fragrance-price">₩340,000</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- DUAL WORLD -->
+<div class="world reveal" id="world">
+  <div class="world-side world-lion">
+    <div class="world-icon">🦁</div>
+    <div class="world-title">Lion's World</div>
+    <div class="world-subtitle">신성한 세계</div>
+    <p class="world-text">빛, 신성, 순수. 모든 것이 시작되기 전의 침묵. 경외로서의 신비.</p>
+  </div>
+  <div class="world-side world-serpent">
+    <div class="world-icon">🐍</div>
+    <div class="world-title">Serpent's World</div>
+    <div class="world-subtitle">유혹의 세계</div>
+    <p class="world-text">그림자, 깊이, 중독. 당신을 끌어당기는 아름다움. 예술로서의 유혹.</p>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter reveal" id="contact">
+  <div class="section-label">Stay</div>
+  <div class="section-divider"></div>
+  <h2>JOVE의 세계로</h2>
+  <p>Creation Series를 가장 먼저 경험하세요.</p>
+  <form class="newsletter-form" onsubmit="event.preventDefault()">
+    <input type="email" placeholder="이메일 주소">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<div class="footer-main">
+  <div class="footer-brand">
+    <img src="logo-white.png" alt="JOVE">
+    <p>서울에서 온 니치 퍼퓨머리.<br>진정한 럭셔리는 보이지 않는다는 것을<br>이해하는 분들을 위해.</p>
+  </div>
+  <div class="footer-col">
+    <h4>탐색</h4>
+    <ul>
+      <li><a href="#collection">컬렉션</a></li>
+      <li><a href="#story">철학</a></li>
+      <li><a href="#world">세계관</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>연결</h4>
+    <ul>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">hello@jove.kr</a></li>
+    </ul>
+  </div>
+</div>
+<div class="footer-bottom">
+  <div class="copyright">© 2026 JOVE. All rights reserved.</div>
+  <div class="footer-bottom-links">
+    <a href="#">이용약관</a>
+    <a href="#">개인정보처리방침</a>
+    <a href="#">배송 안내</a>
+  </div>
+</div>
+<div class="footer-hebrew">
+  <span>מָכוֹן חֲפִילָתִי</span>
+</div>
+
+<script>
+  // Sticky nav on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Golden bokeh particles
+  const bokeh = document.getElementById('bokeh');
+  function createParticle() {
+    const p = document.createElement('div');
+    p.className = 'bokeh-particle';
+    const size = Math.random() * 12 + 3;
+    const x = Math.random() * 100;
+    const dur = Math.random() * 8 + 6;
+    const delay = Math.random() * 5;
+    const brightness = Math.random() * 0.5 + 0.3;
+    p.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${x}%; bottom: -${size}px;
+      animation-duration: ${dur}s;
+      animation-delay: ${delay}s;
+      opacity: ${brightness};
+      filter: blur(${size > 8 ? 2 : 0}px);
+    `;
+    bokeh.appendChild(p);
+    setTimeout(() => p.remove(), (dur + delay) * 1000);
+  }
+
+  // Create initial batch
+  for (let i = 0; i < 30; i++) createParticle();
+  // Keep creating
+  setInterval(() => { for (let i = 0; i < 3; i++) createParticle(); }, 800);
+</script>
+
+</body>
+</html>
