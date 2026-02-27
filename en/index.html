@@ -23,7 +23,7 @@
   }
 
   html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(196,169,106,0.1) transparent; }
-  body { background: var(--bg); color: var(--fg); font-family: var(--serif); line-height: 1.8; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--serif-kr); line-height: 1.8; overflow-x: hidden; }
 
   /* ── NAV ── */
   nav {
@@ -200,17 +200,16 @@
   }
 
   .hero-pretitle {
-    font-family: var(--serif); font-size: 0.75rem;
+    font-family: var(--serif-kr); font-size: 0.75rem;
     letter-spacing: 0.3em; color: var(--gold);
     margin-bottom: 2rem; font-weight: 300;
   }
 
-  .hero h1 {
-    font-family: var(--serif);
-    font-size: clamp(5rem, 14vw, 12rem);
-    font-weight: 300; letter-spacing: 0.08em;
-    line-height: 1; margin-bottom: 2.5rem;
-    text-shadow: 0 0 80px rgba(196,169,106,0.15), 0 0 160px rgba(196,169,106,0.05);
+  .hero h1 { margin-bottom: 2.5rem; line-height: 1; }
+
+  .hero-logo {
+    width: clamp(300px, 70vw, 900px); height: auto;
+    filter: drop-shadow(0 0 80px rgba(196,169,106,0.15)) drop-shadow(0 0 160px rgba(196,169,106,0.05));
   }
 
   .hero-subtitle {
@@ -223,7 +222,7 @@
     display: inline-block; padding: 1rem 3rem;
     border: 1px solid rgba(196,169,106,0.3);
     background: rgba(196,169,106,0.05);
-    color: var(--fg); font-family: var(--serif);
+    color: var(--fg); font-family: var(--serif-kr);
     font-size: 0.8rem; letter-spacing: 0.15em;
     text-decoration: none; transition: all 0.5s;
   }
@@ -242,7 +241,7 @@
   }
 
   .scroll-indicator span {
-    font-family: var(--serif); font-size: 0.6rem;
+    font-family: var(--serif-kr); font-size: 0.6rem;
     letter-spacing: 0.2em; color: rgba(232,228,223,0.3);
   }
 
@@ -268,6 +267,22 @@
   .section-divider {
     width: 50px; height: 1px; margin: 0 auto 4rem;
     background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+
+  /* ── BRAND IMAGE ── */
+  .brand-image {
+    position: relative; width: 100%; height: 70vh;
+    overflow: hidden;
+  }
+
+  .brand-image img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+  }
+
+  .brand-image-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
   }
 
   /* ── PHILOSOPHY ── */
@@ -326,16 +341,20 @@
   }
 
   .card-visual {
-    height: 240px; position: relative; overflow: hidden;
+    height: 320px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
-    background:
-      radial-gradient(ellipse at 50% 40%, rgba(196,169,106,0.06), transparent 60%),
-      linear-gradient(135deg, rgba(25,22,18,1), rgba(12,11,9,1));
+    background-size: cover; background-position: center;
+  }
+
+  .card-visual::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(10,9,8,0.9));
   }
 
   .card-visual .card-number {
     font-family: var(--serif); font-size: 5rem; font-weight: 300;
-    color: rgba(196,169,106,0.08); letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.15); letter-spacing: 0.1em;
+    position: relative; z-index: 1;
   }
 
   .card-info { padding: 2rem 1.8rem 2.5rem; }
@@ -477,7 +496,7 @@
     gap: 4rem;
   }
 
-  .footer-brand img { height: 28px; opacity: 0.7; margin-bottom: 1.5rem; display: block; }
+  .footer-brand img { height: 48px; opacity: 0.7; margin-bottom: 1.5rem; display: block; }
 
   .footer-brand p {
     font-size: 0.8rem; font-weight: 300; color: rgba(232,228,223,0.35);
@@ -485,7 +504,7 @@
   }
 
   .footer-col h4 {
-    font-family: var(--serif); font-size: 0.75rem;
+    font-family: var(--serif-kr); font-size: 0.75rem;
     font-weight: 400; margin-bottom: 1.5rem;
     color: rgba(232,228,223,0.6);
   }
@@ -519,17 +538,13 @@
 
   .footer-bottom-links a:hover { color: var(--fg-dim); }
 
-  .footer-hebrew {
+  .footer-emblem {
     text-align: center; padding: 3rem 0 2rem;
-    overflow: hidden;
   }
 
-  .footer-hebrew span {
-    font-size: clamp(3rem, 8vw, 6rem);
-    color: rgba(232,228,223,0.04);
-    letter-spacing: 0.1em;
-    font-weight: 300;
-    display: block;
+  .emblem-img {
+    height: clamp(120px, 20vw, 200px);
+    opacity: 0.08;
   }
 
   .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1.2s ease, transform 1.2s ease; }
@@ -570,7 +585,7 @@
 
   <div class="hero-content">
     <div class="hero-pretitle">Niche Parfumerie · Seoul</div>
-    <h1>JOVE</h1>
+    <h1><img src="logo-white.png" alt="JOVE" class="hero-logo"></h1>
     <p class="hero-subtitle">
       In a place where memories cannot be seen,<br>
       a scent for those who choose to be remembered.
@@ -583,6 +598,12 @@
     <div class="scroll-line"></div>
   </div>
 </section>
+
+<!-- BRAND IMAGE -->
+<div class="brand-image reveal">
+  <img src="images/eden-packaging.jpg" alt="JOVE Breath of Eden">
+  <div class="brand-image-overlay"></div>
+</div>
 
 <!-- PHILOSOPHY -->
 <section class="philosophy reveal" id="story">
@@ -606,7 +627,7 @@
   </p>
   <div class="fragrances">
     <a href="genesis-i.html" class="fragrance-card reveal">
-      <div class="card-visual"><div class="card-number">I</div></div>
+      <div class="card-visual" style="background-image:url('images/genesis-mood.jpg')"><div class="card-number">I</div></div>
       <div class="card-info">
         <div class="card-meta">Eau de Parfum · 50ml</div>
         <div class="fragrance-name">Genesis I</div>
@@ -617,7 +638,7 @@
       </div>
     </a>
     <a href="breath-of-eden.html" class="fragrance-card reveal">
-      <div class="card-visual"><div class="card-number">II</div></div>
+      <div class="card-visual" style="background-image:url('images/eden-ritual.jpg')"><div class="card-number">II</div></div>
       <div class="card-info">
         <div class="card-meta">Eau de Parfum · 50ml</div>
         <div class="fragrance-name">Breath of Eden</div>
@@ -628,7 +649,7 @@
       </div>
     </a>
     <a href="hawa.html" class="fragrance-card reveal">
-      <div class="card-visual"><div class="card-number">III</div></div>
+      <div class="card-visual" style="background-image:url('images/hawa-mood.jpg')"><div class="card-number">III</div></div>
       <div class="card-info">
         <div class="card-meta">Eau de Parfum · 50ml</div>
         <div class="fragrance-name">Hawa</div>
@@ -680,6 +701,7 @@
     <ul>
       <li><a href="#collection">Collection</a></li>
       <li><a href="#story">Philosophy</a></li>
+      <li><a href="pages/about.html">About</a></li>
       <li><a href="#world">World</a></li>
     </ul>
   </div>
@@ -694,13 +716,13 @@
 <div class="footer-bottom">
   <div class="copyright">© 2026 JOVE. All rights reserved.</div>
   <div class="footer-bottom-links">
-    <a href="#">Terms</a>
-    <a href="#">Privacy</a>
-    <a href="#">Shipping</a>
+    <a href="pages/terms.html">Terms</a>
+    <a href="pages/privacy.html">Privacy</a>
+    <a href="pages/shipping.html">Shipping</a>
   </div>
 </div>
-<div class="footer-hebrew">
-  <span>מָכוֹן חֲפִילָתִי</span>
+<div class="footer-emblem">
+  <img src="images/lion-emblem-white.png" alt="JOVE Emblem" class="emblem-img">
 </div>
 
 <script>
