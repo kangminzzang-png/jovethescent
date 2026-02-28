@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JOVE — Choose Your Path</title>
+<title>JOVE — The Scent of Creation</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
 
   :root {
     --gold: #c4a96a;
-    --gold-dim: rgba(196,169,106,0.3);
-    --crimson: #8b2030;
-    --crimson-dim: rgba(139,32,48,0.3);
     --cream: #e8e4df;
   }
 
@@ -21,7 +18,6 @@
     height: 100%; overflow: hidden;
     font-family: 'Cormorant Garamond', serif;
     background: #060606; color: var(--cream);
-    cursor: default;
   }
 
   /* ── Video BG ── */
@@ -33,14 +29,27 @@
     filter: brightness(0.2) contrast(1.1) saturate(0.5);
   }
 
-  /* ── Noise ── */
+  /* ── Overlays ── */
+  .video-overlay {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 50%, transparent 0%, rgba(0,0,0,0.7) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.6) 100%);
+  }
+
+  .gold-vignette {
+    position: fixed; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse 50% 40% at 50% 45%, rgba(196,169,106,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
   .noise {
     position: fixed; inset: 0; z-index: 1; opacity: 0.025; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 256px;
   }
 
-  /* ── Split Layout ── */
+  /* ── Gate Content ── */
   .gate {
     position: relative; z-index: 2;
     height: 100vh; width: 100%;
@@ -48,17 +57,20 @@
     align-items: center; justify-content: center;
   }
 
-  /* ── Center Column ── */
   .center-col {
     display: flex; flex-direction: column;
     align-items: center; gap: 1.5rem;
-    position: relative; z-index: 10;
-    opacity: 0; animation: fadeIn 2s ease 0.3s forwards;
+    opacity: 0; animation: fadeUp 2.5s ease 0.3s forwards;
   }
 
   .gate-logo img {
     height: clamp(120px, 30vw, 280px);
     filter: drop-shadow(0 0 60px rgba(196,169,106,0.1));
+  }
+
+  .gate-divider {
+    width: 80px; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(196,169,106,0.3), transparent);
   }
 
   .gate-tagline {
@@ -67,173 +79,69 @@
     color: rgba(196,169,106,0.4);
   }
 
-  .gate-divider {
-    width: 80px; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(196,169,106,0.3), transparent);
-  }
-
   .gate-invite {
-    font-size: clamp(0.9rem, 2vw, 1.3rem);
+    font-size: clamp(0.85rem, 1.8vw, 1.2rem);
     font-weight: 300; font-style: italic;
-    color: rgba(228,224,219,0.6);
+    color: rgba(228,224,219,0.5);
     letter-spacing: 0.05em;
     margin-top: 0.5rem;
   }
 
-  /* ── Two Doors ── */
-  .doors {
-    display: flex; gap: clamp(1.5rem, 4vw, 3rem);
-    margin-top: 2rem;
-    opacity: 0; animation: fadeIn 2s ease 1.5s forwards;
+  /* ── Buttons ── */
+  .gate-buttons {
+    display: flex; gap: 1.5rem;
+    margin-top: 1.5rem;
+    opacity: 0; animation: fadeUp 2s ease 1.8s forwards;
   }
 
-  .door {
+  .gate-btn {
     position: relative;
-    width: clamp(140px, 22vw, 240px);
-    height: clamp(200px, 32vw, 340px);
-    border: 1px solid rgba(196,169,106,0.12);
-    background: rgba(0,0,0,0.5);
+    padding: 1.1rem 3.5rem;
+    border: 1px solid rgba(196,169,106,0.15);
+    background: rgba(0,0,0,0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 1rem; cursor: pointer;
-    text-decoration: none; color: var(--cream);
-    transition: all 0.8s cubic-bezier(0.25, 0, 0, 1);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem; font-weight: 400;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.25, 0, 0, 1);
     overflow: hidden;
   }
 
-  /* Door glow overlays */
-  .door::before {
-    content: ''; position: absolute; inset: 0;
-    opacity: 0; transition: opacity 0.8s ease;
+  .gate-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(196,169,106,0.1), transparent, rgba(196,169,106,0.05));
+    opacity: 0; transition: opacity 0.6s ease;
   }
 
-  .door-lion::before {
-    background: radial-gradient(ellipse at center, rgba(196,169,106,0.08) 0%, transparent 70%);
+  .gate-btn:hover {
+    border-color: rgba(196,169,106,0.5);
+    box-shadow: 0 0 60px rgba(196,169,106,0.08), inset 0 0 30px rgba(196,169,106,0.03);
+    transform: translateY(-2px);
   }
 
-  .door-serpent::before {
-    background: radial-gradient(ellipse at center, rgba(139,32,48,0.08) 0%, transparent 70%);
-  }
+  .gate-btn:hover::before { opacity: 1; }
 
-  .door:hover::before { opacity: 1; }
-
-  .door-lion:hover {
-    border-color: rgba(196,169,106,0.35);
-    box-shadow: 0 0 80px rgba(196,169,106,0.08), 0 0 30px rgba(196,169,106,0.04);
-  }
-
-  .door-serpent:hover {
-    border-color: rgba(139,32,48,0.4);
-    box-shadow: 0 0 80px rgba(139,32,48,0.1), 0 0 30px rgba(139,32,48,0.05);
-  }
-
-  .door:hover { transform: translateY(-4px); }
-
-  /* Door arch (top decoration) */
-  .door-arch {
-    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 60%; height: 3px; border-radius: 0 0 50% 50%;
-    transition: all 0.8s ease;
-  }
-
-  .door-lion .door-arch {
-    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
-  }
-
-  .door-serpent .door-arch {
-    background: linear-gradient(to right, transparent, var(--crimson-dim), transparent);
-  }
-
-  .door:hover .door-arch { width: 80%; height: 4px; }
-
-  /* Door symbol */
-  .door-symbol {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    line-height: 1;
-    filter: grayscale(0.3);
-    transition: all 0.6s ease;
-  }
-
-  .door:hover .door-symbol { filter: grayscale(0); transform: scale(1.1); }
-
-  .door-name {
-    font-size: clamp(0.7rem, 1.3vw, 0.85rem);
-    letter-spacing: 0.4em; text-transform: uppercase;
-    font-weight: 400;
+  .btn-label {
     position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0.35rem;
   }
 
-  .door-lion .door-name { color: var(--gold); }
-  .door-serpent .door-name { color: #c4626e; }
-
-  .door-sub {
-    font-size: clamp(0.5rem, 0.9vw, 0.6rem);
-    letter-spacing: 0.25em; text-transform: uppercase;
-    color: rgba(228,224,219,0.3);
-    font-weight: 300;
-    position: relative; z-index: 1;
+  .btn-sub {
+    font-size: 0.55rem; letter-spacing: 0.25em;
+    color: rgba(196,169,106,0.45); font-weight: 300;
   }
 
-  .door-desc {
-    font-size: clamp(0.65rem, 1vw, 0.75rem);
-    font-style: italic; font-weight: 300;
-    color: rgba(228,224,219,0.35);
-    text-align: center;
-    padding: 0 1rem;
-    line-height: 1.6;
-    position: relative; z-index: 1;
-  }
-
-  /* ── Vertical Lines (decorative) ── */
-  .vline {
-    position: fixed; top: 0; width: 1px; height: 100%;
-    pointer-events: none; z-index: 1;
-  }
-
-  .vline-left {
-    left: 15%;
-    background: linear-gradient(to bottom, transparent, rgba(196,169,106,0.04), transparent);
-  }
-
-  .vline-right {
-    right: 15%;
-    background: linear-gradient(to bottom, transparent, rgba(139,32,48,0.04), transparent);
-  }
-
-  /* ── Language Toggle (bottom) ── */
-  .lang-toggle {
-    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 1.5rem; z-index: 10;
-    opacity: 0; animation: fadeIn 2s ease 2.5s forwards;
-  }
-
-  .lang-btn {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.6rem; letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(228,224,219,0.25);
-    text-decoration: none;
-    transition: color 0.4s ease;
-    cursor: pointer; background: none; border: none;
-  }
-
-  .lang-btn:hover { color: rgba(228,224,219,0.6); }
-  .lang-btn.active { color: rgba(196,169,106,0.5); }
-
-  .lang-sep {
-    color: rgba(228,224,219,0.1);
-    font-size: 0.6rem;
-    align-self: center;
-  }
-
-  /* ── Bottom Text ── */
+  /* ── Bottom ── */
   .gate-bottom {
-    position: fixed; bottom: 4.5rem; left: 50%; transform: translateX(-50%);
+    position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
     font-size: 0.5rem; letter-spacing: 0.4em; text-transform: uppercase;
     color: rgba(196,169,106,0.15);
-    opacity: 0; animation: fadeIn 2s ease 3s forwards;
+    opacity: 0; animation: fadeUp 2s ease 3s forwards;
     white-space: nowrap;
   }
 
@@ -243,17 +151,10 @@
     pointer-events: none; overflow: hidden;
   }
 
-  .bokeh-gold, .bokeh-red {
+  .bokeh {
     position: absolute; border-radius: 50%;
-    animation: floatUp linear infinite;
-  }
-
-  .bokeh-gold {
     background: radial-gradient(circle, rgba(196,169,106,0.2) 0%, transparent 70%);
-  }
-
-  .bokeh-red {
-    background: radial-gradient(circle, rgba(139,32,48,0.15) 0%, transparent 70%);
+    animation: floatUp linear infinite;
   }
 
   @keyframes floatUp {
@@ -263,69 +164,54 @@
     100% { transform: translateY(-10vh) scale(1); opacity: 0; }
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── Responsive ── */
   @media (max-width: 500px) {
-    .doors { flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
-    .door {
-      width: clamp(220px, 70vw, 280px);
-      height: clamp(140px, 28vw, 180px);
-      flex-direction: row; gap: 1.2rem;
-      padding: 0 1.5rem;
-    }
-    .door-desc { display: none; }
-    .gate-invite { font-size: 0.85rem; }
+    .gate-buttons { flex-direction: column; gap: 1rem; }
+    .gate-btn { padding: 1rem 3rem; }
   }
 </style>
 </head>
 <body>
 
-<!-- Video BG -->
 <div class="video-bg">
   <video autoplay muted loop playsinline>
     <source src="gate-bg.mp4" type="video/mp4">
   </video>
+  <div class="video-overlay"></div>
 </div>
 
+<div class="gold-vignette"></div>
 <div class="noise"></div>
-<div class="vline vline-left"></div>
-<div class="vline vline-right"></div>
 <div class="bokeh-container" id="bokeh"></div>
 
-<!-- Gate -->
 <div class="gate">
   <div class="center-col">
     <div class="gate-logo">
       <img src="logo-white.png" alt="JOVE">
     </div>
 
-    <div class="gate-tagline">A Quiet Theology Made of Scent</div>
-
     <div class="gate-divider"></div>
 
-    <div class="gate-invite">Choose your path</div>
+    <div class="gate-tagline">The Scent of Creation</div>
 
-    <div class="doors">
-      <!-- Lion Door -->
-      <a href="kr/" class="door door-lion" id="door-lion">
-        <div class="door-arch"></div>
-        <div class="door-symbol">🦁</div>
-        <div class="door-name">Lion</div>
-        <div class="door-sub">선한 세계</div>
-        <div class="door-desc">Sacred · Pure · Divine Light</div>
+    <div class="gate-invite">Select your region</div>
+
+    <div class="gate-buttons">
+      <a href="kr/" class="gate-btn">
+        <span class="btn-label">
+          Korea
+          <span class="btn-sub">한국어</span>
+        </span>
       </a>
-
-      <!-- Serpent Door -->
-      <a href="kr/" class="door door-serpent" id="door-serpent">
-        <div class="door-arch"></div>
-        <div class="door-symbol">🐍</div>
-        <div class="door-name">Serpent</div>
-        <div class="door-sub">악한 세계</div>
-        <div class="door-desc">Forbidden · Seductive · Dark Mystery</div>
+      <a href="en/" class="gate-btn">
+        <span class="btn-label">
+          Global
+          <span class="btn-sub">English</span>
+        </span>
       </a>
     </div>
   </div>
@@ -333,66 +219,23 @@
 
 <div class="gate-bottom">Niche Perfumery · Est. MMXXV</div>
 
-<div class="lang-toggle">
-  <button class="lang-btn active" onclick="setLang('kr')">한국어</button>
-  <span class="lang-sep">|</span>
-  <button class="lang-btn" onclick="setLang('en')">English</button>
-</div>
-
 <script>
-// Bokeh particles — gold on left, red on right
 (function() {
   const c = document.getElementById('bokeh');
-  const n = window.innerWidth < 600 ? 10 : 18;
-
+  const n = window.innerWidth < 600 ? 8 : 15;
   for (let i = 0; i < n; i++) {
-    const isGold = i < n / 2;
     const el = document.createElement('div');
-    el.className = isGold ? 'bokeh-gold' : 'bokeh-red';
-    const size = Math.random() * 5 + 2;
-    const leftPos = isGold
-      ? Math.random() * 45 + 5   // left half
-      : Math.random() * 45 + 50; // right half
+    el.className = 'bokeh';
+    const size = Math.random() * 6 + 2;
     el.style.cssText = `
       width:${size}px; height:${size}px;
-      left:${leftPos}%;
+      left:${Math.random()*100}%;
       animation-duration:${Math.random()*12+10}s;
-      animation-delay:${Math.random()*8}s;
+      animation-delay:${Math.random()*10}s;
     `;
     c.appendChild(el);
   }
 })();
-
-// Language toggle
-let lang = 'kr';
-function setLang(l) {
-  lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  // Update door links
-  document.getElementById('door-lion').href = l + '/';
-  document.getElementById('door-serpent').href = l + '/';
-}
-
-// Hover effect: tint the whole page subtly
-const lion = document.getElementById('door-lion');
-const serpent = document.getElementById('door-serpent');
-const body = document.body;
-
-lion.addEventListener('mouseenter', () => {
-  body.style.transition = 'background 1s ease';
-  body.style.background = '#0a0904';
-});
-lion.addEventListener('mouseleave', () => {
-  body.style.background = '#060606';
-});
-serpent.addEventListener('mouseenter', () => {
-  body.style.transition = 'background 1s ease';
-  body.style.background = '#0a0406';
-});
-serpent.addEventListener('mouseleave', () => {
-  body.style.background = '#060606';
-});
 </script>
 
 </body>
