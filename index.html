@@ -3,135 +3,271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JOVE</title>
+<title>JOVE — The Scent of Creation</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+  :root {
+    --gold: #c4a96a;
+    --gold-light: #d4bc82;
+    --cream: #e8e4df;
+  }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    background: #080808;
-    color: #e8e4df;
+  html, body {
+    height: 100%; overflow: hidden;
     font-family: 'Cormorant Garamond', serif;
-    height: 100vh; overflow: hidden;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    position: relative;
+    background: #000;
+    color: var(--cream);
   }
 
-  .bg {
+  /* ── Video Background ── */
+  .video-bg {
+    position: fixed; inset: 0; z-index: 0;
+    overflow: hidden;
+  }
+
+  .video-bg video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.3) contrast(1.1) saturate(0.7);
+  }
+
+  .video-overlay {
     position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 70% 50% at 50% 45%, rgba(195,170,120,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 30% 60%, rgba(120,100,70,0.04) 0%, transparent 50%);
+      radial-gradient(ellipse 60% 60% at 50% 50%, transparent 0%, rgba(0,0,0,0.7) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.6) 100%);
+  }
+
+  /* ── Gold Vignette ── */
+  .gold-vignette {
+    position: fixed; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse 50% 40% at 50% 45%, rgba(196,169,106,0.06) 0%, transparent 70%);
     pointer-events: none;
   }
 
-  .texture {
-    position: absolute; inset: 0; opacity: 0.025;
+  /* ── Noise Texture ── */
+  .noise {
+    position: fixed; inset: 0; z-index: 1;
+    opacity: 0.03; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 256px; pointer-events: none;
+    background-size: 256px;
   }
 
-  .light {
-    position: absolute; top: -15%; left: 50%; transform: translateX(-50%);
-    width: 1px; height: 55%;
-    background: linear-gradient(to bottom, rgba(195,170,120,0.12), rgba(195,170,120,0.02), transparent);
-    pointer-events: none;
-  }
-
-  .light::before {
-    content: ''; position: absolute; top: 40%; left: -200px;
-    width: 400px; height: 300px;
-    background: radial-gradient(ellipse, rgba(195,170,120,0.04), transparent 70%);
-  }
-
-  .marquee-wrap {
-    position: absolute; top: 50%; left: 0; width: 100%;
-    transform: translateY(-50%); overflow: hidden;
-    pointer-events: none; opacity: 0.03;
-  }
-
-  .marquee {
-    display: flex; white-space: nowrap;
-    animation: marquee 30s linear infinite;
-    font-size: 10vw; font-weight: 300;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(195,170,120,0.5);
-  }
-
-  .marquee span { margin-right: 0.6em; }
-
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  .content {
+  /* ── Content ── */
+  .gate {
     position: relative; z-index: 2;
+    height: 100vh; width: 100%;
     display: flex; flex-direction: column;
-    align-items: center; gap: 2rem;
-    animation: fadeIn 3s ease forwards; opacity: 0;
+    align-items: center; justify-content: center;
+    gap: 0;
   }
 
-  @keyframes fadeIn { to { opacity: 1; } }
-
-  .logo img { height: clamp(55px, 9vw, 100px); }
-
-  .divider {
-    width: 50px; height: 1px;
-    background: linear-gradient(to right, transparent, rgba(195,170,120,0.25), transparent);
+  /* ── Logo ── */
+  .gate-logo {
+    opacity: 0;
+    animation: fadeUp 2s ease 0.5s forwards;
   }
 
-  .choose {
-    font-size: 0.65rem; letter-spacing: 0.4em;
-    text-transform: uppercase; color: rgba(195,170,120,0.4);
-    margin-top: 0.5rem;
+  .gate-logo img {
+    height: clamp(50px, 8vw, 90px);
+    filter: drop-shadow(0 0 40px rgba(196,169,106,0.15));
   }
 
-  .buttons { display: flex; gap: 1.5rem; }
-
-  .btn {
-    padding: 0.85rem 3rem;
-    border: 1px solid rgba(195,170,120,0.15);
-    background: rgba(195,170,120,0.03);
-    color: #e8e4df; font-family: 'Cormorant Garamond', serif;
-    font-size: 0.75rem; letter-spacing: 0.3em;
-    text-transform: uppercase; cursor: pointer;
-    text-decoration: none; transition: all 0.5s ease;
+  /* ── Decorative Line ── */
+  .gate-line {
+    width: 0; height: 1px; margin: 2rem 0;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    opacity: 0;
+    animation: expandLine 1.5s ease 1.5s forwards;
   }
 
-  .btn:hover {
-    background: rgba(195,170,120,0.1);
-    border-color: rgba(195,170,120,0.35);
-    box-shadow: 0 0 40px rgba(195,170,120,0.06);
+  @keyframes expandLine {
+    to { width: 120px; opacity: 0.4; }
+  }
+
+  /* ── Tagline ── */
+  .gate-tagline {
+    font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: rgba(196,169,106,0.5);
+    opacity: 0;
+    animation: fadeUp 2s ease 2s forwards;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Buttons ── */
+  .gate-buttons {
+    display: flex; gap: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 2s ease 2.5s forwards;
+  }
+
+  .gate-btn {
+    position: relative;
+    padding: 1rem 3.5rem;
+    border: 1px solid rgba(196,169,106,0.2);
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.25, 0, 0, 1);
+    overflow: hidden;
+  }
+
+  .gate-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(196,169,106,0.1), transparent, rgba(196,169,106,0.05));
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .gate-btn:hover {
+    border-color: rgba(196,169,106,0.5);
+    box-shadow:
+      0 0 60px rgba(196,169,106,0.08),
+      inset 0 0 30px rgba(196,169,106,0.03);
+    transform: translateY(-2px);
+  }
+
+  .gate-btn:hover::before { opacity: 1; }
+
+  .gate-btn .btn-label {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0.35rem;
+  }
+
+  .gate-btn .btn-sub {
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    color: rgba(196,169,106,0.45);
+    font-weight: 300;
+  }
+
+  /* ── Bottom Tagline ── */
+  .gate-bottom {
+    position: absolute;
+    bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.55rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(196,169,106,0.2);
+    opacity: 0;
+    animation: fadeUp 2s ease 3.5s forwards;
+    white-space: nowrap;
+  }
+
+  /* ── Bokeh Particles ── */
+  .bokeh-container {
+    position: fixed; inset: 0; z-index: 1;
+    pointer-events: none; overflow: hidden;
+  }
+
+  .bokeh {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,169,106,0.25) 0%, transparent 70%);
+    animation: floatBokeh linear infinite;
+  }
+
+  @keyframes floatBokeh {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 500px) {
+    .gate-buttons { flex-direction: column; gap: 1rem; }
+    .gate-btn { padding: 0.9rem 3rem; }
+    .gate-bottom { font-size: 0.45rem; letter-spacing: 0.3em; }
   }
 </style>
 </head>
 <body>
 
-<div class="bg"></div>
-<div class="texture"></div>
-<div class="light"></div>
+<!-- Video Background -->
+<div class="video-bg">
+  <video autoplay muted loop playsinline>
+    <source src="gate-bg.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+</div>
 
-<div class="marquee-wrap">
-  <div class="marquee">
-    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
-    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
-    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
-    <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
+<!-- Effects -->
+<div class="gold-vignette"></div>
+<div class="noise"></div>
+<div class="bokeh-container" id="bokeh"></div>
+
+<!-- Gate Content -->
+<div class="gate">
+  <div class="gate-logo">
+    <img src="logo-white.png" alt="JOVE">
+  </div>
+
+  <div class="gate-line"></div>
+
+  <div class="gate-tagline">The Scent of Creation</div>
+
+  <div class="gate-buttons">
+    <a href="kr/" class="gate-btn">
+      <span class="btn-label">
+        Korea
+        <span class="btn-sub">한국어</span>
+      </span>
+    </a>
+    <a href="en/" class="gate-btn">
+      <span class="btn-label">
+        Global
+        <span class="btn-sub">English</span>
+      </span>
+    </a>
   </div>
 </div>
 
-<div class="content">
-  <div class="logo"><img src="logo-white.png" alt="JOVE"></div>
-  <div class="divider"></div>
-  <div class="choose">Select your region</div>
-  <div class="buttons">
-    <a href="kr/" class="btn">Korea</a>
-    <a href="en/" class="btn">Global</a>
-  </div>
-</div>
+<div class="gate-bottom">Niche Perfumery · Est. MMXXV</div>
+
+<script>
+// Bokeh particles
+(function() {
+  const container = document.getElementById('bokeh');
+  const count = window.innerWidth < 600 ? 8 : 15;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'bokeh';
+    const size = Math.random() * 6 + 2;
+    el.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      animation-duration: ${Math.random() * 12 + 10}s;
+      animation-delay: ${Math.random() * 10}s;
+      opacity: ${Math.random() * 0.5 + 0.1};
+    `;
+    container.appendChild(el);
+  }
+})();
+</script>
 
 </body>
 </html>
