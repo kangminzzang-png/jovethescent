@@ -4,151 +4,98 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JOVE — Parfumeur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html, body {
     height: 100%; overflow: hidden;
-    font-family: 'Cormorant Garamond', serif;
-    background: #000; color: #e8e4df;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #141414; color: #dddad5;
   }
 
-  /* ── Marquee ── */
   .marquee-wrap {
-    position: absolute;
-    top: 18%;
-    left: 0; width: 100%;
-    overflow: hidden;
-    pointer-events: none;
+    position: absolute; top: 18%; left: 0; width: 100%;
+    overflow: hidden; pointer-events: none;
   }
-
   .marquee {
-    display: flex;
-    white-space: nowrap;
+    display: flex; white-space: nowrap;
     animation: marquee 20s linear infinite;
   }
-
   .marquee span {
     font-size: clamp(5rem, 12vw, 10rem);
-    font-weight: 300;
-    letter-spacing: 0.15em;
+    font-weight: 400; letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(196,169,106,0.12);
+    color: rgba(196,169,106,0.08);
     margin-right: 0.4em;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Playfair Display', Georgia, serif;
   }
-
   @keyframes marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
 
-  /* ── Main Layout ── */
   .gate {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; position: relative;
   }
-
-  /* ── Product Image ── */
   .gate-product {
-    position: relative;
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeUp 2s ease 0.3s forwards;
+    position: relative; margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 2s ease 0.3s forwards;
   }
-
   .gate-product img {
-    height: clamp(180px, 35vh, 320px);
-    object-fit: contain;
+    height: clamp(180px, 35vh, 320px); object-fit: contain;
     filter: drop-shadow(0 20px 60px rgba(196,169,106,0.08));
   }
-
-  /* Subtle arc beneath product */
   .gate-product::after {
-    content: '';
-    position: absolute;
-    bottom: -10px; left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 1px;
-    background: radial-gradient(ellipse, rgba(196,169,106,0.2), transparent 70%);
+    content: ''; position: absolute; bottom: -10px; left: 50%;
+    transform: translateX(-50%); width: 60%; height: 1px;
+    background: radial-gradient(ellipse, rgba(196,169,106,0.15), transparent 70%);
   }
-
-  /* ── Logo ── */
   .gate-logo {
-    margin-bottom: 2.5rem;
-    opacity: 0;
+    margin-bottom: 2.5rem; opacity: 0;
     animation: fadeUp 2s ease 0.6s forwards;
   }
-
   .gate-logo img {
     height: clamp(40px, 7vw, 70px);
     filter: drop-shadow(0 0 30px rgba(196,169,106,0.06));
   }
-
-  /* ── Prompt ── */
   .gate-prompt {
-    font-size: 0.6rem;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    color: rgba(196,169,106,0.5);
-    margin-bottom: 1.8rem;
-    opacity: 0;
+    font-size: 0.65rem; font-weight: 400;
+    letter-spacing: 0.5em; text-transform: uppercase;
+    color: rgba(196,169,106,0.4);
+    margin-bottom: 1.8rem; opacity: 0;
     animation: fadeUp 1.5s ease 1.2s forwards;
   }
-
-  /* ── Buttons ── */
   .gate-buttons {
-    display: flex;
-    gap: 0.8rem;
-    opacity: 0;
+    display: flex; gap: 0.8rem; opacity: 0;
     animation: fadeUp 1.5s ease 1.5s forwards;
   }
-
   .gate-btn {
     padding: 0.9rem 2.8rem;
-    background: rgba(196,169,106,1);
-    border: none;
-    color: #000;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.4s ease;
+    background: rgba(196,169,106,1); border: none;
+    color: #141414; font-family: 'Inter', sans-serif;
+    font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; transition: all 0.4s ease;
   }
-
   .gate-btn:hover {
     background: #d4bc82;
     box-shadow: 0 0 40px rgba(196,169,106,0.2);
   }
-
-  /* ── Bottom Text ── */
   .gate-bottom {
-    position: fixed;
-    bottom: 2rem; left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.45rem;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: rgba(196,169,106,0.15);
-    opacity: 0;
-    animation: fadeUp 1.5s ease 2s forwards;
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.45rem; letter-spacing: 0.4em;
+    text-transform: uppercase; color: rgba(196,169,106,0.12);
+    opacity: 0; animation: fadeUp 1.5s ease 2s forwards;
     white-space: nowrap;
   }
 
-  /* ── Noise Texture ── */
   .noise {
-    position: fixed; inset: 0;
-    opacity: 0.02; pointer-events: none; z-index: 10;
+    position: fixed; inset: 0; opacity: 0.02;
+    pointer-events: none; z-index: 10;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 256px;
   }
@@ -158,7 +105,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── Mobile ── */
   @media (max-width: 500px) {
     .marquee span { font-size: 4rem; }
     .gate-product img { height: 160px; }
@@ -170,7 +116,6 @@
 
 <div class="noise"></div>
 
-<!-- Marquee -->
 <div class="marquee-wrap">
   <div class="marquee">
     <span>JOVE</span><span>JOVE</span><span>JOVE</span><span>JOVE</span>
@@ -180,18 +125,14 @@
   </div>
 </div>
 
-<!-- Gate -->
 <div class="gate">
   <div class="gate-product">
     <img src="assets/img/genesis-hero.jpg" alt="JOVE Genesis I — Fiat Lux">
   </div>
-
   <div class="gate-logo">
     <img src="logo-white.png" alt="JOVE">
   </div>
-
   <div class="gate-prompt">Choose Your Country</div>
-
   <div class="gate-buttons">
     <a href="kr/" class="gate-btn">Korea</a>
     <a href="en/" class="gate-btn">Global</a>

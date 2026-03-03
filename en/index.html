@@ -3,50 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JOVE — Parfumeur</title>
+<title>JOVE — A Quiet Theology Made of Scent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+KR:wght@200;300;400;500;600&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #060606;
-    --fg: #e8e4df;
-    --fg-dim: rgba(232,228,223,0.45);
-    --fg-subtle: rgba(232,228,223,0.12);
+    --bg: #141414;
+    --fg: #dddad5;
+    --fg-dim: rgba(221,218,213,0.45);
+    --fg-subtle: rgba(221,218,213,0.12);
     --gold: #c4a96a;
     --gold-bright: #d4b97a;
     --gold-dim: rgba(196,169,106,0.25);
     --gold-glow: rgba(196,169,106,0.08);
-    --serif: 'Cormorant Garamond', serif;
-    --serif-kr: 'Noto Serif KR', serif;
+    --heading: 'Playfair Display', Georgia, serif;
+    --body: 'Inter', -apple-system, sans-serif;
   }
 
-  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(196,169,106,0.1) transparent; }
-  body { background: var(--bg); color: var(--fg); font-family: var(--serif-kr); line-height: 1.8; overflow-x: hidden; }
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(196,169,106,0.15) transparent; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); font-weight: 300; line-height: 1.8; overflow-x: hidden; }
 
   /* ── NAV ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; justify-content: space-between; align-items: center;
     padding: 1.5rem 3rem;
-    background: rgba(6,6,6,0.6);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    background: rgba(20,20,20,0.6);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(196,169,106,0.06);
     transition: background 0.4s, padding 0.4s;
   }
-
-  nav.scrolled {
-    background: rgba(6,6,6,0.92);
-    padding: 1rem 3rem;
-  }
+  nav.scrolled { background: rgba(20,20,20,0.95); padding: 1rem 3rem; }
   .nav-left, .nav-right { flex: 1; }
   .nav-right { text-align: right; }
-  .nav-center img { height: 24px; }
+  .nav-center img { height: 22px; opacity: 0.9; }
   .nav-left a, .nav-right a {
     color: var(--fg-dim); text-decoration: none;
-    font-family: var(--serif); font-size: 0.65rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
+    font-family: var(--body); font-size: 0.7rem; font-weight: 400;
+    letter-spacing: 0.15em; text-transform: uppercase;
     transition: color 0.3s;
   }
   .nav-left a:hover, .nav-right a:hover { color: var(--fg); }
@@ -57,431 +54,335 @@
     height: 100vh; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
   }
-
-  /* Dark marble/stone background via CSS */
   .hero-bg {
     position: absolute; inset: 0;
-    background: var(--bg);
+    background: url('../assets/lovable/hero-atmosphere.jpg') center/cover no-repeat;
   }
-
-  /* Stone crack patterns - gold veins */
-  .hero-bg::before {
-    content: ''; position: absolute; inset: 0;
-    background:
-      /* Gold diagonal vein 1 */
-      linear-gradient(125deg, transparent 30%, rgba(196,169,106,0.06) 30.5%, rgba(196,169,106,0.12) 31%, rgba(196,169,106,0.06) 31.5%, transparent 32%),
-      /* Gold diagonal vein 2 */
-      linear-gradient(55deg, transparent 60%, rgba(196,169,106,0.05) 60.3%, rgba(196,169,106,0.1) 60.6%, rgba(196,169,106,0.05) 60.9%, transparent 61.2%),
-      /* Gold diagonal vein 3 */
-      linear-gradient(140deg, transparent 70%, rgba(196,169,106,0.04) 70.2%, rgba(196,169,106,0.08) 70.5%, rgba(196,169,106,0.04) 70.8%, transparent 71%),
-      /* Stone base gradient */
-      radial-gradient(ellipse at 20% 50%, rgba(30,28,24,1) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 40%, rgba(25,23,20,1) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 80%, rgba(20,18,15,0.8) 0%, transparent 40%);
-  }
-
   .hero-bg::after {
     content: ''; position: absolute; inset: 0;
-    /* More gold veins - thinner */
-    background:
-      linear-gradient(110deg, transparent 45%, rgba(196,169,106,0.03) 45.1%, rgba(196,169,106,0.07) 45.3%, rgba(196,169,106,0.03) 45.5%, transparent 45.6%),
-      linear-gradient(160deg, transparent 25%, rgba(196,169,106,0.04) 25.2%, rgba(196,169,106,0.09) 25.4%, rgba(196,169,106,0.04) 25.6%, transparent 25.8%),
-      linear-gradient(80deg, transparent 75%, rgba(196,169,106,0.03) 75.1%, rgba(196,169,106,0.06) 75.3%, transparent 75.5%);
+    background: linear-gradient(to bottom,
+      rgba(20,20,20,0.3) 0%,
+      rgba(20,20,20,0.1) 40%,
+      rgba(20,20,20,0.5) 80%,
+      rgba(20,20,20,0.95) 100%
+    );
   }
-
-  /* Noise texture */
   .hero-noise {
-    position: absolute; inset: 0; opacity: 0.04;
+    position: absolute; inset: 0; opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 512px; pointer-events: none;
   }
-
-  /* Central golden light rays */
-  .hero-rays {
-    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; height: 100%; pointer-events: none; overflow: hidden;
-  }
-
-  .hero-rays::before {
-    content: ''; position: absolute;
-    bottom: -20%; left: 50%; transform: translateX(-50%);
-    width: 120%; height: 100%;
-    background:
-      conic-gradient(from 250deg at 50% 100%,
-        transparent 0deg,
-        rgba(212,185,122,0.06) 5deg,
-        transparent 10deg,
-        rgba(212,185,122,0.04) 20deg,
-        transparent 25deg,
-        rgba(212,185,122,0.08) 30deg,
-        transparent 40deg,
-        rgba(212,185,122,0.03) 50deg,
-        transparent 55deg,
-        rgba(212,185,122,0.06) 65deg,
-        transparent 75deg,
-        transparent 285deg,
-        rgba(212,185,122,0.06) 295deg,
-        transparent 305deg,
-        rgba(212,185,122,0.04) 315deg,
-        transparent 325deg,
-        rgba(212,185,122,0.07) 340deg,
-        transparent 350deg,
-        rgba(212,185,122,0.05) 355deg,
-        transparent 360deg
-      );
-    filter: blur(8px);
-  }
-
-  .hero-rays::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 60%; height: 40%;
-    background: radial-gradient(ellipse at 50% 100%, rgba(212,185,122,0.12), transparent 60%);
-    filter: blur(40px);
-  }
-
-  /* Golden bokeh particles */
-  .hero-bokeh {
-    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-  }
-
-  .bokeh-particle {
-    position: absolute; border-radius: 50%;
-    background: radial-gradient(circle, rgba(212,185,122,0.6), rgba(212,185,122,0.1) 60%, transparent 70%);
-    animation: bokehFloat linear infinite;
-  }
-
-  @keyframes bokehFloat {
-    0% { transform: translateY(0) scale(1); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 0.8; }
-    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
-  }
-
-  /* Smoke/mist */
-  .hero-smoke {
-    position: absolute; inset: 0; pointer-events: none;
-  }
-
-  .hero-smoke::before {
-    content: ''; position: absolute;
-    bottom: 10%; left: 30%; width: 40%; height: 40%;
-    background: radial-gradient(ellipse, rgba(212,185,122,0.05), transparent 60%);
-    filter: blur(60px);
-    animation: smokeDrift 8s ease-in-out infinite alternate;
-  }
-
-  .hero-smoke::after {
-    content: ''; position: absolute;
-    top: 30%; right: 15%; width: 35%; height: 35%;
-    background: radial-gradient(ellipse, rgba(180,160,120,0.03), transparent 60%);
-    filter: blur(50px);
-    animation: smokeDrift2 10s ease-in-out infinite alternate;
-  }
-
-  @keyframes smokeDrift {
-    0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-    100% { transform: translate(30px, -20px) scale(1.15); opacity: 1; }
-  }
-  @keyframes smokeDrift2 {
-    0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-    100% { transform: translate(-20px, 15px) scale(1.2); opacity: 0.9; }
-  }
-
-  /* Hero content */
   .hero-content {
     position: relative; z-index: 10; text-align: center;
     animation: heroFade 2.5s ease forwards; opacity: 0;
   }
-
   @keyframes heroFade {
-    0% { opacity: 0; transform: translateY(20px); }
+    0% { opacity: 0; transform: translateY(30px); }
     100% { opacity: 1; transform: translateY(0); }
   }
-
   .hero-pretitle {
-    font-family: var(--serif-kr); font-size: 0.75rem;
-    letter-spacing: 0.3em; color: var(--gold);
-    margin-bottom: 2rem; font-weight: 300;
+    font-family: var(--body); font-size: 0.7rem;
+    letter-spacing: 0.4em; color: var(--gold);
+    margin-bottom: 2.5rem; font-weight: 400; text-transform: uppercase;
   }
-
   .hero h1 { margin-bottom: 2.5rem; line-height: 1; }
-
   .hero-logo {
-    width: clamp(300px, 70vw, 900px); height: auto;
-    filter: drop-shadow(0 0 80px rgba(196,169,106,0.15)) drop-shadow(0 0 160px rgba(196,169,106,0.05));
+    width: clamp(280px, 55vw, 700px); height: auto;
+    filter: drop-shadow(0 0 80px rgba(196,169,106,0.12));
   }
-
   .hero-subtitle {
-    font-size: 0.95rem; font-weight: 300;
-    color: rgba(232,228,223,0.55); line-height: 2;
-    margin-bottom: 3rem; max-width: 450px; margin-left: auto; margin-right: auto;
+    font-family: var(--heading); font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 400; font-style: italic;
+    color: rgba(221,218,213,0.6); line-height: 2.2;
+    margin-bottom: 3.5rem; max-width: 500px; margin-left: auto; margin-right: auto;
+    letter-spacing: -0.01em;
   }
-
   .hero-cta {
-    display: inline-block; padding: 1rem 3rem;
+    display: inline-block; padding: 1.1rem 3.5rem;
     border: 1px solid rgba(196,169,106,0.3);
-    background: rgba(196,169,106,0.05);
-    color: var(--fg); font-family: var(--serif-kr);
-    font-size: 0.8rem; letter-spacing: 0.15em;
-    text-decoration: none; transition: all 0.5s;
+    background: rgba(196,169,106,0.06);
+    color: var(--fg); font-family: var(--body);
+    font-size: 0.75rem; font-weight: 400; letter-spacing: 0.2em;
+    text-transform: uppercase; text-decoration: none; transition: all 0.5s;
   }
-
   .hero-cta:hover {
-    background: rgba(196,169,106,0.12);
+    background: rgba(196,169,106,0.15);
     border-color: rgba(196,169,106,0.5);
-    box-shadow: 0 0 50px rgba(196,169,106,0.1);
+    box-shadow: 0 0 60px rgba(196,169,106,0.1);
   }
-
   .scroll-indicator {
     position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
     z-index: 10; display: flex; flex-direction: column;
     align-items: center; gap: 0.6rem;
     animation: scrollFloat 3s ease-in-out infinite;
   }
-
   .scroll-indicator span {
-    font-family: var(--serif-kr); font-size: 0.6rem;
-    letter-spacing: 0.2em; color: rgba(232,228,223,0.3);
+    font-family: var(--body); font-size: 0.6rem;
+    letter-spacing: 0.2em; color: rgba(221,218,213,0.3);
   }
-
   .scroll-line {
     width: 1px; height: 40px;
     background: linear-gradient(to bottom, rgba(196,169,106,0.3), transparent);
   }
-
   @keyframes scrollFloat {
     0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.5; }
     50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
   }
 
   /* ── SECTIONS ── */
-  section { padding: 9rem 3rem; max-width: 1200px; margin: 0 auto; }
-
+  section { padding: 10rem 3rem; max-width: 1200px; margin: 0 auto; }
   .section-label {
-    font-family: var(--serif); font-size: 0.6rem;
+    font-family: var(--body); font-size: 0.65rem; font-weight: 400;
     letter-spacing: 0.5em; text-transform: uppercase;
     color: var(--gold-dim); margin-bottom: 2rem; text-align: center;
   }
-
   .section-divider {
     width: 50px; height: 1px; margin: 0 auto 4rem;
     background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
   }
 
   /* ── BRAND IMAGE ── */
-  .brand-image {
-    position: relative; width: 100%; height: 70vh;
-    overflow: hidden;
-  }
-
-  .brand-image img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: center;
-  }
-
+  .brand-image { position: relative; width: 100%; height: 70vh; overflow: hidden; }
+  .brand-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
   .brand-image-overlay {
     position: absolute; inset: 0;
     background: linear-gradient(to bottom, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
   }
 
   /* ── PHILOSOPHY ── */
-  .philosophy {
-    text-align: center; padding: 12rem 3rem; position: relative;
-  }
-
+  .philosophy { text-align: center; padding: 14rem 3rem; position: relative; }
   .philosophy::before {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse 60% 50% at 50% 50%, var(--gold-glow), transparent);
     pointer-events: none;
   }
-
   .philosophy blockquote {
-    font-size: clamp(1.3rem, 2.8vw, 2rem); font-weight: 300;
-    line-height: 2.4; max-width: 600px; margin: 0 auto 2.5rem;
-    color: rgba(232,228,223,0.7); position: relative;
+    font-family: var(--heading);
+    font-size: clamp(1.5rem, 3.5vw, 2.8rem); font-weight: 400;
+    line-height: 2; max-width: 650px; margin: 0 auto 2.5rem;
+    color: rgba(221,218,213,0.75); position: relative;
+    letter-spacing: -0.02em;
   }
-
   .philosophy .attribution {
-    font-family: var(--serif); font-size: 0.65rem;
+    font-family: var(--body); font-size: 0.65rem;
     letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dim);
   }
 
   /* ── COLLECTION ── */
   .collection { text-align: center; }
-
   .collection h2 {
-    font-family: var(--serif);
-    font-size: clamp(2rem, 4.5vw, 3.5rem); font-weight: 300;
-    letter-spacing: 0.15em; margin-bottom: 1rem;
+    font-family: var(--heading);
+    font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 400;
+    letter-spacing: -0.02em; margin-bottom: 1.2rem;
   }
-
   .collection-desc {
     font-size: 0.9rem; font-weight: 300; color: var(--fg-dim);
     max-width: 500px; margin: 0 auto 5rem; line-height: 2;
   }
-
   .fragrances {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 2rem; margin-top: 3rem;
+    gap: 1.5rem; margin-top: 3rem;
   }
-
   a.fragrance-card {
     text-decoration: none; color: inherit; display: block;
-    border: 1px solid rgba(196,169,106,0.08);
+    border: 1px solid rgba(196,169,106,0.06);
     transition: all 0.6s ease; cursor: pointer;
     position: relative; overflow: hidden;
-    background: linear-gradient(165deg, rgba(20,18,15,1), rgba(10,9,8,1));
+    background: rgba(20,18,15,0.6);
   }
-
   a.fragrance-card:hover {
-    border-color: rgba(196,169,106,0.25);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(196,169,106,0.06);
+    border-color: rgba(196,169,106,0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 100px rgba(196,169,106,0.04);
   }
-
   .card-visual {
-    height: 320px; position: relative; overflow: hidden;
+    height: 380px; position: relative; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
     background-size: cover; background-position: center;
   }
-
   .card-visual::after {
     content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(10,9,8,0.9));
+    background: linear-gradient(to bottom, transparent 40%, rgba(20,20,20,0.95));
   }
-
-  .card-visual .card-number {
-    font-family: var(--serif); font-size: 5rem; font-weight: 300;
-    color: rgba(255,255,255,0.15); letter-spacing: 0.1em;
-    position: relative; z-index: 1;
-  }
-
   .card-info { padding: 2rem 1.8rem 2.5rem; }
-
   .card-meta {
-    font-family: var(--serif); font-size: 0.55rem;
-    letter-spacing: 0.35em; text-transform: uppercase;
+    font-family: var(--body); font-size: 0.6rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
     color: var(--gold-dim); margin-bottom: 1rem;
   }
-
   .fragrance-name {
-    font-family: var(--serif); font-size: 1.5rem;
-    font-weight: 400; letter-spacing: 0.08em; margin-bottom: 0.3rem;
+    font-family: var(--heading); font-size: 1.6rem;
+    font-weight: 400; letter-spacing: -0.01em; margin-bottom: 0.3rem;
   }
-
   .fragrance-latin {
-    font-family: var(--serif); font-size: 0.8rem;
+    font-family: var(--heading); font-size: 0.85rem;
     font-style: italic; color: var(--fg-dim); margin-bottom: 1.2rem;
   }
-
   .fragrance-desc {
     font-size: 0.8rem; font-weight: 300;
-    color: rgba(232,228,223,0.35); line-height: 1.8; margin-bottom: 1.2rem;
+    color: rgba(221,218,213,0.35); line-height: 1.8; margin-bottom: 1.2rem;
   }
-
   .fragrance-notes {
-    padding-top: 1rem; border-top: 1px solid rgba(196,169,106,0.08); margin-bottom: 1.2rem;
+    padding-top: 1rem; border-top: 1px solid rgba(196,169,106,0.06); margin-bottom: 1.2rem;
   }
-
   .fragrance-notes span {
-    font-family: var(--serif); font-size: 0.7rem; font-style: italic;
+    font-family: var(--heading); font-size: 0.75rem; font-style: italic;
     color: rgba(196,169,106,0.35);
   }
-
   .fragrance-price {
-    font-family: var(--serif); font-size: 1.15rem; font-weight: 400;
-    color: var(--fg); letter-spacing: 0.05em;
+    font-family: var(--heading); font-size: 1.2rem; font-weight: 400;
+    color: var(--fg); letter-spacing: 0.02em;
+  }
+
+  /* ── CAPTURED MOMENTS ── */
+  .moments { text-align: center; }
+  .moments h2 {
+    font-family: var(--heading);
+    font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 400;
+    letter-spacing: -0.02em; margin-bottom: 1.5rem;
+  }
+  .moments-desc {
+    font-size: 0.9rem; color: var(--fg-dim); font-weight: 300;
+    max-width: 500px; margin: 0 auto 4rem; line-height: 2;
+  }
+  .moments-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .moment-card {
+    position: relative; overflow: hidden; aspect-ratio: 1; cursor: pointer;
+  }
+  .moment-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.8s ease, filter 0.8s ease;
+    filter: brightness(0.85);
+  }
+  .moment-card:hover img { transform: scale(1.05); filter: brightness(1); }
+  .moment-card .moment-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 2rem 1.5rem; z-index: 2;
+    background: linear-gradient(to top, rgba(20,20,20,0.9), transparent);
+  }
+  .moment-label h3 {
+    font-family: var(--heading); font-size: 1.3rem;
+    font-weight: 400; letter-spacing: -0.01em; margin-bottom: 0.3rem;
+  }
+  .moment-label p { font-size: 0.75rem; color: var(--fg-dim); font-weight: 300; }
+
+  /* ── PACKAGING SHOWCASE ── */
+  .packaging { position: relative; width: 100%; overflow: hidden; padding: 8rem 0; }
+  .packaging-inner { max-width: 1000px; margin: 0 auto; position: relative; }
+  .packaging-inner img {
+    width: 100%; height: auto;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.5));
+  }
+  .packaging-text { text-align: center; padding: 4rem 3rem 0; }
+  .packaging-text h2 {
+    font-family: var(--heading);
+    font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400;
+    letter-spacing: -0.02em; margin-bottom: 1.5rem;
+  }
+  .packaging-text p {
+    font-size: 0.9rem; color: var(--fg-dim); font-weight: 300;
+    max-width: 500px; margin: 0 auto; line-height: 2;
+  }
+
+  /* ── INGREDIENTS ── */
+  .ingredients { position: relative; width: 100%; overflow: hidden; }
+  .ingredients img { width: 100%; height: auto; filter: brightness(0.9); }
+  .ingredients-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 15%, transparent 85%, var(--bg) 100%);
+    pointer-events: none;
+  }
+  .ingredients-text {
+    position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);
+    text-align: center; z-index: 2;
+  }
+  .ingredients-text h3 {
+    font-family: var(--heading);
+    font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 400;
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .ingredients-text p {
+    font-size: 0.85rem; color: var(--fg-dim); font-weight: 300;
+    max-width: 400px; margin: 0 auto; line-height: 1.9;
   }
 
   /* ── WORLD ── */
   .world {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 0; max-width: 100%; margin: 0;
+    gap: 0; max-width: 100%; margin: 0; position: relative;
   }
-
+  .world-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: url('../assets/lovable/mood-two-worlds.png') center/cover no-repeat;
+    opacity: 0.15;
+  }
   .world-side {
     height: 85vh; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: 4rem; text-align: center; position: relative;
+    padding: 4rem; text-align: center; position: relative; z-index: 1;
     overflow: hidden; transition: all 0.6s ease; cursor: pointer;
   }
-
   .world-lion {
-    background:
-      radial-gradient(ellipse at 50% 30%, rgba(196,169,106,0.05), transparent 60%),
-      linear-gradient(135deg, #12110f, #1a1816);
+    background: linear-gradient(135deg, rgba(25,23,20,0.9), rgba(30,28,24,0.85));
     border-right: 1px solid rgba(196,169,106,0.06);
   }
-
   .world-serpent {
-    background:
-      radial-gradient(ellipse at 50% 70%, rgba(120,80,60,0.04), transparent 60%),
-      linear-gradient(135deg, #0c0b0a, #100e0c);
+    background: linear-gradient(135deg, rgba(18,16,14,0.9), rgba(22,20,18,0.85));
   }
-
-  .world-side:hover { background: rgba(196,169,106,0.03); }
+  .world-side:hover { background: rgba(196,169,106,0.04); }
   .world-icon { font-size: 3rem; margin-bottom: 2.5rem; opacity: 0.5; }
-
   .world-title {
-    font-family: var(--serif); font-size: 1.8rem;
-    font-weight: 300; letter-spacing: 0.15em; margin-bottom: 0.5rem;
+    font-family: var(--heading); font-size: 2rem;
+    font-weight: 400; letter-spacing: -0.02em; margin-bottom: 0.5rem;
   }
-
   .world-subtitle {
-    font-family: var(--serif); font-size: 0.65rem;
+    font-family: var(--body); font-size: 0.65rem; font-weight: 400;
     letter-spacing: 0.35em; text-transform: uppercase;
     color: var(--gold-dim); margin-bottom: 2.5rem;
   }
-
   .world-text {
     font-size: 0.85rem; font-weight: 300;
-    color: rgba(232,228,223,0.35); max-width: 280px; line-height: 2;
+    color: rgba(221,218,213,0.4); max-width: 280px; line-height: 2;
   }
 
   /* ── NEWSLETTER ── */
-  .newsletter { text-align: center; padding: 12rem 3rem; position: relative; }
-
+  .newsletter { text-align: center; padding: 14rem 3rem; position: relative; }
   .newsletter::before {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse at 50% 50%, var(--gold-glow), transparent 60%);
     pointer-events: none;
   }
-
   .newsletter h2 {
-    font-size: 1.5rem; font-weight: 300; letter-spacing: 0.12em;
-    margin-bottom: 1rem; position: relative;
+    font-family: var(--heading);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 400;
+    letter-spacing: -0.02em; margin-bottom: 1.2rem; position: relative;
   }
-
   .newsletter p {
     font-size: 0.85rem; color: var(--fg-dim);
     margin-bottom: 3rem; font-weight: 300; position: relative;
   }
-
   .newsletter-form {
     display: flex; justify-content: center;
     gap: 0; max-width: 450px; margin: 0 auto; position: relative;
   }
-
   .newsletter-form input {
     flex: 1; padding: 1rem 1.4rem;
     background: rgba(20,18,15,0.8);
-    border: 1px solid rgba(196,169,106,0.12); border-right: none;
-    color: var(--fg); font-family: var(--serif); font-size: 0.8rem;
-    letter-spacing: 0.1em; outline: none; transition: border-color 0.3s;
+    border: 1px solid rgba(196,169,106,0.1); border-right: none;
+    color: var(--fg); font-family: var(--body); font-size: 0.8rem;
+    letter-spacing: 0.05em; outline: none; transition: border-color 0.3s;
   }
-
-  .newsletter-form input::placeholder { color: rgba(232,228,223,0.2); }
+  .newsletter-form input::placeholder { color: rgba(221,218,213,0.2); }
   .newsletter-form input:focus { border-color: rgba(196,169,106,0.3); }
-
   .newsletter-form button {
     padding: 1rem 2rem; background: rgba(196,169,106,0.08);
-    border: 1px solid rgba(196,169,106,0.12);
-    color: var(--gold); font-family: var(--serif);
-    font-size: 0.7rem; letter-spacing: 0.25em;
+    border: 1px solid rgba(196,169,106,0.1);
+    color: var(--gold); font-family: var(--body);
+    font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em;
     text-transform: uppercase; cursor: pointer; transition: all 0.4s;
   }
-
   .newsletter-form button:hover {
     background: rgba(196,169,106,0.15);
     border-color: rgba(196,169,106,0.3);
@@ -489,80 +390,60 @@
 
   /* ── FOOTER ── */
   .footer-main {
-    border-top: 1px solid rgba(196,169,106,0.08);
-    padding: 5rem 3rem 3rem;
-    max-width: 1200px; margin: 0 auto;
-    display: grid; grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 4rem;
+    border-top: 1px solid rgba(196,169,106,0.06);
+    padding: 5rem 3rem 3rem; max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 4rem;
   }
-
-  .footer-brand img { height: 48px; opacity: 0.7; margin-bottom: 1.5rem; display: block; }
-
+  .footer-brand img { height: 44px; opacity: 0.7; margin-bottom: 1.5rem; display: block; }
   .footer-brand p {
-    font-size: 0.8rem; font-weight: 300; color: rgba(232,228,223,0.35);
+    font-size: 0.8rem; font-weight: 300; color: rgba(221,218,213,0.3);
     line-height: 1.9; max-width: 280px;
   }
-
   .footer-col h4 {
-    font-family: var(--serif-kr); font-size: 0.75rem;
-    font-weight: 400; margin-bottom: 1.5rem;
-    color: rgba(232,228,223,0.6);
+    font-family: var(--body); font-size: 0.75rem;
+    font-weight: 400; margin-bottom: 1.5rem; color: rgba(221,218,213,0.5);
   }
-
   .footer-col ul { list-style: none; }
-
   .footer-col ul li { margin-bottom: 0.8rem; }
-
   .footer-col ul a {
-    color: rgba(232,228,223,0.3); text-decoration: none;
+    color: rgba(221,218,213,0.25); text-decoration: none;
     font-size: 0.75rem; font-weight: 300; transition: color 0.3s;
   }
-
   .footer-col ul a:hover { color: var(--fg-dim); }
-
   .footer-bottom {
-    border-top: 1px solid rgba(196,169,106,0.06);
-    padding: 2rem 3rem;
-    max-width: 1200px; margin: 0 auto;
+    border-top: 1px solid rgba(196,169,106,0.04);
+    padding: 2rem 3rem; max-width: 1200px; margin: 0 auto;
     display: flex; justify-content: space-between; align-items: center;
   }
-
-  .footer-bottom .copyright { font-size: 0.55rem; color: rgba(232,228,223,0.15); }
-
+  .footer-bottom .copyright { font-size: 0.55rem; color: rgba(221,218,213,0.12); }
   .footer-bottom-links { display: flex; gap: 2rem; }
-
   .footer-bottom-links a {
-    color: rgba(232,228,223,0.2); text-decoration: none;
+    color: rgba(221,218,213,0.15); text-decoration: none;
     font-size: 0.55rem; letter-spacing: 0.1em; transition: color 0.3s;
   }
-
   .footer-bottom-links a:hover { color: var(--fg-dim); }
+  .footer-emblem { text-align: center; padding: 3rem 0 2rem; }
+  .emblem-img { height: clamp(100px, 16vw, 180px); opacity: 0.06; }
 
-  .footer-emblem {
-    text-align: center; padding: 3rem 0 2rem;
-  }
-
-  .emblem-img {
-    height: clamp(120px, 20vw, 200px);
-    opacity: 0.08;
-  }
-
-  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1.2s ease, transform 1.2s ease; }
+  .reveal { opacity: 0; transform: translateY(50px); transition: opacity 1.2s ease, transform 1.2s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   @media (max-width: 768px) {
     nav { padding: 1.2rem 1.5rem; }
-    .hero h1 { font-size: clamp(3.5rem, 16vw, 7rem); }
     section { padding: 6rem 1.5rem; }
+    .hero-subtitle { font-size: 0.95rem; }
     .fragrances { grid-template-columns: 1fr; gap: 2rem; max-width: 400px; margin: 3rem auto 0; }
+    .moments-grid { grid-template-columns: 1fr; gap: 1.5rem; max-width: 400px; margin: 0 auto; }
     .world { grid-template-columns: 1fr; }
-    .world-side { height: 65vh; }
+    .world-side { height: 55vh; }
     .world-lion { border-right: none; border-bottom: 1px solid rgba(196,169,106,0.06); }
     .newsletter-form { flex-direction: column; }
-    .newsletter-form input { border-right: 1px solid rgba(196,169,106,0.12); }
+    .newsletter-form input { border-right: 1px solid rgba(196,169,106,0.1); }
     .footer-main { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.5rem 2rem; }
     .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; padding: 1.5rem; }
-
+    .packaging-inner { padding: 0 1.5rem; }
+    .philosophy { padding: 10rem 1.5rem; }
+    .newsletter { padding: 10rem 1.5rem; }
   }
 </style>
 </head>
@@ -579,9 +460,6 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-noise"></div>
-  <div class="hero-rays"></div>
-  <div class="hero-bokeh" id="bokeh"></div>
-  <div class="hero-smoke"></div>
 
   <div class="hero-content">
     <div class="hero-pretitle">Niche Parfumerie · Seoul</div>
@@ -601,7 +479,7 @@
 
 <!-- BRAND IMAGE -->
 <div class="brand-image reveal">
-  <img src="images/eden-packaging.jpg" alt="JOVE Breath of Eden">
+  <img src="../assets/lovable/product-hawa-box.png" alt="JOVE Hawa Packaging">
   <div class="brand-image-overlay"></div>
 </div>
 
@@ -610,15 +488,15 @@
   <div class="section-label">Philosophy</div>
   <div class="section-divider"></div>
   <blockquote>
-    We capture stories through scent,<br>
-    creating sensations meant to be remembered forever.
+    Scent is the deepest<br>
+    form of memory
   </blockquote>
   <div class="attribution">— JOVE</div>
 </section>
 
 <!-- COLLECTION -->
 <section class="collection reveal" id="collection">
-  <div class="section-label">The Creation Series</div>
+  <div class="section-label">First Edition</div>
   <div class="section-divider"></div>
   <h2>Lion Collection</h2>
   <p class="collection-desc">
@@ -627,7 +505,7 @@
   </p>
   <div class="fragrances">
     <a href="genesis-i.html" class="fragrance-card reveal">
-      <div class="card-visual" style="background-image:url('images/genesis-hero.jpg'); background-size:cover; background-position:center"><div class="card-number">I</div></div>
+      <div class="card-visual" style="background-image:url('../assets/lovable/product-genesis.jpg')"></div>
       <div class="card-info">
         <div class="card-meta">Eau de Parfum · 50ml</div>
         <div class="fragrance-name">Genesis I</div>
@@ -638,7 +516,7 @@
       </div>
     </a>
     <a href="breath-of-eden.html" class="fragrance-card reveal">
-      <div class="card-visual" style="background-image:url('images/eden-hero.jpg'); background-size:cover; background-position:center"><div class="card-number">II</div></div>
+      <div class="card-visual" style="background-image:url('../assets/lovable/product-eden.jpg')"></div>
       <div class="card-info">
         <div class="card-meta">Eau de Parfum · 50ml</div>
         <div class="fragrance-name">Breath of Eden</div>
@@ -649,7 +527,7 @@
       </div>
     </a>
     <a href="hawa.html" class="fragrance-card reveal">
-      <div class="card-visual" style="background-image:url('images/hawa-hero.jpg'); background-size:cover; background-position:center"><div class="card-number">III</div></div>
+      <div class="card-visual" style="background-image:url('../assets/lovable/product-hawa-box.png')"></div>
       <div class="card-info">
         <div class="card-meta">Eau de Parfum · 50ml</div>
         <div class="fragrance-name">Hawa</div>
@@ -662,8 +540,64 @@
   </div>
 </section>
 
+<!-- CAPTURED MOMENTS -->
+<section class="moments reveal">
+  <div class="section-label">Captured Moments</div>
+  <div class="section-divider"></div>
+  <h2>Frozen in Eternity</h2>
+  <p class="moments-desc">
+    Visual narratives captured from the story each fragrance holds.<br>
+    A single scene, suspended in time.
+  </p>
+  <div class="moments-grid">
+    <div class="moment-card reveal">
+      <img src="../assets/lovable/mood-genesis.png" alt="Genesis I Mood">
+      <div class="moment-label">
+        <h3>Genesis I</h3>
+        <p>The moment light first pierced the void</p>
+      </div>
+    </div>
+    <div class="moment-card reveal">
+      <img src="../assets/lovable/mood-hawa.png" alt="Hawa Mood">
+      <div class="moment-label">
+        <h3>Hawa</h3>
+        <p>Beauty before the first choice</p>
+      </div>
+    </div>
+    <div class="moment-card reveal">
+      <img src="../assets/lovable/mood-eden.png" alt="Breath of Eden Mood">
+      <div class="moment-label">
+        <h3>Breath of Eden</h3>
+        <p>Where the first paradise still breathes</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGING -->
+<div class="packaging reveal">
+  <div class="packaging-inner">
+    <img src="../assets/lovable/product-hawa-box.png" alt="JOVE Packaging">
+  </div>
+  <div class="packaging-text">
+    <h2>Like an Excavated Artifact</h2>
+    <p>A name embossed in black leather. An asymmetric natural stone cap. A cord inspired by David's sling. Not a perfume bottle — an eternal objet.</p>
+  </div>
+</div>
+
+<!-- INGREDIENTS -->
+<div class="ingredients reveal">
+  <img src="../assets/lovable/ingredients-triptych.png" alt="JOVE Ingredients">
+  <div class="ingredients-overlay"></div>
+  <div class="ingredients-text">
+    <h3>Nature's Rarest Materials</h3>
+    <p>Bergamot, Frankincense, Oud, Jasmine Sambac — each ingredient carries a story.</p>
+  </div>
+</div>
+
 <!-- DUAL WORLD -->
 <div class="world reveal" id="world">
+  <div class="world-bg"></div>
   <div class="world-side world-lion">
     <div class="world-icon">🦁</div>
     <div class="world-title">Lion's World</div>
@@ -682,7 +616,7 @@
 <section class="newsletter reveal" id="contact">
   <div class="section-label">Stay</div>
   <div class="section-divider"></div>
-  <h2>Enter the World of JOVE</h2>
+  <h2>Beyond the Scent</h2>
   <p>Be the first to experience the Creation Series.</p>
   <form class="newsletter-form" onsubmit="event.preventDefault()">
     <input type="email" placeholder="Your email address">
@@ -722,48 +656,19 @@
   </div>
 </div>
 <div class="footer-emblem">
-  <img src="images/lion-emblem-white.png" alt="JOVE Emblem" class="emblem-img">
+  <img src="../assets/lovable/symbol-jove.png" alt="JOVE Emblem" class="emblem-img">
 </div>
 
 <script>
-  // Sticky nav on scroll
   const nav = document.querySelector('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 80);
   });
 
-  // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // Golden bokeh particles
-  const bokeh = document.getElementById('bokeh');
-  function createParticle() {
-    const p = document.createElement('div');
-    p.className = 'bokeh-particle';
-    const size = Math.random() * 12 + 3;
-    const x = Math.random() * 100;
-    const dur = Math.random() * 8 + 6;
-    const delay = Math.random() * 5;
-    const brightness = Math.random() * 0.5 + 0.3;
-    p.style.cssText = `
-      width: ${size}px; height: ${size}px;
-      left: ${x}%; bottom: -${size}px;
-      animation-duration: ${dur}s;
-      animation-delay: ${delay}s;
-      opacity: ${brightness};
-      filter: blur(${size > 8 ? 2 : 0}px);
-    `;
-    bokeh.appendChild(p);
-    setTimeout(() => p.remove(), (dur + delay) * 1000);
-  }
-
-  // Create initial batch
-  for (let i = 0; i < 30; i++) createParticle();
-  // Keep creating
-  setInterval(() => { for (let i = 0; i < 3; i++) createParticle(); }, 800);
 </script>
 
 </body>
