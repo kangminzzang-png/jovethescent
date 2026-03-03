@@ -214,7 +214,7 @@
   .philosophy-content { position: relative; display: flex; align-items: center; padding: 4rem 1.5rem; }
   @media(min-width:768px){ .philosophy-content { padding: 0 3rem; } }
   @media(min-width:1024px){ .philosophy-content { padding: 0 5rem; } }
-  .philosophy-symbol { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 400px; pointer-events: none; opacity: 0.04; display: none; }
+  .philosophy-symbol { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 400px; pointer-events: none; opacity: 0.06; display: none; filter: invert(1); }
   @media(min-width:1024px){ .philosophy-symbol { display: block; } }
   .philosophy-inner { max-width: 32rem; position: relative; z-index: 10; }
   .philosophy-title { font-size: clamp(1.875rem, 4vw, 3rem); line-height: 1.3; margin-bottom: 2rem; white-space: pre-line; }
@@ -311,7 +311,8 @@
 
   /* FOOTER */
   footer { position: relative; background: var(--obsidian); border-top: 1px solid var(--border); overflow: hidden; }
-  .footer-symbol { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 600px; pointer-events: none; opacity: 0.04; }
+  .footer-symbol { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 600px; pointer-events: none; opacity: 0.05; filter: invert(1); }
+  .two-worlds-symbol { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 500px; pointer-events: none; opacity: 0.04; filter: invert(1); }
   .footer-inner { position: relative; z-index: 10; padding: 4rem 1.5rem; }
   @media(min-width:768px){ .footer-inner { padding: 5rem 3rem; } }
   @media(min-width:1024px){ .footer-inner { padding: 5rem 4rem; } }
@@ -514,7 +515,7 @@
       <div class="philosophy-fade"></div>
     </div>
     <div class="philosophy-content">
-      <img src="../assets/lovable/symbol-jove.png" alt="" class="philosophy-symbol">
+      <img src="../assets/lovable/winged-lion-symbol.jpg" alt="" class="philosophy-symbol">
       <div class="philosophy-inner reveal">
         <div class="section-label" style="color:var(--gold)">철학</div>
         <h2 class="philosophy-title">향은 기억의 가장
@@ -546,7 +547,8 @@
       <p class="two-worlds-desc">모든 JOVE 창작물은 대립하는 힘 사이의 긴장 속에 살아 숨 쉽니다. 갈등이 아닌, 조화.</p>
     </div>
   </div>
-  <div class="two-worlds-grid">
+  <div class="two-worlds-grid" style="position:relative">
+    <img src="../assets/lovable/winged-lion-symbol.jpg" alt="" class="two-worlds-symbol">
     <div class="world-card reveal">
       <div class="world-card-label light">빛</div>
       <h3 class="world-card-title">명료함</h3>
@@ -598,7 +600,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <img src="../assets/lovable/symbol-jove.png" alt="" class="footer-symbol">
+  <img src="../assets/lovable/winged-lion-symbol.jpg" alt="" class="footer-symbol">
   <div class="footer-inner">
     <div class="footer-grid">
       <div>
