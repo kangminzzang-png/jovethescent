@@ -13,32 +13,23 @@
   html, body {
     height: 100%; overflow: hidden;
     font-family: 'Inter', -apple-system, sans-serif;
-    background: #0a0a0a; color: #dddad5;
+    background: #080808; color: #dddad5;
   }
 
-  /* Background — subtle product showcase */
+  /* Clean dark background — no image, pure atmosphere */
   .gate-bg {
     position: fixed; inset: 0; z-index: 0;
-  }
-  .gate-bg img {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0.25;
-  }
-  .gate-bg::after {
-    content: ''; position: absolute; inset: 0;
     background:
-      radial-gradient(ellipse 70% 60% at 50% 50%, transparent 10%, rgba(10,10,10,0.7) 60%),
-      linear-gradient(to bottom, rgba(10,10,10,0.3), transparent 30%, transparent 70%, rgba(10,10,10,0.8));
+      radial-gradient(ellipse 80% 60% at 50% 45%, rgba(196,169,106,0.03) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 50% 50%, rgba(20,18,14,1) 0%, #080808 100%);
   }
 
-  /* Noise */
   .noise {
-    position: fixed; inset: 0; opacity: 0.02; pointer-events: none; z-index: 1;
+    position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 1;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 256px;
   }
 
-  /* Layout */
   .gate {
     position: relative; z-index: 10;
     height: 100vh; display: flex; flex-direction: column;
@@ -46,137 +37,115 @@
     padding: 0 1.5rem;
   }
 
-  /* Product hero image — front and center */
+  /* Product — single, centered, dramatic */
   .gate-product {
-    margin-bottom: 2.5rem;
-    opacity: 0; animation: fadeScale 2s ease 0.2s forwards;
+    margin-bottom: 3rem;
+    opacity: 0; animation: fadeScale 2.5s ease 0.3s forwards;
   }
   .gate-product img {
-    height: clamp(160px, 30vh, 280px);
+    height: clamp(200px, 38vh, 340px);
     width: auto; object-fit: contain;
-    filter: drop-shadow(0 20px 60px rgba(196,169,106,0.12))
-            drop-shadow(0 0 100px rgba(196,169,106,0.06));
+    filter: drop-shadow(0 30px 80px rgba(0,0,0,0.6))
+            drop-shadow(0 0 60px rgba(196,169,106,0.06));
   }
 
-  /* Logo — bright, prominent */
+  /* Logo */
   .gate-logo {
-    margin-bottom: 0.6rem;
-    opacity: 0; animation: fadeUp 1.8s ease 0.6s forwards;
+    margin-bottom: 0.5rem;
+    opacity: 0; animation: fadeUp 2s ease 0.8s forwards;
   }
   .gate-logo img {
-    height: clamp(36px, 6vw, 56px);
-    filter: brightness(1.1) drop-shadow(0 0 20px rgba(196,169,106,0.15));
+    height: clamp(32px, 5vw, 48px);
+    filter: invert(1) brightness(1.05);
+    opacity: 0.9;
   }
 
   /* Tagline */
   .gate-tagline {
     font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic; font-size: clamp(0.8rem, 1.6vw, 1rem);
-    color: rgba(196,169,106,0.6);
-    margin-bottom: 0.5rem; letter-spacing: 0.05em;
-    opacity: 0; animation: fadeUp 1.8s ease 0.9s forwards;
+    font-style: italic; font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+    color: rgba(196,169,106,0.45);
+    margin-bottom: 0.4rem; letter-spacing: 0.05em;
+    opacity: 0; animation: fadeUp 2s ease 1s forwards;
   }
 
-  /* Descriptor */
   .gate-descriptor {
-    font-size: 0.6rem; font-weight: 300;
-    letter-spacing: 0.35em; text-transform: uppercase;
-    color: rgba(221,218,213,0.3);
-    margin-bottom: 3rem;
-    opacity: 0; animation: fadeUp 1.5s ease 1.1s forwards;
+    font-size: 0.5rem; font-weight: 300;
+    letter-spacing: 0.4em; text-transform: uppercase;
+    color: rgba(221,218,213,0.2);
+    margin-bottom: 3.5rem;
+    opacity: 0; animation: fadeUp 1.5s ease 1.2s forwards;
   }
 
-  /* Gold accent line */
-  .gate-accent {
-    width: 30px; height: 1px;
-    background: rgba(196,169,106,0.4);
-    margin-bottom: 2rem;
-    opacity: 0; animation: fadeIn 1.5s ease 1.3s forwards;
-  }
-
-  /* Region prompt */
+  /* Region select */
   .gate-prompt {
-    font-size: 0.55rem; font-weight: 400;
+    font-size: 0.5rem; font-weight: 400;
     letter-spacing: 0.5em; text-transform: uppercase;
-    color: rgba(221,218,213,0.25);
-    margin-bottom: 1.2rem;
+    color: rgba(221,218,213,0.18);
+    margin-bottom: 1rem;
     opacity: 0; animation: fadeUp 1.2s ease 1.5s forwards;
   }
 
-  /* Buttons — refined with gold hint */
   .gate-buttons {
     display: flex; gap: 0;
     opacity: 0; animation: fadeUp 1.2s ease 1.7s forwards;
   }
   .gate-btn {
-    padding: 0.85rem 2.8rem;
+    padding: 0.8rem 2.5rem;
     background: transparent;
-    border: 1px solid rgba(196,169,106,0.2);
-    color: rgba(221,218,213,0.65);
+    border: 1px solid rgba(196,169,106,0.15);
+    color: rgba(221,218,213,0.55);
     font-family: 'Inter', sans-serif;
-    font-size: 0.6rem; font-weight: 400;
+    font-size: 0.55rem; font-weight: 400;
     letter-spacing: 0.3em; text-transform: uppercase;
     text-decoration: none; cursor: pointer;
     transition: all 0.5s ease;
-    position: relative;
   }
   .gate-btn + .gate-btn { border-left: none; }
-  .gate-btn::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(196,169,106,0.06), transparent);
-    opacity: 0; transition: opacity 0.5s;
-  }
-  .gate-btn:hover::before { opacity: 1; }
   .gate-btn:hover {
-    border-color: rgba(196,169,106,0.45);
-    color: #dddad5;
+    background: rgba(196,169,106,0.06);
+    border-color: rgba(196,169,106,0.3);
+    color: rgba(221,218,213,0.85);
   }
 
-  /* Bottom */
   .gate-bottom {
     position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    font-size: 0.4rem; letter-spacing: 0.5em;
-    text-transform: uppercase; color: rgba(196,169,106,0.1);
-    opacity: 0; animation: fadeIn 1.5s ease 2.2s forwards;
+    font-size: 0.35rem; letter-spacing: 0.5em;
+    text-transform: uppercase; color: rgba(196,169,106,0.08);
+    opacity: 0; animation: fadeIn 1.5s ease 2.5s forwards;
     white-space: nowrap;
   }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
+    from { opacity: 0; transform: translateY(15px); }
     to { opacity: 1; transform: translateY(0); }
   }
   @keyframes fadeScale {
-    from { opacity: 0; transform: translateY(10px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   @media (max-width: 500px) {
-    .gate-btn { padding: 0.75rem 2rem; font-size: 0.55rem; letter-spacing: 0.25em; }
-    .gate-product img { height: 140px; }
+    .gate-btn { padding: 0.7rem 2rem; }
+    .gate-product img { height: 180px; }
   }
 </style>
 </head>
 <body>
 
-<div class="gate-bg">
-  <img src="assets/lovable/genesis-mood-dark.jpg" alt="">
-</div>
+<div class="gate-bg"></div>
 <div class="noise"></div>
 
 <div class="gate">
   <div class="gate-product">
-    <img src="assets/lovable/genesis-hero-zen.jpg" alt="JOVE Genesis I">
+    <img src="assets/lovable/product-hawa-box.png" alt="JOVE">
   </div>
   <div class="gate-logo">
-    <img src="assets/lovable/logo-jove.png" alt="JOVE" style="filter:invert(1) brightness(1.1) drop-shadow(0 0 20px rgba(196,169,106,0.15))">
+    <img src="assets/lovable/logo-jove.png" alt="JOVE">
   </div>
   <div class="gate-tagline">The Scent of Creation</div>
   <div class="gate-descriptor">Niche Parfumerie · Seoul</div>
-  <div class="gate-accent"></div>
   <div class="gate-prompt">Select Region</div>
   <div class="gate-buttons">
     <a href="kr/" class="gate-btn">한국</a>
