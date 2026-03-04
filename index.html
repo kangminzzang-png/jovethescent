@@ -16,24 +16,38 @@
     background: #060606; color: #dddad5;
   }
 
-  /* Abstract full-bleed background */
+  /* Abstract ambient background — CSS only */
   .gate-bg {
     position: fixed; inset: 0; z-index: 0;
+    background: #060606;
   }
-  .gate-bg img {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0.2; filter: blur(1px);
-    animation: bgReveal 3s ease forwards;
+  .gate-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 12s ease-in-out infinite;
   }
-  @keyframes bgReveal {
-    from { opacity: 0; transform: scale(1.05); }
-    to { opacity: 0.2; transform: scale(1); }
+  .gate-orb.orb1 {
+    width: 500px; height: 500px;
+    top: 20%; left: 35%;
+    background: radial-gradient(circle, rgba(196,169,106,0.06), transparent 70%);
+    animation-duration: 14s;
   }
-  .gate-bg::after {
-    content: ''; position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 50% 50%, transparent 10%, rgba(6,6,6,0.8) 70%),
-      linear-gradient(to bottom, rgba(6,6,6,0.6) 0%, transparent 25%, transparent 75%, rgba(6,6,6,0.9) 100%);
+  .gate-orb.orb2 {
+    width: 350px; height: 350px;
+    top: 50%; right: 25%;
+    background: radial-gradient(circle, rgba(160,140,110,0.04), transparent 70%);
+    animation-duration: 18s; animation-delay: -5s;
+  }
+  .gate-orb.orb3 {
+    width: 250px; height: 250px;
+    bottom: 20%; left: 25%;
+    background: radial-gradient(circle, rgba(196,169,106,0.03), transparent 70%);
+    animation-duration: 16s; animation-delay: -8s;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(20px, -15px) scale(1.05); }
+    66% { transform: translate(-15px, 10px) scale(0.95); }
   }
 
   .noise {
@@ -136,7 +150,9 @@
 <body>
 
 <div class="gate-bg">
-  <img src="assets/lovable/jove-smoke-logo.jpg" alt="">
+  <div class="gate-orb orb1"></div>
+  <div class="gate-orb orb2"></div>
+  <div class="gate-orb orb3"></div>
 </div>
 <div class="noise"></div>
 
