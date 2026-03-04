@@ -340,7 +340,7 @@
 
 <!-- PROMO BAR -->
 <div class="promo-bar" id="promoBar">
-  🎁 First purchase? Use code <strong>JOVE10</strong> for 10% off · <a href="#promo">Enter code</a>
+  ✦ Have an invitation code? Discover your ambassador benefits · <a href="#invitation">Enter code</a>
 </div>
 
 <!-- NAV -->
@@ -556,16 +556,28 @@ form of memory</h2>
   </div>
 </section>
 
-<!-- PROMO CODE -->
-<section class="promo-section" id="promo">
-  <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">Promotion</div>
-  <h2>Have a Promo Code?</h2>
-  <p>Enter your invitation or promotional code below for an exclusive discount.</p>
-  <form class="promo-form" id="promoForm" onsubmit="return false">
-    <input type="text" placeholder="Enter promo code" id="promoInput" autocomplete="off">
-    <button type="submit" id="promoBtn">Apply</button>
+<!-- INVITATION CODE (Ambassador) -->
+<section class="promo-section" id="invitation">
+  <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">Invitation</div>
+  <h2>Enter Your Invitation Code</h2>
+  <p>Enter the code shared by your JOVE ambassador to unlock exclusive benefits.</p>
+  <form class="promo-form" id="ambassadorForm" onsubmit="return false">
+    <input type="text" placeholder="Invitation code" id="ambassadorInput" autocomplete="off">
+    <button type="submit" id="ambassadorBtn">Verify</button>
   </form>
-  <div class="promo-result" id="promoResult"></div>
+  <div class="promo-result" id="ambassadorResult"></div>
+</section>
+
+<!-- SEASONAL OFFER — hidden by default -->
+<section class="promo-section" id="seasonal" style="display:none; border-top: 1px solid var(--border);">
+  <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">Limited Offer</div>
+  <h2>Seasonal Benefit</h2>
+  <p>Enter your limited-time promotion code below.</p>
+  <form class="promo-form" id="seasonalForm" onsubmit="return false">
+    <input type="text" placeholder="Promotion code" id="seasonalInput" autocomplete="off">
+    <button type="submit" id="seasonalBtn">Apply</button>
+  </form>
+  <div class="promo-result" id="seasonalResult"></div>
 </section>
 
 <!-- CTA -->
@@ -647,28 +659,41 @@ exists where it cannot be seen.</p>
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  // Promo codes
-  const PROMO_CODES = {
-    'JOVE10': { discount: 10, type: 'percent', msg: '🎉 10% discount applied!' },
-    'WELCOME': { discount: 15, type: 'percent', msg: '🎉 Welcome! 15% discount applied!' },
-    'SCROLLS': { discount: 5, type: 'fixed', msg: '🎉 $5 discount applied!' },
-    'CREATION': { discount: 20, type: 'percent', msg: '🎉 Creation Series 20% off!' }
+  // Ambassador codes (permanent)
+  const AMBASSADOR_CODES = {
+    'JOVE10': { discount: 10, type: 'percent', msg: '✦ Welcome. Your ambassador 10% benefit has been applied.' },
+    'WELCOME': { discount: 15, type: 'percent', msg: '✦ Welcome. Your 15% invitation benefit has been applied.' },
+    'CREATION': { discount: 20, type: 'percent', msg: '✦ Creation Series 20% exclusive benefit applied.' }
   };
 
-  document.getElementById('promoBtn').addEventListener('click', () => {
-    const input = document.getElementById('promoInput');
-    const result = document.getElementById('promoResult');
-    const code = input.value.trim().toUpperCase();
-    if (!code) { result.className = 'promo-result error'; result.textContent = 'Please enter a code.'; return; }
-    if (PROMO_CODES[code]) {
-      result.className = 'promo-result success';
-      result.textContent = PROMO_CODES[code].msg;
-      localStorage.setItem('jove_promo', JSON.stringify({ code, ...PROMO_CODES[code] }));
-    } else {
-      result.className = 'promo-result error';
-      result.textContent = 'Invalid code.';
-    }
-  });
+  // Seasonal codes (time-limited, toggle #seasonal when active)
+  const SEASONAL_CODES = {
+    // 'SPRING26': { discount: 10, type: 'percent', msg: '🌸 Spring 10% discount applied.' },
+  };
+
+  function setupCodeForm(btnId, inputId, resultId, codes, errorMsg) {
+    document.getElementById(btnId).addEventListener('click', () => {
+      const input = document.getElementById(inputId);
+      const result = document.getElementById(resultId);
+      const code = input.value.trim().toUpperCase();
+      if (!code) { result.className = 'promo-result error'; result.textContent = 'Please enter a code.'; return; }
+      if (codes[code]) {
+        result.className = 'promo-result success';
+        result.textContent = codes[code].msg;
+        localStorage.setItem('jove_code', JSON.stringify({ code, type: btnId.includes('ambassador') ? 'ambassador' : 'seasonal', ...codes[code] }));
+      } else {
+        result.className = 'promo-result error';
+        result.textContent = errorMsg;
+      }
+    });
+  }
+
+  setupCodeForm('ambassadorBtn', 'ambassadorInput', 'ambassadorResult', AMBASSADOR_CODES, 'Invalid invitation code.');
+
+  if (Object.keys(SEASONAL_CODES).length > 0) {
+    document.getElementById('seasonal').style.display = '';
+    setupCodeForm('seasonalBtn', 'seasonalInput', 'seasonalResult', SEASONAL_CODES, 'Invalid promotion code.');
+  }
 </script>
 
 </body>

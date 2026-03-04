@@ -343,9 +343,9 @@
 </head>
 <body>
 
-<!-- PROMO BAR — inspired by Frédéric Malle -->
+<!-- PROMO BAR -->
 <div class="promo-bar" id="promoBar">
-  🎁 첫 구매 시 프로모 코드 <strong>JOVE10</strong>으로 10% 할인 · <a href="#promo">코드 입력하기</a>
+  ✦ 초대 코드가 있으신가요? 엠배서더 혜택을 확인하세요 · <a href="#invitation">코드 입력</a>
 </div>
 
 <!-- NAV -->
@@ -561,16 +561,28 @@
   </div>
 </section>
 
-<!-- PROMO CODE -->
-<section class="promo-section" id="promo">
-  <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">프로모션</div>
-  <h2>프로모 코드가 있으신가요?</h2>
-  <p>초대 코드 또는 프로모션 코드를 입력하시면 특별 할인이 적용됩니다.</p>
-  <form class="promo-form" id="promoForm" onsubmit="return false">
-    <input type="text" placeholder="프로모 코드 입력" id="promoInput" autocomplete="off">
-    <button type="submit" id="promoBtn">적용</button>
+<!-- INVITATION CODE (Ambassador) -->
+<section class="promo-section" id="invitation">
+  <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">Invitation</div>
+  <h2>초대 코드를 입력하세요</h2>
+  <p>JOVE 엠배서더로부터 받은 초대 코드를 입력하시면 특별 혜택이 적용됩니다.</p>
+  <form class="promo-form" id="ambassadorForm" onsubmit="return false">
+    <input type="text" placeholder="초대 코드 입력" id="ambassadorInput" autocomplete="off">
+    <button type="submit" id="ambassadorBtn">확인</button>
   </form>
-  <div class="promo-result" id="promoResult"></div>
+  <div class="promo-result" id="ambassadorResult"></div>
+</section>
+
+<!-- SEASONAL OFFER (Promotion) — hidden by default, toggle via JS -->
+<section class="promo-section" id="seasonal" style="display:none; border-top: 1px solid var(--border);">
+  <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">Limited Offer</div>
+  <h2>시즌 혜택</h2>
+  <p>기간 한정 프로모션 코드를 입력하세요.</p>
+  <form class="promo-form" id="seasonalForm" onsubmit="return false">
+    <input type="text" placeholder="프로모션 코드 입력" id="seasonalInput" autocomplete="off">
+    <button type="submit" id="seasonalBtn">적용</button>
+  </form>
+  <div class="promo-result" id="seasonalResult"></div>
 </section>
 
 <!-- CTA -->
@@ -652,30 +664,43 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  // Promo code system
-  const PROMO_CODES = {
-    'JOVE10': { discount: 10, type: 'percent', msg: '🎉 10% 할인이 적용되었습니다!' },
-    'WELCOME': { discount: 15, type: 'percent', msg: '🎉 웰컴 15% 할인이 적용되었습니다!' },
-    'SCROLLS': { discount: 5000, type: 'fixed', msg: '🎉 ₩5,000 할인이 적용되었습니다!' },
-    'CREATION': { discount: 20, type: 'percent', msg: '🎉 Creation Series 20% 할인!' }
+  // Ambassador codes (permanent, from influencers/ambassadors)
+  const AMBASSADOR_CODES = {
+    'JOVE10': { discount: 10, type: 'percent', msg: '✦ 환영합니다. 엠배서더 10% 혜택이 적용되었습니다.' },
+    'WELCOME': { discount: 15, type: 'percent', msg: '✦ 환영합니다. 15% 초대 혜택이 적용되었습니다.' },
+    'CREATION': { discount: 20, type: 'percent', msg: '✦ Creation Series 20% 특별 혜택이 적용되었습니다.' }
   };
 
-  document.getElementById('promoBtn').addEventListener('click', () => {
-    const input = document.getElementById('promoInput');
-    const result = document.getElementById('promoResult');
-    const code = input.value.trim().toUpperCase();
+  // Seasonal promotion codes (time-limited, toggle #seasonal section when active)
+  const SEASONAL_CODES = {
+    // 'SPRING26': { discount: 10, type: 'percent', msg: '🌸 봄 시즌 10% 할인이 적용되었습니다.' },
+    // 'SCROLLS': { discount: 5000, type: 'fixed', msg: '✦ The Scrolls ₩5,000 할인이 적용되었습니다.' }
+  };
 
-    if (!code) { result.className = 'promo-result error'; result.textContent = '코드를 입력해주세요.'; return; }
+  function setupCodeForm(btnId, inputId, resultId, codes, errorMsg) {
+    document.getElementById(btnId).addEventListener('click', () => {
+      const input = document.getElementById(inputId);
+      const result = document.getElementById(resultId);
+      const code = input.value.trim().toUpperCase();
+      if (!code) { result.className = 'promo-result error'; result.textContent = '코드를 입력해주세요.'; return; }
+      if (codes[code]) {
+        result.className = 'promo-result success';
+        result.textContent = codes[code].msg;
+        localStorage.setItem('jove_code', JSON.stringify({ code, type: btnId.includes('ambassador') ? 'ambassador' : 'seasonal', ...codes[code] }));
+      } else {
+        result.className = 'promo-result error';
+        result.textContent = errorMsg;
+      }
+    });
+  }
 
-    if (PROMO_CODES[code]) {
-      result.className = 'promo-result success';
-      result.textContent = PROMO_CODES[code].msg;
-      localStorage.setItem('jove_promo', JSON.stringify({ code, ...PROMO_CODES[code] }));
-    } else {
-      result.className = 'promo-result error';
-      result.textContent = '유효하지 않은 코드입니다.';
-    }
-  });
+  setupCodeForm('ambassadorBtn', 'ambassadorInput', 'ambassadorResult', AMBASSADOR_CODES, '유효하지 않은 초대 코드입니다.');
+
+  // Show seasonal section only when there are active promotions
+  if (Object.keys(SEASONAL_CODES).length > 0) {
+    document.getElementById('seasonal').style.display = '';
+    setupCodeForm('seasonalBtn', 'seasonalInput', 'seasonalResult', SEASONAL_CODES, '유효하지 않은 프로모션 코드입니다.');
+  }
 </script>
 
 </body>
