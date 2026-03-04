@@ -3,197 +3,224 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JOVE — Hawa</title>
+<title>JOVE — HAWA · Primam Femina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+KR:wght@200;300;400;500;600&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #060606; --fg: #e8e4df;
-    --fg-dim: rgba(232,228,223,0.45);
-    --fg-subtle: rgba(232,228,223,0.12);
-    --gold: #c4a96a;
-    --gold-dim: rgba(196,169,106,0.25);
-    --serif: 'Cormorant Garamond', serif;
-    --serif-kr: 'Noto Serif KR', serif;
+    --bg: hsl(0,0%,5%); --fg: hsl(40,10%,85%); --card: hsl(0,0%,8%);
+    --muted: hsl(40,5%,55%); --border: hsl(0,0%,15%);
+    --gold: hsl(43,35%,50%); --obsidian: hsl(0,0%,4%);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', -apple-system, 'Apple SD Gothic Neo', system-ui, sans-serif;
   }
-
   html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--fg); font-family: var(--serif-kr); line-height: 1.8; }
-
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1.5rem 3rem;
-    background: rgba(6,6,6,0.6);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(196,169,106,0.06);
-    transition: background 0.4s, padding 0.4s;
-  }
-
-  nav.scrolled { background: rgba(6,6,6,0.92); padding: 1rem 3rem; }
-
-  .nav-left, .nav-right { flex: 1; }
-  .nav-right { text-align: right; }
-  .nav-center img { height: 24px; }
-
-  .nav-left a, .nav-right a {
-    color: var(--fg-dim); text-decoration: none;
-    font-family: var(--serif); font-size: 0.65rem;
-    letter-spacing: 0.2em; text-transform: uppercase; transition: color 0.3s;
-  }
-
-  .nav-left a:hover, .nav-right a:hover { color: var(--fg); }
-  .hamburger { font-size: 1.2rem; cursor: pointer; color: var(--fg-dim); }
-
-  .product { max-width: 900px; margin: 0 auto; padding: 8rem 3rem 4rem; }
-
-  .product-back {
-    font-size: 0.65rem; letter-spacing: 0.2em;
-    color: rgba(196,169,106,0.3); text-decoration: none;
-    transition: color 0.3s; display: inline-block; margin-bottom: 3rem;
-  }
-
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  h1,h2,h3 { font-family: var(--serif); font-weight: 400; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: rgba(13,13,13,0.8); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(196,169,106,0.06); }
+  .nav-logo img { height: 22px; filter: invert(1); opacity: 0.85; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--fg); }
+  .product-hero { position: relative; height: 80vh; overflow: hidden; }
+  .product-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .product-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(13,13,13,0.3), rgba(13,13,13,0.1) 40%, var(--bg)); }
+  .product-section { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+  .product-header { text-align: center; padding: 4rem 0 3rem; }
+  .product-back { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--muted); display: inline-block; margin-bottom: 2rem; transition: color 0.3s; }
   .product-back:hover { color: var(--gold); }
-
-  .product-meta {
-    font-family: var(--serif); font-size: 0.65rem;
-    letter-spacing: 0.35em; text-transform: uppercase;
-    color: var(--gold-dim); margin-bottom: 1.5rem;
-  }
-
-  .product h1 {
-    font-family: var(--serif);
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 300; letter-spacing: 0.1em; margin-bottom: 0.3rem;
-  }
-
-  .product-latin {
-    font-family: var(--serif); font-size: 1rem;
-    font-style: italic; font-weight: 300;
-    color: var(--fg-dim); letter-spacing: 0.15em; margin-bottom: 2.5rem;
-  }
-
-  .product-desc {
-    font-size: 0.95rem; font-weight: 300;
-    color: rgba(232,228,223,0.6); line-height: 2;
-    max-width: 600px; margin-bottom: 3rem;
-  }
-
-  .notes-label {
-    font-family: var(--serif); font-size: 0.65rem;
-    letter-spacing: 0.35em; text-transform: uppercase;
-    color: rgba(196,169,106,0.3); margin-bottom: 1.5rem;
-  }
-
-  .notes-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 2rem; margin-bottom: 3rem;
-  }
-
-  .note-group h3 {
-    font-family: var(--serif); font-size: 0.6rem;
-    letter-spacing: 0.3em; text-transform: uppercase;
-    color: var(--fg-dim); margin-bottom: 0.8rem; font-weight: 400;
-  }
-
-  .note-group p { font-size: 0.9rem; font-weight: 400; line-height: 1.8; }
-
-  .product-divider {
-    width: 100%; height: 1px;
-    background: linear-gradient(to right, rgba(196,169,106,0.1), transparent);
-    margin: 2.5rem 0;
-  }
-
-  .product-price {
-    font-family: var(--serif); font-size: 1.8rem;
-    font-weight: 300; letter-spacing: 0.05em; margin-bottom: 2rem;
-  }
-
-  .add-to-cart {
-    display: block; width: 100%; max-width: 400px;
-    padding: 1rem; text-align: center;
-    border: 1px solid rgba(196,169,106,0.2);
-    background: rgba(196,169,106,0.05);
-    color: var(--fg); font-family: var(--serif); font-size: 0.75rem;
-    letter-spacing: 0.3em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.4s; text-decoration: none;
-  }
-
-  .add-to-cart:hover {
-    background: rgba(196,169,106,0.12);
-    border-color: rgba(196,169,106,0.4);
-    box-shadow: 0 0 40px rgba(196,169,106,0.08);
-  }
-
-  .shipping-info { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(196,169,106,0.06); }
-  .shipping-info p { font-size: 0.75rem; color: var(--fg-dim); font-weight: 300; margin-bottom: 0.5rem; }
-
-  footer {
-    border-top: 1px solid rgba(196,169,106,0.06); padding: 3rem;
-    display: flex; justify-content: space-between; align-items: center;
-    max-width: 900px; margin: 4rem auto 0;
-  }
-
-  footer .footer-logo img { height: 18px; opacity: 0.4; }
-  footer .copyright { font-size: 0.55rem; color: rgba(232,228,223,0.15); }
-
-  @media (max-width: 768px) {
-    nav { padding: 1.2rem 1.5rem; }
-    .product { padding: 7rem 1.5rem 3rem; }
-    .notes-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .product-meta { font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; }
+  .product-header h1 { font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .product-latin { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem; }
+  .product-desc { color: var(--muted); font-size: 0.9rem; line-height: 2; max-width: 550px; margin: 0 auto 3rem; }
+  .scent-pyramid { padding: 5rem 0; }
+  .pyramid-title { text-align: center; margin-bottom: 4rem; }
+  .pyramid-title h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .pyramid-title p { font-size: 0.75rem; color: var(--muted); }
+  .pyramid-layers { max-width: 700px; margin: 0 auto; }
+  .pyramid-layer { display: grid; grid-template-columns: 120px 1fr; gap: 2rem; align-items: center; padding: 2.5rem 0; border-bottom: 1px solid var(--border); }
+  .pyramid-layer:last-child { border-bottom: none; }
+  .layer-label { text-align: right; }
+  .layer-label h3 { font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .layer-label.top h3 { color: var(--gold); }
+  .layer-label.heart h3 { color: hsl(340,35%,55%); }
+  .layer-label.base h3 { color: hsl(20,25%,40%); }
+  .layer-label span { font-size: 0.55rem; color: rgba(221,218,213,0.25); letter-spacing: 0.1em; }
+  .layer-notes { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .note-card { flex: 1; min-width: 120px; background: var(--card); border: 1px solid var(--border); padding: 1.5rem; text-align: center; transition: all 0.5s; position: relative; overflow: hidden; }
+  .note-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .note-card.top-note::before { background: var(--gold); }
+  .note-card.heart-note::before { background: hsl(340,35%,55%); }
+  .note-card.base-note::before { background: hsl(20,25%,40%); }
+  .note-card:hover { border-color: rgba(196,169,106,0.2); transform: translateY(-3px); }
+  .note-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .note-name { font-family: var(--serif); font-size: 1rem; margin-bottom: 0.3rem; }
+  .note-detail { font-size: 0.65rem; color: var(--muted); line-height: 1.6; }
+  .scent-journey { padding: 5rem 0; text-align: center; }
+  .journey-title { margin-bottom: 3rem; }
+  .journey-title h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .journey-title p { font-size: 0.75rem; color: var(--muted); }
+  .journey-bar { position: relative; max-width: 600px; margin: 0 auto; height: 60px; background: var(--card); border: 1px solid var(--border); display: flex; overflow: hidden; }
+  .journey-segment { display: flex; align-items: center; justify-content: center; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(221,218,213,0.7); transition: all 0.5s; }
+  .journey-segment:hover { filter: brightness(1.3); }
+  .journey-segment.seg-top { width: 20%; background: linear-gradient(135deg, rgba(196,169,106,0.15), rgba(196,169,106,0.05)); border-right: 1px solid var(--border); }
+  .journey-segment.seg-heart { width: 35%; background: linear-gradient(135deg, rgba(180,80,100,0.12), rgba(180,80,100,0.04)); border-right: 1px solid var(--border); }
+  .journey-segment.seg-base { width: 45%; background: linear-gradient(135deg, rgba(140,100,60,0.15), rgba(140,100,60,0.05)); }
+  .journey-labels { display: flex; max-width: 600px; margin: 0.8rem auto 0; }
+  .journey-labels span { font-size: 0.5rem; color: rgba(221,218,213,0.2); letter-spacing: 0.1em; }
+  .journey-labels .jl-top { width: 20%; text-align: center; }
+  .journey-labels .jl-heart { width: 35%; text-align: center; }
+  .journey-labels .jl-base { width: 45%; text-align: center; }
+  .product-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 4rem 0; }
+  .product-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border: 1px solid var(--border); transition: transform 0.5s; }
+  .product-gallery img:hover { transform: scale(1.02); }
+  .purchase { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); }
+  .purchase-price { font-family: var(--serif); font-size: 2rem; margin-bottom: 2rem; }
+  .purchase-btn { display: inline-block; padding: 1rem 3.5rem; background: var(--fg); color: var(--bg); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.5s; }
+  .purchase-btn:hover { background: var(--gold); }
+  .purchase-info { margin-top: 2rem; }
+  .purchase-info p { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.3rem; }
+  footer { border-top: 1px solid var(--border); padding: 3rem 2rem; display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 3rem auto 0; }
+  footer img { height: 18px; filter: invert(1); opacity: 0.4; }
+  footer span { font-size: 0.5rem; color: rgba(221,218,213,0.15); }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media(max-width:767px){
+    nav { padding: 1rem 1.5rem; }
+    .product-section { padding: 0 1.5rem; }
+    .pyramid-layer { grid-template-columns: 1fr; gap: 1rem; text-align: center; }
+    .layer-label { text-align: center; }
+    .layer-notes { justify-content: center; }
+    .product-gallery { grid-template-columns: 1fr; }
+    .product-hero { height: 60vh; }
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-left"><span class="hamburger">☰</span></div>
-  <a href="./" class="nav-center"><img src="logo-white.png" alt="JOVE"></a>
-  <div class="nav-right"><a href="#" style="margin-right:1.5rem">장바구니 (0)</a><a href="../en/hawa.html">EN</a></div>
+  <a href="./" class="nav-logo"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <div class="nav-links">
+    <a href="./#collection">컬렉션</a>
+    <a href="../en/hawa.html">EN</a>
+    <a href="#">장바구니 (0)</a>
+  </div>
 </nav>
 
-<div class="product">
-  <a href="./#collection" class="product-back">← 컬렉션으로 돌아가기</a>
+<div class="product-hero">
+  <img src="../assets/lovable/hawa-terracotta.jpg" alt="HAWA — Primam Femina">
+  <div class="product-hero-overlay"></div>
+</div>
 
-  <div class="product-meta">Eau de Parfum · 50ml</div>
-  <h1>Hawa</h1>
-  <div class="product-latin">Primam Femina</div>
-
-  <p class="product-desc">
-    최초의 여성, 하와의 향기. 관능과 신성의 경계를 넘나드는 향수.
-    Fig Leaf와 Pink Pepper의 탑 노트, Jasmine Sambac과 Rose de Mai의 하트,
-    Oud와 Vanilla Absolute의 베이스로 구성된 향수입니다.
-  </p>
-
-  <div class="notes-label">Fragrance Notes</div>
-  <div class="notes-grid">
-    <div class="note-group"><h3>Top Notes</h3><p>Fig Leaf,<br>Pink Pepper</p></div>
-    <div class="note-group"><h3>Heart Notes</h3><p>Jasmine Sambac,<br>Rose de Mai</p></div>
-    <div class="note-group"><h3>Base Notes</h3><p>Oud,<br>Vanilla Absolute</p></div>
+<div class="product-section">
+  <div class="product-header reveal">
+    <a href="./#collection" class="product-back">← 컬렉션으로 돌아가기</a>
+    <div class="product-meta">Eau de Parfum · 50ml · Lion Collection</div>
+    <h1>HAWA</h1>
+    <div class="product-latin">Primam Femina — "최초의 여성"</div>
+    <p class="product-desc">최초의 여성, 하와의 향기. 관능과 신성의 경계를 넘나드는 매혹적인 향수. 무화과 잎사귀 아래에서 시작된, 순수와 욕망 사이의 영원한 춤.</p>
   </div>
 
-  <div class="product-divider"></div>
-  <div class="product-price">₩340,000</div>
-  <a href="#" class="add-to-cart">Add to Cart</a>
+  <div class="scent-pyramid reveal">
+    <div class="pyramid-title">
+      <h2>향의 구조</h2>
+      <p>유혹과 순수 사이의 세 개의 층위</p>
+    </div>
+    <div class="pyramid-layers">
+      <div class="pyramid-layer">
+        <div class="layer-label top"><h3>Top Notes</h3><span>첫 인상 · 0–15분</span></div>
+        <div class="layer-notes">
+          <div class="note-card top-note">
+            <div class="note-icon">🌿</div>
+            <div class="note-name">Fig Leaf</div>
+            <div class="note-detail">무화과 잎<br>에덴의 첫 번째 향기</div>
+          </div>
+          <div class="note-card top-note">
+            <div class="note-icon">🌶️</div>
+            <div class="note-name">Pink Pepper</div>
+            <div class="note-detail">핑크 페퍼<br>스파이시한 유혹의 시작</div>
+          </div>
+        </div>
+      </div>
+      <div class="pyramid-layer">
+        <div class="layer-label heart"><h3>Heart Notes</h3><span>본질 · 15분–3시간</span></div>
+        <div class="layer-notes">
+          <div class="note-card heart-note">
+            <div class="note-icon">🤍</div>
+            <div class="note-name">Jasmine Sambac</div>
+            <div class="note-detail">인도산 재스민 삼박<br>관능적이고 풍부한 플로럴</div>
+          </div>
+          <div class="note-card heart-note">
+            <div class="note-icon">🌹</div>
+            <div class="note-name">Rose de Mai</div>
+            <div class="note-detail">그라스산 로즈 드 메<br>가장 고귀한 장미</div>
+          </div>
+        </div>
+      </div>
+      <div class="pyramid-layer">
+        <div class="layer-label base"><h3>Base Notes</h3><span>잔향 · 3시간 이후</span></div>
+        <div class="layer-notes">
+          <div class="note-card base-note">
+            <div class="note-icon">🪵</div>
+            <div class="note-name">Oud</div>
+            <div class="note-detail">아가우드<br>천 년의 나무가 품은 깊이</div>
+          </div>
+          <div class="note-card base-note">
+            <div class="note-icon">🍯</div>
+            <div class="note-name">Vanilla Absolute</div>
+            <div class="note-detail">바닐라 앱솔루트<br>따뜻하고 중독적인 감미</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <div class="shipping-info">
-    <p>₩100,000 이상 무료 배송</p>
-    <p>무료 선물 포장 서비스</p>
+  <div class="scent-journey reveal">
+    <div class="journey-title">
+      <h2>향의 여정</h2>
+      <p>시간에 따라 깊어지는 유혹</p>
+    </div>
+    <div class="journey-bar">
+      <div class="journey-segment seg-top">Top</div>
+      <div class="journey-segment seg-heart">Heart</div>
+      <div class="journey-segment seg-base">Base</div>
+    </div>
+    <div class="journey-labels">
+      <span class="jl-top">무화과의 초대</span>
+      <span class="jl-heart">꽃의 관능</span>
+      <span class="jl-base">우드의 깊이</span>
+    </div>
+  </div>
+
+  <div class="product-gallery reveal">
+    <img src="../assets/lovable/hawa-terracotta.jpg" alt="HAWA">
+    <img src="../assets/lovable/hawa-linen-warm.jpg" alt="HAWA Mood">
+  </div>
+
+  <div class="purchase reveal">
+    <div class="purchase-price">₩340,000</div>
+    <button class="purchase-btn">장바구니에 담기</button>
+    <div class="purchase-info">
+      <p>₩100,000 이상 무료 배송</p>
+      <p>무료 선물 포장 서비스</p>
+    </div>
   </div>
 </div>
 
 <footer>
-  <a href="./" class="footer-logo"><img src="logo-white.png" alt="JOVE"></a>
-  <div class="copyright">© 2026 JOVE</div>
+  <a href="./"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <span>© 2026 JOVE</span>
 </footer>
 
 <script>
-  const nav = document.querySelector('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 80);
-  });
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
