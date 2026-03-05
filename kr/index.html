@@ -282,7 +282,8 @@
   /* CTA */
   .cta-section { background: var(--obsidian); position: relative; height: 100vh; overflow: hidden; }
   .cta-bg { position: absolute; inset: 0; }
-  .cta-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+  .cta-bg img, .cta-bg video { width: 100%; height: 100%; object-fit: cover; opacity: 0.35; }
+  .cta-bg video { object-position: center; }
   .cta-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; }
   .cta-title { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1.5rem; }
   .cta-desc { color: var(--muted); max-width: 28rem; font-size: 0.875rem; line-height: 1.8; margin-bottom: 2.5rem; }
@@ -593,7 +594,7 @@
 
 <!-- CTA -->
 <section class="cta-section">
-  <div class="cta-bg"><img src="../assets/lovable/jove-smoke-logo.jpg" alt=""></div>
+  <div class="cta-bg"><video src="../assets/genesis-light.mp4" autoplay muted loop playsinline></video></div>
   <div class="cta-content reveal">
     <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem">JOVE 체험</div>
     <h2 class="cta-title">향 그 너머</h2>
