@@ -229,15 +229,25 @@
 
   /* TWO WORLDS */
   .two-worlds { background: var(--bg); }
-  .two-worlds-hero { position: relative; height: 70vh; overflow: hidden; }
-  @media(min-width:768px){ .two-worlds-hero { height: 100vh; } }
-  .two-worlds-hero img { width: 100%; height: 100%; object-fit: cover; }
-  .two-worlds-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--bg), transparent); }
-  .two-worlds-hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; }
+  .two-worlds-intro { text-align: center; padding: 6rem 1.5rem 3rem; }
+  @media(min-width:768px){ .two-worlds-intro { padding: 8rem 3rem 4rem; } }
   .two-worlds-title { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1.5rem; }
-  .two-worlds-desc { color: var(--muted); max-width: 36rem; font-size: 0.875rem; line-height: 1.8; }
-  .two-worlds-grid { display: grid; gap: 1px; background: var(--border); max-width: 64rem; margin: 0 auto; padding: 6rem 1.5rem; }
-  @media(min-width:768px){ .two-worlds-grid { grid-template-columns: 1fr 1fr; padding: 8rem 3rem; } }
+  .two-worlds-desc { color: var(--muted); max-width: 36rem; font-size: 0.875rem; line-height: 1.8; margin: 0 auto; }
+  .two-worlds-grid { display: grid; gap: 0; max-width: 100%; margin: 0; }
+  @media(min-width:768px){ .two-worlds-grid { grid-template-columns: 1fr 1fr; } }
+  .world-video-card { position: relative; height: 70vh; overflow: hidden; cursor: pointer; }
+  @media(min-width:768px){ .world-video-card { height: 85vh; } }
+  .world-video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.6s; }
+  .world-video-card:hover video { opacity: 0.85; }
+  .world-video-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%, rgba(0,0,0,0.3) 100%); }
+  .world-video-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 3rem 2rem; text-align: center; }
+  @media(min-width:768px){ .world-video-content { padding: 4rem 3rem; } }
+  .world-video-label { font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase; margin-bottom: 1rem; }
+  .world-video-label.lion { color: var(--gold); }
+  .world-video-label.serpent { color: hsl(0, 50%, 55%); }
+  .world-video-name { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 0.8rem; }
+  .world-video-tagline { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+  .world-video-text { color: var(--muted); font-size: 0.8rem; line-height: 1.8; max-width: 20rem; margin: 0 auto; }
   .world-card { background: var(--bg); padding: 2rem; }
   @media(min-width:768px){ .world-card { padding: 3rem; } }
   @media(min-width:1024px){ .world-card { padding: 4rem; } }
@@ -534,31 +544,31 @@ form of memory</h2>
 
 <!-- TWO WORLDS -->
 <section class="two-worlds" id="about">
-  <div class="two-worlds-hero reveal">
-    <picture>
-      <source media="(max-width: 767px)" srcset="../assets/lovable/duality-light-dark.jpg">
-      <img src="../assets/lovable/duality-light-dark.jpg" alt="Two Worlds">
-    </picture>
-    <div class="two-worlds-hero-overlay"></div>
-    <div class="two-worlds-hero-content">
-      <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem">Duality</div>
-      <h2 class="two-worlds-title">Two Sides of Being</h2>
-      <p class="two-worlds-desc">Every JOVE creation lives in the tension between opposing forces. Not conflict, but harmony.</p>
-    </div>
+  <div class="two-worlds-intro reveal">
+    <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem">Duality</div>
+    <h2 class="two-worlds-title">Two Sides of Being</h2>
+    <p class="two-worlds-desc">Every JOVE creation lives in the tension between opposing forces. Not conflict, but harmony.</p>
   </div>
-  <div class="two-worlds-grid" style="position:relative">
-    <img src="../assets/lovable/winged-lion-symbol.jpg" alt="" class="two-worlds-symbol">
-    <div class="world-card reveal">
-      <div class="world-card-label light">Light</div>
-      <h3 class="world-card-title">Clarity</h3>
-      <p class="world-card-text">The purity of intention. A quiet confidence born from knowing exactly who you are. Fresh beginnings and crystalline moments.</p>
-      <div class="world-tags"><span class="world-tag">Fresh</span><span class="world-tag">Clean</span><span class="world-tag">Luminous</span></div>
+  <div class="two-worlds-grid">
+    <div class="world-video-card reveal">
+      <video src="../assets/lion-worldview.mp4" autoplay muted loop playsinline></video>
+      <div class="world-video-overlay"></div>
+      <div class="world-video-content">
+        <div class="world-video-label lion">The Sacred</div>
+        <h3 class="world-video-name">Lion</h3>
+        <p class="world-video-tagline">A World of Divine Light</p>
+        <p class="world-video-text">The purity of intention. A quiet confidence born from knowing exactly who you are. Fresh beginnings and crystalline moments.</p>
+      </div>
     </div>
-    <div class="world-card reveal">
-      <div class="world-card-label shadow">Shadow</div>
-      <h3 class="world-card-title">Depth</h3>
-      <p class="world-card-text">The allure of mystery. Rich, complex layers that reveal themselves slowly. The magnetic pull of the unknown.</p>
-      <div class="world-tags"><span class="world-tag">Deep</span><span class="world-tag">Rich</span><span class="world-tag">Enigmatic</span></div>
+    <div class="world-video-card reveal">
+      <video src="../assets/serpent-worldview.mp4" autoplay muted loop playsinline></video>
+      <div class="world-video-overlay"></div>
+      <div class="world-video-content">
+        <div class="world-video-label serpent">The Temptation</div>
+        <h3 class="world-video-name">Serpent</h3>
+        <p class="world-video-tagline">A World of Mystery &amp; Allure</p>
+        <p class="world-video-text">The allure of mystery. Rich, complex layers that reveal themselves slowly. The magnetic pull of the unknown.</p>
+      </div>
     </div>
   </div>
 </section>
