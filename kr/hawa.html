@@ -107,7 +107,7 @@
   <div class="nav-links">
     <a href="./#collection">컬렉션</a>
     <a href="../en/hawa.html">EN</a>
-    <a href="#">장바구니 (0)</a>
+    <a href="#" data-toggle-cart style="position:relative">장바구니 <span class="cart-count" style="display:none;background:hsl(43,35%,50%);color:hsl(0,0%,4%);font-size:0.45rem;width:14px;height:14px;border-radius:50%;position:absolute;top:-5px;right:-8px;align-items:center;justify-content:center">0</span></a>
   </div>
 </nav>
 
@@ -203,7 +203,7 @@
 
   <div class="purchase reveal">
     <div class="purchase-price">₩340,000</div>
-    <button class="purchase-btn">장바구니에 담기</button>
+    <button class="purchase-btn" data-add-to-cart="hawa">장바구니에 담기</button>
     <div class="purchase-info">
       <p>₩100,000 이상 무료 배송</p>
       <p>무료 선물 포장 서비스</p>
@@ -222,5 +222,6 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
+<script src="../js/cart.js"></script>
 </body>
 </html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — 결제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+KR:wght@200;300" rel="stylesheet">
+<!-- Toss Payments SDK -->
+<script src="https://js.tosspayments.com/v1/payment"></script>
+<!-- Daum Postcode -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: hsl(0,0%,5%); --fg: hsl(40,10%,85%); --card: hsl(0,0%,8%);
+    --muted: hsl(40,5%,55%); --border: hsl(0,0%,15%);
+    --gold: hsl(43,35%,50%); --obsidian: hsl(0,0%,4%);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', system-ui, sans-serif;
+    --danger: hsl(0,60%,50%);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  h1,h2,h3 { font-family: var(--serif); font-weight: 400; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem; background: rgba(13,13,13,0.8);
+    backdrop-filter: blur(16px); border-bottom: 1px solid rgba(196,169,106,0.06);
+  }
+  .nav-logo img { height: 22px; filter: invert(1); opacity: 0.85; }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-links a { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--fg); }
+
+  /* CHECKOUT LAYOUT */
+  .checkout-wrapper {
+    max-width: 1000px; margin: 0 auto; padding: 7rem 2rem 4rem;
+    display: grid; gap: 3rem;
+  }
+  @media(min-width:768px) {
+    .checkout-wrapper { grid-template-columns: 1fr 380px; gap: 4rem; }
+  }
+
+  .checkout-title {
+    font-family: var(--serif); font-size: 2rem; margin-bottom: 0.5rem;
+    grid-column: 1 / -1;
+  }
+  .checkout-back {
+    font-size: 0.6rem; letter-spacing: 0.2em; color: var(--muted);
+    margin-bottom: 2rem; display: inline-block; grid-column: 1 / -1;
+    transition: color 0.3s;
+  }
+  .checkout-back:hover { color: var(--gold); }
+
+  /* SECTIONS */
+  .section-title {
+    font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* FORM */
+  .form-row { margin-bottom: 1.2rem; }
+  .form-row label {
+    display: block; font-size: 0.65rem; letter-spacing: 0.15em;
+    color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase;
+  }
+  .form-row input, .form-row select, .form-row textarea {
+    width: 100%; padding: 0.8rem 1rem; background: var(--card);
+    border: 1px solid var(--border); color: var(--fg);
+    font-family: var(--sans); font-size: 0.85rem;
+    transition: border-color 0.3s; outline: none;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    border-color: var(--gold);
+  }
+  .form-row input::placeholder { color: rgba(221,218,213,0.2); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-row.full { grid-column: 1 / -1; }
+
+  .btn-address {
+    display: inline-block; margin-top: 0.4rem; padding: 0.5rem 1.2rem;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.65rem; letter-spacing: 0.15em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+  }
+  .btn-address:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ORDER SUMMARY SIDEBAR */
+  .order-summary {
+    background: var(--card); border: 1px solid var(--border); padding: 2rem;
+    position: sticky; top: 6rem; align-self: start;
+  }
+
+  .summary-item {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-item:last-of-type { border-bottom: none; }
+  .summary-item-img {
+    width: 60px; height: 75px; overflow: hidden; flex-shrink: 0;
+    background: var(--obsidian);
+  }
+  .summary-item-img img { width: 100%; height: 100%; object-fit: cover; }
+  .summary-item-info { flex: 1; }
+  .summary-item-name { font-family: var(--serif); font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .summary-item-meta { font-size: 0.65rem; color: var(--muted); }
+  .summary-item-price { font-size: 0.85rem; white-space: nowrap; }
+  .summary-item-qty {
+    display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem;
+  }
+  .qty-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    width: 22px; height: 22px; cursor: pointer; font-size: 0.75rem;
+    display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+  }
+  .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .qty-val { font-size: 0.8rem; min-width: 18px; text-align: center; }
+  .summary-item-remove {
+    font-size: 0.55rem; color: var(--muted); cursor: pointer;
+    text-decoration: underline; margin-top: 0.3rem; transition: color 0.3s;
+    background: none; border: none; font-family: var(--sans);
+  }
+  .summary-item-remove:hover { color: var(--danger); }
+
+  /* PROMO */
+  .promo-row {
+    display: flex; gap: 0; margin: 1rem 0; border: 1px solid var(--border);
+  }
+  .promo-row input {
+    flex: 1; padding: 0.7rem 1rem; background: transparent;
+    border: none; color: var(--fg); font-size: 0.8rem;
+    font-family: var(--sans); outline: none;
+  }
+  .promo-row input::placeholder { color: rgba(221,218,213,0.2); }
+  .promo-row button {
+    padding: 0.7rem 1.5rem; background: var(--fg); color: var(--bg);
+    border: none; font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+    font-family: var(--sans);
+  }
+  .promo-row button:hover { background: var(--gold); }
+  .promo-result {
+    font-size: 0.7rem; margin-top: 0.5rem; min-height: 1.2rem;
+  }
+  .promo-result.success { color: var(--gold); }
+  .promo-result.error { color: var(--danger); }
+
+  /* TOTALS */
+  .summary-totals { padding-top: 1rem; border-top: 1px solid var(--border); margin-top: 0.5rem; }
+  .summary-line {
+    display: flex; justify-content: space-between; margin-bottom: 0.6rem;
+    font-size: 0.8rem;
+  }
+  .summary-line.discount { color: var(--gold); }
+  .summary-line.total {
+    font-family: var(--serif); font-size: 1.4rem;
+    padding-top: 0.8rem; border-top: 1px solid var(--border);
+    margin-top: 0.8rem;
+  }
+
+  /* PAY BUTTON */
+  .btn-pay {
+    display: block; width: 100%; padding: 1rem; margin-top: 1.5rem;
+    background: var(--fg); color: var(--bg);
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: all 0.5s;
+    font-family: var(--sans);
+  }
+  .btn-pay:hover { background: var(--gold); }
+  .btn-pay:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .pay-note {
+    font-size: 0.6rem; color: var(--muted); text-align: center;
+    margin-top: 1rem; line-height: 1.6;
+  }
+
+  /* EMPTY CART */
+  .empty-cart {
+    text-align: center; padding: 4rem 0; grid-column: 1 / -1;
+  }
+  .empty-cart h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+  .empty-cart p { color: var(--muted); margin-bottom: 2rem; }
+  .empty-cart a {
+    display: inline-block; padding: 0.8rem 2.5rem;
+    border: 1px solid var(--border); font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); transition: all 0.3s;
+  }
+  .empty-cart a:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 3rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1000px; margin: 3rem auto 0;
+  }
+  footer img { height: 18px; filter: invert(1); opacity: 0.4; }
+  footer span { font-size: 0.5rem; color: rgba(221,218,213,0.15); }
+
+  @media(max-width:767px) {
+    nav { padding: 1rem 1.5rem; }
+    .checkout-wrapper { padding: 6rem 1.5rem 3rem; }
+    .form-grid { grid-template-columns: 1fr; }
+    .order-summary { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="./" class="nav-logo"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <div class="nav-links">
+    <a href="./#collection">컬렉션</a>
+    <a href="./" >홈</a>
+  </div>
+</nav>
+
+<div class="checkout-wrapper" id="checkoutWrapper">
+  <a href="./" class="checkout-back">← 쇼핑 계속하기</a>
+  <h1 class="checkout-title">결제</h1>
+
+  <!-- LEFT: FORM -->
+  <div class="checkout-form" id="checkoutForm">
+    <div class="section-title">배송 정보</div>
+    <div class="form-grid">
+      <div class="form-row">
+        <label>이름</label>
+        <input type="text" id="name" placeholder="홍길동" required>
+      </div>
+      <div class="form-row">
+        <label>연락처</label>
+        <input type="tel" id="phone" placeholder="010-0000-0000" required>
+      </div>
+      <div class="form-row full">
+        <label>이메일</label>
+        <input type="email" id="email" placeholder="email@example.com" required>
+      </div>
+      <div class="form-row full">
+        <label>우편번호</label>
+        <div style="display:flex;gap:0.5rem">
+          <input type="text" id="postcode" placeholder="우편번호" readonly style="flex:1">
+          <button type="button" class="btn-address" onclick="searchAddress()">주소 검색</button>
+        </div>
+      </div>
+      <div class="form-row full">
+        <label>주소</label>
+        <input type="text" id="address" placeholder="기본 주소" readonly>
+      </div>
+      <div class="form-row full">
+        <label>상세 주소</label>
+        <input type="text" id="addressDetail" placeholder="상세 주소 (동/호수)">
+      </div>
+      <div class="form-row full">
+        <label>배송 메모</label>
+        <input type="text" id="memo" placeholder="부재시 문 앞에 놓아주세요 (선택)">
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: ORDER SUMMARY -->
+  <div class="order-summary" id="orderSummary">
+    <div class="section-title">주문 요약</div>
+    <div id="summaryItems"></div>
+
+    <!-- PROMO CODE -->
+    <div style="margin-top:1rem">
+      <div class="promo-row">
+        <input type="text" id="promoInput" placeholder="초대 코드 입력">
+        <button id="promoBtn">적용</button>
+      </div>
+      <div class="promo-result" id="promoResult"></div>
+    </div>
+
+    <!-- TOTALS -->
+    <div class="summary-totals" id="summaryTotals"></div>
+
+    <!-- PAY -->
+    <button class="btn-pay" id="payBtn" onclick="processPayment()">토스페이먼츠로 결제하기</button>
+    <div class="pay-note">
+      안전한 결제를 위해 토스페이먼츠를 사용합니다.<br>
+      카드 / 계좌이체 / 간편결제
+    </div>
+  </div>
+</div>
+
+<!-- EMPTY STATE -->
+<div class="empty-cart" id="emptyCart" style="display:none">
+  <h2>장바구니가 비어있습니다</h2>
+  <p>JOVE의 향을 만나보세요.</p>
+  <a href="./#collection">컬렉션 보기</a>
+</div>
+
+<footer>
+  <a href="./"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <span>© 2026 JOVE</span>
+</footer>
+
+<script src="../js/cart.js"></script>
+<script>
+  /* ── Render Order Summary ── */
+  function renderSummary() {
+    const cart = JoveCart.getCart();
+    if (cart.length === 0) {
+      document.getElementById('checkoutWrapper').style.display = 'none';
+      document.getElementById('emptyCart').style.display = 'block';
+      return;
+    }
+
+    const itemsEl = document.getElementById('summaryItems');
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="summary-item">
+        <div class="summary-item-img"><img src="${item.image}" alt="${item.name}"></div>
+        <div class="summary-item-info">
+          <div class="summary-item-name">${item.name}</div>
+          <div class="summary-item-meta">${item.subtitle}</div>
+          <div class="summary-item-qty">
+            <button class="qty-btn" onclick="JoveCart.updateQuantity('${item.id}',${item.quantity-1});renderSummary()">−</button>
+            <span class="qty-val">${item.quantity}</span>
+            <button class="qty-btn" onclick="JoveCart.updateQuantity('${item.id}',${item.quantity+1});renderSummary()">+</button>
+          </div>
+          <button class="summary-item-remove" onclick="JoveCart.remove('${item.id}');renderSummary()">삭제</button>
+        </div>
+        <div class="summary-item-price">${JoveCart.formatKRW(item.price * item.quantity)}</div>
+      </div>
+    `).join('');
+
+    renderTotals();
+  }
+
+  function renderTotals() {
+    const subtotal = JoveCart.getCartSubtotal('krw');
+    const promo = JoveCart.getAppliedPromo();
+    const total = JoveCart.getCartTotal('krw');
+    const shipping = subtotal >= 100000 ? 0 : 3000;
+    const finalTotal = total + shipping;
+
+    let html = `
+      <div class="summary-line">
+        <span style="color:var(--muted)">소계</span>
+        <span>${JoveCart.formatKRW(subtotal)}</span>
+      </div>
+    `;
+    if (promo) {
+      const discountAmount = subtotal - total;
+      html += `
+        <div class="summary-line discount">
+          <span>할인 (${promo.code})</span>
+          <span>-${JoveCart.formatKRW(discountAmount)}</span>
+        </div>
+      `;
+    }
+    html += `
+      <div class="summary-line">
+        <span style="color:var(--muted)">배송비</span>
+        <span>${shipping === 0 ? '무료' : JoveCart.formatKRW(shipping)}</span>
+      </div>
+      <div class="summary-line total">
+        <span>합계</span>
+        <span>${JoveCart.formatKRW(finalTotal)}</span>
+      </div>
+    `;
+    document.getElementById('summaryTotals').innerHTML = html;
+  }
+
+  /* ── Promo Code ── */
+  document.getElementById('promoBtn').addEventListener('click', () => {
+    const input = document.getElementById('promoInput');
+    const result = document.getElementById('promoResult');
+    const promo = JoveCart.applyPromo(input.value);
+    if (promo) {
+      result.textContent = promo.msgKr;
+      result.className = 'promo-result success';
+      renderTotals();
+    } else {
+      result.textContent = '유효하지 않은 코드입니다.';
+      result.className = 'promo-result error';
+    }
+  });
+
+  /* ── Daum Postcode ── */
+  function searchAddress() {
+    new daum.Postcode({
+      oncomplete: function(data) {
+        document.getElementById('postcode').value = data.zonecode;
+        document.getElementById('address').value = data.address;
+        document.getElementById('addressDetail').focus();
+      }
+    }).open();
+  }
+
+  /* ── Toss Payments ── */
+  function processPayment() {
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const postcode = document.getElementById('postcode').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if (!name || !phone || !email || !postcode || !address) {
+      alert('배송 정보를 모두 입력해주세요.');
+      return;
+    }
+
+    const cart = JoveCart.getCart();
+    const subtotal = JoveCart.getCartSubtotal('krw');
+    const total = JoveCart.getCartTotal('krw');
+    const shipping = subtotal >= 100000 ? 0 : 3000;
+    const finalTotal = total + shipping;
+
+    const orderId = 'JOVE-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+    const orderName = cart.length === 1 
+      ? cart[0].name 
+      : cart[0].name + ' 외 ' + (cart.length - 1) + '건';
+
+    try {
+      const tossPayments = TossPayments('test_ck_PLACEHOLDER');
+      tossPayments.requestPayment('카드', {
+        amount: finalTotal,
+        orderId: orderId,
+        orderName: orderName,
+        customerName: name,
+        customerEmail: email,
+        successUrl: window.location.origin + '/kr/order-complete.html',
+        failUrl: window.location.origin + '/kr/checkout.html?fail=true'
+      });
+    } catch(e) {
+      alert('결제 시스템 준비 중입니다. 곧 서비스 시작됩니다.');
+      console.error(e);
+    }
+  }
+
+  /* ── Init ── */
+  renderSummary();
+  window.addEventListener('cart-updated', renderSummary);
+</script>
+</body>
+</html>

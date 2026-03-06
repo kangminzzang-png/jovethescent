@@ -107,7 +107,7 @@
   <div class="nav-links">
     <a href="./#collection">Collection</a>
     <a href="../kr/hawa.html">EN</a>
-    <a href="#">Cart (0)</a>
+    <a href="#" data-toggle-cart style="position:relative">Cart <span class="cart-count" style="display:none;background:hsl(43,35%,50%);color:hsl(0,0%,4%);font-size:0.45rem;width:14px;height:14px;border-radius:50%;position:absolute;top:-5px;right:-8px;align-items:center;justify-content:center">0</span></a>
   </div>
 </nav>
 
@@ -203,7 +203,7 @@
 
   <div class="purchase reveal">
     <div class="purchase-price">$280</div>
-    <button class="purchase-btn">Add to Cart</button>
+    <button class="purchase-btn" data-add-to-cart="hawa">Add to Cart</button>
     <div class="purchase-info">
       <p>Free shipping on orders over $100</p>
       <p>Complimentary gift wrapping</p>
@@ -222,5 +222,6 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
+<script src="../js/cart.js"></script>
 </body>
 </html>

@@ -372,7 +372,7 @@
   <a href="./" class="nav-logo"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
   <div class="nav-right">
     <a href="../en/">EN</a>
-    <button>장바구니 (0)</button>
+    <button data-toggle-cart style="position:relative;cursor:pointer">장바구니 <span class="cart-count" style="display:none;position:absolute;top:-6px;right:-10px;background:var(--gold);color:var(--obsidian);font-size:0.5rem;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center">0</span></button>
   </div>
 </nav>
 
@@ -431,7 +431,7 @@
       <div class="product-img">
         <img src="../assets/lovable/product-genesis.jpg" alt="Genesis I">
         <div class="product-img-overlay"></div>
-        <div class="quick-add"><button>장바구니에 담기</button></div>
+        <div class="quick-add"><button data-add-to-cart="genesis-i">장바구니에 담기</button></div>
       </div>
       <div class="product-info">
         <div><div class="product-name">Genesis I</div><div class="product-latin">Fiat Lux</div></div>
@@ -443,7 +443,7 @@
       <div class="product-img">
         <img src="../assets/lovable/product-hawa-box.png" alt="HAWA">
         <div class="product-img-overlay"></div>
-        <div class="quick-add"><button>장바구니에 담기</button></div>
+        <div class="quick-add"><button data-add-to-cart="hawa">장바구니에 담기</button></div>
       </div>
       <div class="product-info">
         <div><div class="product-name">HAWA</div><div class="product-latin">Primam Femina</div></div>
@@ -455,7 +455,7 @@
       <div class="product-img">
         <img src="../assets/lovable/product-eden.jpg" alt="Breath of Eden">
         <div class="product-img-overlay"></div>
-        <div class="quick-add"><button>장바구니에 담기</button></div>
+        <div class="quick-add"><button data-add-to-cart="breath-of-eden">장바구니에 담기</button></div>
       </div>
       <div class="product-info">
         <div><div class="product-name">Breath of Eden</div><div class="product-latin">Ortus Paradisi</div></div>
@@ -480,7 +480,7 @@
     <div class="scrolls-price">₩27,000</div>
     <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
       <button class="scrolls-cta" onclick="window.location.href='the-scrolls.html'">자세히 보기</button>
-      <button class="scrolls-cta" style="background:transparent;color:var(--fg);border:1px solid var(--border);" onclick="event.stopPropagation()">장바구니에 담기</button>
+      <button class="scrolls-cta" style="background:transparent;color:var(--fg);border:1px solid var(--border);" data-add-to-cart="the-scrolls">장바구니에 담기</button>
     </div>
   </div>
 </div>
@@ -724,6 +724,7 @@
     setupCodeForm('seasonalBtn', 'seasonalInput', 'seasonalResult', SEASONAL_CODES, '유효하지 않은 프로모션 코드입니다.');
   }
 </script>
+<script src="../js/cart.js"></script>
 
 </body>
 </html>
