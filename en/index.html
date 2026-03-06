@@ -187,7 +187,7 @@
   .moments-grid { display: grid; gap: 1rem; }
   @media(min-width:768px){ .moments-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
   .moment-card { position: relative; aspect-ratio: 1; overflow: hidden; cursor: pointer; }
-  .moment-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 60px; height: 60px; background: radial-gradient(ellipse at bottom right, rgba(13,13,13,0.95) 40%, transparent 75%); z-index: 2; pointer-events: none; }
+  .moment-card::after { content: ''; position: absolute; bottom: 0; right: 0; width: 120px; height: 100px; background: radial-gradient(ellipse at bottom right, rgba(13,13,13,1) 45%, transparent 80%); z-index: 2; pointer-events: none; }
   .moment-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; filter: brightness(0.85); }
   .moment-card:hover img { transform: scale(1.05); filter: brightness(1); }
   .moment-overlay { position: absolute; inset: 0; background: rgba(13,13,13,0.2); transition: background 0.5s; }
