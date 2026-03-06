@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — The Scrolls · Discovery Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: hsl(0,0%,5%); --fg: hsl(40,10%,85%); --card: hsl(0,0%,8%);
+    --muted: hsl(40,5%,55%); --border: hsl(0,0%,15%);
+    --gold: hsl(43,35%,50%); --obsidian: hsl(0,0%,4%);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  h1,h2,h3 { font-family: var(--serif); font-weight: 400; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(13,13,13,0.8); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(196,169,106,0.06);
+  }
+  .nav-logo img { height: 22px; filter: invert(1); opacity: 0.85; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--fg); }
+
+  .product-hero { position: relative; height: 80vh; overflow: hidden; }
+  .product-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .product-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(13,13,13,0.3), rgba(13,13,13,0.1) 40%, var(--bg));
+  }
+
+  .product-section { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+  .product-header { text-align: center; padding: 4rem 0 3rem; }
+  .product-back { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--muted); display: inline-block; margin-bottom: 2rem; transition: color 0.3s; }
+  .product-back:hover { color: var(--gold); }
+  .product-meta { font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; }
+  .product-header h1 { font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .product-latin { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--muted); margin-bottom: 2rem; }
+  .product-desc { color: var(--muted); font-size: 0.9rem; line-height: 2; max-width: 600px; margin: 0 auto 3rem; }
+
+  .set-contents { padding: 5rem 0; }
+  .set-title { text-align: center; margin-bottom: 4rem; }
+  .set-title h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .set-title p { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+  .set-grid { display: grid; gap: 2rem; max-width: 800px; margin: 0 auto; }
+  @media(min-width:768px) { .set-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .set-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 2rem 1.5rem; text-align: center;
+    transition: all 0.5s; position: relative; overflow: hidden; cursor: pointer;
+  }
+  .set-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); opacity: 0; transition: opacity 0.5s;
+  }
+  .set-card:hover { border-color: rgba(196,169,106,0.2); transform: translateY(-4px); }
+  .set-card:hover::before { opacity: 1; }
+  .set-card-number { font-family: var(--serif); font-size: 0.6rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.5rem; }
+  .set-card-img { width: 80px; height: 80px; margin: 0 auto 1.5rem; border-radius: 50%; overflow: hidden; border: 1px solid var(--border); background: var(--obsidian); }
+  .set-card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .set-card-name { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .set-card-latin { font-family: var(--serif); font-style: italic; font-size: 0.75rem; color: var(--muted); margin-bottom: 1rem; }
+  .set-card-notes { font-size: 0.7rem; color: rgba(221,218,213,0.4); line-height: 1.8; }
+  .set-card-volume { display: inline-block; margin-top: 1.2rem; padding: 0.3rem 0.8rem; border: 1px solid var(--border); font-size: 0.6rem; letter-spacing: 0.15em; color: var(--muted); }
+
+  .discovery-journey { padding: 5rem 0; text-align: center; }
+  .discovery-journey h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .discovery-journey > p { font-size: 0.75rem; color: var(--muted); margin-bottom: 3rem; }
+  .journey-steps { display: flex; flex-direction: column; max-width: 600px; margin: 0 auto; position: relative; }
+  .journey-steps::before { content: ''; position: absolute; left: 24px; top: 24px; bottom: 24px; width: 1px; background: var(--border); }
+  .journey-step { display: flex; align-items: flex-start; gap: 1.5rem; padding: 1.5rem 0; position: relative; }
+  .step-dot { flex-shrink: 0; width: 48px; height: 48px; border: 1px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 0.7rem; color: var(--gold); letter-spacing: 0.1em; background: var(--bg); z-index: 1; }
+  .step-text { text-align: left; padding-top: 0.5rem; }
+  .step-text h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .step-text p { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+
+  .packaging { padding: 5rem 0; }
+  .packaging-title { text-align: center; margin-bottom: 3rem; }
+  .packaging-title h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .packaging-title p { font-size: 0.75rem; color: var(--muted); }
+  .packaging-features { display: grid; gap: 1px; max-width: 700px; margin: 0 auto; background: var(--border); }
+  @media(min-width:600px) { .packaging-features { grid-template-columns: 1fr 1fr; } }
+  .pkg-feature { background: var(--card); padding: 2rem; text-align: center; transition: all 0.5s; }
+  .pkg-feature:hover { background: hsl(0,0%,10%); }
+  .pkg-icon { font-size: 1.5rem; margin-bottom: 1rem; filter: grayscale(0.3); }
+  .pkg-feature h3 { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .pkg-feature p { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
+
+  .product-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 4rem 0; }
+  .product-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border: 1px solid var(--border); transition: transform 0.5s; }
+  .product-gallery img:hover { transform: scale(1.02); }
+
+  .explore-individual { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); }
+  .explore-individual h2 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .explore-individual > p { font-size: 0.75rem; color: var(--muted); margin-bottom: 2.5rem; }
+  .explore-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+  .explore-link { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.7rem 2rem; border: 1px solid var(--border); transition: all 0.4s; color: var(--muted); }
+  .explore-link:hover { border-color: var(--gold); color: var(--gold); }
+
+  .purchase { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); }
+  .purchase-price { font-family: var(--serif); font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .purchase-original { font-size: 0.8rem; color: var(--muted); text-decoration: line-through; margin-bottom: 0.3rem; }
+  .purchase-saving { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 2rem; }
+  .purchase-btn { display: inline-block; padding: 1rem 3.5rem; background: var(--fg); color: var(--bg); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.5s; }
+  .purchase-btn:hover { background: var(--gold); }
+  .purchase-info { margin-top: 2rem; }
+  .purchase-info p { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.3rem; }
+
+  footer { border-top: 1px solid var(--border); padding: 3rem 2rem; display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 3rem auto 0; }
+  footer img { height: 18px; filter: invert(1); opacity: 0.4; }
+  footer span { font-size: 0.5rem; color: rgba(221,218,213,0.15); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media(max-width:767px){
+    nav { padding: 1rem 1.5rem; }
+    .product-section { padding: 0 1.5rem; }
+    .product-gallery { grid-template-columns: 1fr; }
+    .product-hero { height: 60vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="./" class="nav-logo"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <div class="nav-links">
+    <a href="./#collection">Collection</a>
+    <a href="../kr/the-scrolls.html">KR</a>
+    <a href="#">Cart (0)</a>
+  </div>
+</nav>
+
+<div class="product-hero">
+  <img src="../assets/scrolls-hero.jpg" alt="The Scrolls — Discovery Set">
+  <div class="product-hero-overlay"></div>
+</div>
+
+<div class="product-section">
+
+  <div class="product-header reveal">
+    <a href="./#scrolls" class="product-back">← Back to Collection</a>
+    <div class="product-meta">Discovery Set · 3ml × 3 · Creation Series</div>
+    <h1>The Scrolls</h1>
+    <div class="product-latin">Your Story Begins</div>
+    <p class="product-desc">Three scents of creation in a single set. The birth of light, the breath of Eden, the first woman — experience the essence of the Creation Series in 3ml vials. This is where your story begins.</p>
+  </div>
+
+  <div class="set-contents reveal">
+    <div class="set-title">
+      <h2>What's Inside</h2>
+      <p>Three fragrances from the Creation Series</p>
+    </div>
+
+    <div class="set-grid">
+      <a href="genesis-i.html" class="set-card">
+        <div class="set-card-number">I</div>
+        <div class="set-card-img"><img src="../assets/lovable/product-genesis.jpg" alt="Genesis I"></div>
+        <div class="set-card-name">Genesis I</div>
+        <div class="set-card-latin">Fiat Lux</div>
+        <div class="set-card-notes">
+          Bergamot · White Tea<br>
+          Frankincense · Iris<br>
+          White Musk · Ambergris
+        </div>
+        <div class="set-card-volume">3ml</div>
+      </a>
+
+      <a href="hawa.html" class="set-card">
+        <div class="set-card-number">II</div>
+        <div class="set-card-img"><img src="../assets/lovable/product-hawa-box.png" alt="HAWA"></div>
+        <div class="set-card-name">HAWA</div>
+        <div class="set-card-latin">Primam Femina</div>
+        <div class="set-card-notes">
+          Fig Leaf · Pink Pepper<br>
+          Jasmine Sambac · Rose de Mai<br>
+          Oud · Vanilla Absolute
+        </div>
+        <div class="set-card-volume">3ml</div>
+      </a>
+
+      <a href="breath-of-eden.html" class="set-card">
+        <div class="set-card-number">III</div>
+        <div class="set-card-img"><img src="../assets/lovable/product-eden.jpg" alt="Breath of Eden"></div>
+        <div class="set-card-name">Breath of Eden</div>
+        <div class="set-card-latin">Ortus Paradisi</div>
+        <div class="set-card-notes">
+          Green Leaves · Morning Dew<br>
+          White Florals · Moss<br>
+          Cedarwood · Musk
+        </div>
+        <div class="set-card-volume">3ml</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="discovery-journey reveal">
+    <h2>A Journey of Discovery</h2>
+    <p>Three scents, three stories</p>
+
+    <div class="journey-steps">
+      <div class="journey-step">
+        <div class="step-dot">01</div>
+        <div class="step-text">
+          <h3>Genesis I — The Birth of Light</h3>
+          <p>Where citrus meets frankincense. The purest moment of clarity, emerging from the primordial dark.</p>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="step-dot">02</div>
+        <div class="step-text">
+          <h3>Breath of Eden — The First Morning</h3>
+          <p>A dew-kissed garden at dawn. The world's first breath, when life itself was new.</p>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="step-dot">03</div>
+        <div class="step-text">
+          <h3>HAWA — The First Woman</h3>
+          <p>Fig leaf and jasmine intertwined. The eternal dance between innocence and desire.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="packaging reveal">
+    <div class="packaging-title">
+      <h2>Packaging</h2>
+      <p>Matchbox-inspired slide box</p>
+    </div>
+
+    <div class="packaging-features">
+      <div class="pkg-feature">
+        <div class="pkg-icon">🦁</div>
+        <h3>Lion Illustration</h3>
+        <p>Symbol of the Lion Collection.<br>A mark of the sacred and divine.</p>
+      </div>
+      <div class="pkg-feature">
+        <div class="pkg-icon">✦</div>
+        <h3>Hebrew Lettering</h3>
+        <p>Ancient script etched into<br>the surface of the box.</p>
+      </div>
+      <div class="pkg-feature">
+        <div class="pkg-icon">🪨</div>
+        <h3>Stone Texture</h3>
+        <p>Volcanic stone finish for<br>a tactile experience.</p>
+      </div>
+      <div class="pkg-feature">
+        <div class="pkg-icon">📜</div>
+        <h3>Slide Open</h3>
+        <p>A ritualistic unboxing,<br>like opening a scroll.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-gallery reveal">
+    <img src="../assets/scrolls-hero.jpg" alt="The Scrolls — Discovery Set">
+    <img src="../assets/lovable/collection-trio.jpg" alt="Creation Series Collection">
+  </div>
+
+  <div class="explore-individual reveal">
+    <h2>Explore Each Fragrance</h2>
+    <p>Discover the full story behind each scent</p>
+    <div class="explore-links">
+      <a href="genesis-i.html" class="explore-link">Genesis I</a>
+      <a href="breath-of-eden.html" class="explore-link">Breath of Eden</a>
+      <a href="hawa.html" class="explore-link">HAWA</a>
+    </div>
+  </div>
+
+  <div class="purchase reveal">
+    <div class="purchase-original">$28</div>
+    <div class="purchase-price">$22</div>
+    <div class="purchase-saving">Discovery Set Price</div>
+    <button class="purchase-btn">Add to Cart</button>
+    <div class="purchase-info">
+      <p>Complimentary shipping on orders over $80</p>
+      <p>Gift wrapping available</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="./"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <span>© 2026 JOVE</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

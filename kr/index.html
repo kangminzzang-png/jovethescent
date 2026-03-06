@@ -305,7 +305,7 @@
   /* NEWSLETTER */
   .newsletter { background: var(--bg); padding: 6rem 1.5rem; text-align: center; position: relative; }
   @media(min-width:768px){ .newsletter { padding: 8rem 3rem; } }
-  .newsletter h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1rem; }
+  .newsletter h2 { font-family: var(--serif-kr); font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 200; text-transform: none; letter-spacing: -0.02em; margin-bottom: 1rem; }
   .newsletter p { color: var(--muted); font-size: 0.85rem; margin-bottom: 2rem; }
   .newsletter-form { display: flex; justify-content: center; gap: 0; max-width: 400px; margin: 0 auto; }
   .newsletter-form input {
@@ -414,11 +414,11 @@
     <div class="featured-item-overlay"></div>
     <div class="featured-item-text"><span>Ortus Paradisi</span><h3>Breath of Eden</h3></div>
   </a>
-  <div class="featured-item">
+  <a href="the-scrolls.html" class="featured-item">
     <img src="../assets/scrolls-hero.jpg" alt="The Scrolls">
     <div class="featured-item-overlay"></div>
     <div class="featured-item-text"><span>Discovery Set</span><h3>The Scrolls</h3></div>
-  </div>
+  </a>
 </div>
 
 <!-- COLLECTION -->
@@ -480,7 +480,8 @@
     <p class="scrolls-desc">세 가지 창조의 향을 하나의 세트로.<br>당신의 이야기가 시작되는 곳.</p>
     <div class="scrolls-includes">Genesis I · HAWA · Breath of Eden — 각 3ml</div>
     <div class="scrolls-price">₩27,000</div>
-    <button class="scrolls-cta">장바구니에 담기</button>
+    <button class="scrolls-cta" onclick="window.location.href='the-scrolls.html'">자세히 보기</button>
+    <button class="scrolls-cta" style="background:transparent;color:var(--fg);border:1px solid var(--border);margin-left:0.5rem;" onclick="event.stopPropagation()">장바구니에 담기</button>
   </div>
 </div>
 
@@ -620,8 +621,8 @@
 <!-- NEWSLETTER -->
 <section class="newsletter">
   <div class="section-label" style="color:var(--gold);margin-bottom:1.5rem;text-align:center">소식</div>
-  <h2>Creation Series를 가장 먼저 경험하세요</h2>
-  <p>뉴스레터를 구독하고 독점 소식과 혜택을 받아보세요.</p>
+  <h2>가장 먼저 경험하세요</h2>
+  <p>Creation Series 소식을 구독하고<br>독점 혜택을 받아보세요.</p>
   <form class="newsletter-form" onsubmit="event.preventDefault()">
     <input type="email" placeholder="이메일 주소">
     <button type="submit">Subscribe</button>
