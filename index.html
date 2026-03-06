@@ -27,6 +27,14 @@
     object-fit: cover; object-position: center;
     opacity: 0.5;
   }
+  .gate-bg::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 150px; height: 80px;
+    background: radial-gradient(ellipse at bottom right, #060606 30%, transparent 70%);
+    z-index: 1;
+  }
 
   .noise {
     position: fixed; inset: 0; opacity: 0.025; pointer-events: none; z-index: 1;
