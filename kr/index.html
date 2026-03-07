@@ -253,7 +253,7 @@
   @media(min-width:768px){ .two-worlds-grid { grid-template-columns: 1fr 1fr; } }
   .world-video-card { position: relative; height: 70vh; overflow: hidden; cursor: pointer; }
   @media(min-width:768px){ .world-video-card { height: 85vh; } }
-  .world-video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.6s; }
+  .world-video-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.6s; transform: scale(1.05); }
   .world-video-card:hover video { opacity: 0.85; }
   .world-video-card:first-child video { transform: scaleX(-1); }
   .world-video-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%, rgba(0,0,0,0.3) 100%); }
@@ -303,9 +303,9 @@
 
   /* CTA */
   .cta-section { background: var(--obsidian); position: relative; height: 100vh; overflow: hidden; }
-  .cta-bg { position: absolute; inset: 0; }
+  .cta-bg { position: absolute; inset: 0; overflow: hidden; }
   .cta-bg img, .cta-bg video { width: 100%; height: 100%; object-fit: cover; opacity: 0.35; }
-  .cta-bg video { object-position: center; }
+  .cta-bg video { object-position: center; transform: scale(1.05); }
   .cta-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; }
   .cta-title { font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1.5rem; }
   .cta-desc { color: var(--muted); max-width: 28rem; font-size: 0.875rem; line-height: 1.8; margin-bottom: 2.5rem; }
