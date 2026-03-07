@@ -75,11 +75,21 @@
   }
   .nav-drawer-links a:hover { color: var(--gold); }
   .nav-drawer-cat {
-    font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.4em;
-    text-transform: uppercase; padding: 1.5rem 0 0.5rem;
+    font-family: var(--sans); font-size: 0.6rem; letter-spacing: 0.35em;
+    text-transform: uppercase; padding: 1.2rem 0 0.6rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+    user-select: none;
   }
+  .nav-drawer-cat::after {
+    content: '+'; font-size: 0.9rem; font-weight: 200; transition: transform 0.3s;
+  }
+  .nav-drawer-cat.open::after { content: '−'; }
   .nav-drawer-cat.lion { color: var(--gold); }
   .nav-drawer-cat.serpent { color: hsl(0,50%,55%); }
+  .nav-drawer-sub-links {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+  }
+  .nav-drawer-sub-links.open { max-height: 300px; }
   .nav-drawer-divider { height: 1px; background: var(--border); margin: 1.2rem 0; }
   .nav-drawer-links a.nav-drawer-page {
     font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.15em;
@@ -411,13 +421,17 @@
   <div class="nav-drawer-panel">
     <button class="nav-drawer-close" onclick="document.getElementById('navDrawer').classList.remove('open')">✕</button>
     <div class="nav-drawer-links">
-      <div class="nav-drawer-cat lion">Lion Collection</div>
-      <a href="genesis-i.html">Genesis I</a>
-      <a href="breath-of-eden.html">Breath of Eden</a>
-      <a href="hawa.html">HAWA</a>
-      <a href="the-scrolls.html">The Scrolls</a>
-      <div class="nav-drawer-cat serpent">Serpent Collection</div>
-      <a href="#" style="color:rgba(255,255,255,0.2);pointer-events:none;font-style:italic;font-size:0.85rem;">Coming Soon</a>
+      <div class="nav-drawer-cat lion" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Lion Collection</div>
+      <div class="nav-drawer-sub-links">
+        <a href="genesis-i.html">Genesis I</a>
+        <a href="breath-of-eden.html">Breath of Eden</a>
+        <a href="hawa.html">HAWA</a>
+        <a href="the-scrolls.html">The Scrolls</a>
+      </div>
+      <div class="nav-drawer-cat serpent" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Serpent Collection</div>
+      <div class="nav-drawer-sub-links">
+        <a href="#" style="color:rgba(255,255,255,0.2);pointer-events:none;font-style:italic;font-size:0.85rem;">Coming Soon</a>
+      </div>
       <div class="nav-drawer-divider"></div>
       <a href="pages/philosophy.html" class="nav-drawer-page">Philosophy</a>
       <a href="pages/about.html" class="nav-drawer-page">About</a>
