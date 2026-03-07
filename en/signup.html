@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — Sign Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --bg: #050505; --fg: #F5F5F0; --card: hsl(0,0%,8%); --muted: #A0A0A0; --border: hsl(0,0%,18%); --gold: hsl(43,35%,50%); --obsidian: #050505; --serif: 'Cormorant Garamond', serif; --sans: 'Pretendard', -apple-system, system-ui, sans-serif; --danger: hsl(0,55%,55%); --success: hsl(140,50%,45%); }
+  body { background: var(--bg); color: var(--muted); font-family: var(--sans); font-weight: 300; -webkit-font-smoothing: antialiased; line-height: 1.7; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1.25rem 1.5rem; background: linear-gradient(to bottom, rgba(13,13,13,0.95), rgba(13,13,13,0.8)); backdrop-filter: blur(12px); }
+  .nav-logo img { height: 24px; width: auto; filter: invert(1); opacity: 0.9; }
+  .auth-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 6rem 1.5rem 3rem; }
+  .auth-card { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--border); padding: 3rem 2.5rem; }
+  @media(max-width:500px) { .auth-card { padding: 2.5rem 1.5rem; } }
+  .auth-header { text-align: center; margin-bottom: 2.5rem; }
+  .auth-symbol { font-size: 0.7rem; letter-spacing: 0.5em; color: var(--gold); margin-bottom: 1rem; }
+  .auth-title { font-family: var(--serif); font-weight: 300; font-size: 1.8rem; color: var(--fg); margin-bottom: 0.5rem; letter-spacing: 0.1em; }
+  .auth-subtitle { font-size: 0.8rem; color: var(--muted); }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label { display: block; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .form-input { width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--fg); font-family: var(--sans); font-size: 0.85rem; outline: none; transition: border-color 0.3s; }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: rgba(221,218,213,0.15); }
+  .form-error { font-size: 0.75rem; color: var(--danger); margin-top: 0.4rem; display: none; }
+  .form-error.visible { display: block; }
+  .form-submit { width: 100%; padding: 0.9rem; margin-top: 0.5rem; background: var(--fg); color: var(--bg); border: 1px solid var(--fg); font-family: var(--sans); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: all 0.4s; }
+  .form-submit:hover { background: var(--gold); border-color: var(--gold); color: var(--obsidian); }
+  .form-submit.loading { pointer-events: none; opacity: 0.7; }
+  .auth-message { padding: 0.8rem 1rem; margin-bottom: 1.5rem; font-size: 0.8rem; border: 1px solid; display: none; }
+  .auth-message.error { border-color: var(--danger); color: var(--danger); background: rgba(180,50,50,0.05); }
+  .auth-message.success { border-color: var(--success); color: var(--success); background: rgba(50,150,80,0.05); }
+  .auth-message.visible { display: block; }
+  .auth-links { margin-top: 2rem; text-align: center; }
+  .auth-links a { font-size: 0.75rem; color: var(--muted); transition: color 0.3s; }
+  .checkbox-group { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 1.5rem; }
+  .checkbox-group input[type="checkbox"] { appearance: none; width: 16px; height: 16px; border: 1px solid var(--border); background: transparent; cursor: pointer; position: relative; flex-shrink: 0; margin-top: 2px; }
+  .checkbox-group input[type="checkbox"]:checked { border-color: var(--gold); background: var(--gold); }
+  .checkbox-group input[type="checkbox"]:checked::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--obsidian); }
+  .checkbox-group label { font-size: 0.75rem; color: var(--muted); cursor: pointer; }
+  .checkbox-group label a { color: var(--gold); }
+  .noise { position: fixed; inset: 0; opacity: 0.02; pointer-events: none; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 256px; }
+  .pw-strength { height: 2px; margin-top: 0.4rem; background: var(--border); overflow: hidden; }
+  .pw-strength-bar { height: 100%; width: 0; transition: width 0.3s, background 0.3s; }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<nav><a href="./" class="nav-logo"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a></nav>
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-symbol">✦</div>
+      <h1 class="auth-title">Sign Up</h1>
+      <p class="auth-subtitle">Begin your journey with JOVE</p>
+    </div>
+    <div class="auth-message" id="authMessage"></div>
+    <form id="signupForm">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="name" placeholder="Your name" required autocomplete="name">
+        <div class="form-error" id="nameError"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="email" placeholder="your@email.com" required autocomplete="email">
+        <div class="form-error" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="password" placeholder="At least 8 characters" required autocomplete="new-password">
+        <div class="pw-strength"><div class="pw-strength-bar" id="pwBar"></div></div>
+        <div class="form-error" id="passwordError"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-input" id="passwordConfirm" placeholder="Re-enter password" required autocomplete="new-password">
+        <div class="form-error" id="confirmError"></div>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the <a href="pages/terms.html" target="_blank">Terms of Service</a> and <a href="pages/privacy.html" target="_blank">Privacy Policy</a>.</label>
+      </div>
+      <div class="form-error" id="termsError" style="margin-top:-1rem;margin-bottom:1rem"></div>
+      <button type="submit" class="form-submit" id="submitBtn">Create Account</button>
+    </form>
+    <div class="auth-links">
+      <p>Already have an account? <a href="login.html" style="color:var(--gold)">Sign In</a></p>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+document.getElementById('password').addEventListener('input', (e) => {
+  const bar = document.getElementById('pwBar'); const v = e.target.value; let s = 0;
+  if (v.length >= 8) s++; if (/[A-Z]/.test(v)) s++; if (/[0-9]/.test(v)) s++; if (/[^A-Za-z0-9]/.test(v)) s++;
+  const colors = ['','hsl(0,55%,55%)','hsl(30,60%,50%)','hsl(50,60%,50%)','hsl(140,50%,45%)'];
+  bar.style.width = (s*25)+'%'; bar.style.background = colors[s]||'';
+});
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn'); const msg = document.getElementById('authMessage');
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('passwordConfirm').value;
+  const terms = document.getElementById('terms').checked;
+  msg.className = 'auth-message';
+  document.querySelectorAll('.form-error').forEach(el => { el.className = 'form-error'; el.textContent = ''; });
+  let valid = true;
+  if (!name) { show('nameError', 'Please enter your name.'); valid = false; }
+  if (!email) { show('emailError', 'Please enter your email.'); valid = false; }
+  if (password.length < 8) { show('passwordError', 'Password must be at least 8 characters.'); valid = false; }
+  if (password !== confirm) { show('confirmError', 'Passwords do not match.'); valid = false; }
+  if (!terms) { show('termsError', 'Please agree to the terms.'); valid = false; }
+  if (!valid) return;
+  btn.textContent = 'Creating...'; btn.classList.add('loading');
+  const { data, error } = await JoveAuth.signUp(email, password, name);
+  btn.textContent = 'Create Account'; btn.classList.remove('loading');
+  if (error) { msg.textContent = error.message; msg.className = 'auth-message error visible'; return; }
+  window.location.href = 'login.html?message=' + encodeURIComponent('✦ Account created. Please check your email to verify.');
+});
+function show(id, text) { const el = document.getElementById(id); el.textContent = text; el.className = 'form-error visible'; }
+</script>
+</body>
+</html>
