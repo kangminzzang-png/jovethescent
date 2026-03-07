@@ -241,6 +241,102 @@ document.getElementById('pwForm').addEventListener('submit', async (e) => {
   else { result.textContent = '✦ 비밀번호가 변경되었습니다.'; result.className = 'save-result success'; document.getElementById('newPassword').value = ''; document.getElementById('newPasswordConfirm').value = ''; }
 });
 
+// Address management
+document.getElementById('addAddressBtn').addEventListener('click', () => showAddressForm());
+
+function showAddressForm(existing) {
+  const container = document.getElementById('addressList');
+  container.innerHTML = `
+    <form id="addressForm" style="text-align:left">
+      <div style="display:grid;gap:1rem;grid-template-columns:1fr 1fr">
+        <div><label class="form-label">구분</label><input type="text" class="form-input" id="addrLabel" placeholder="집, 회사..." value="${existing?.label||''}"></div>
+        <div><label class="form-label">수령인</label><input type="text" class="form-input" id="addrName" placeholder="이름" value="${existing?.name||''}"></div>
+      </div>
+      <div style="margin-top:1rem"><label class="form-label">주소</label><input type="text" class="form-input" id="addrLine1" placeholder="도로명 주소" value="${existing?.line1||''}"></div>
+      <div style="margin-top:1rem"><input type="text" class="form-input" id="addrLine2" placeholder="상세 주소 (선택)" value="${existing?.line2||''}"></div>
+      <div style="display:grid;gap:1rem;grid-template-columns:1fr 1fr;margin-top:1rem">
+        <div><label class="form-label">시/군/구</label><input type="text" class="form-input" id="addrCity" placeholder="서울특별시" value="${existing?.city||''}"></div>
+        <div><label class="form-label">우편번호</label><input type="text" class="form-input" id="addrZip" placeholder="00000" value="${existing?.zip||''}"></div>
+      </div>
+      <div style="display:grid;gap:1rem;grid-template-columns:1fr 1fr;margin-top:1rem">
+        <div><label class="form-label">국가</label><input type="text" class="form-input" id="addrCountry" placeholder="대한민국" value="${existing?.country||'대한민국'}"></div>
+        <div><label class="form-label">연락처</label><input type="tel" class="form-input" id="addrPhone" placeholder="010-0000-0000" value="${existing?.phone||''}"></div>
+      </div>
+      <div style="display:flex;gap:0.8rem;margin-top:1.5rem">
+        <button type="submit" class="btn-save">저장하기</button>
+        <button type="button" class="btn-add-address" onclick="loadAddresses()">취소</button>
+      </div>
+      <div class="save-result" id="addrResult"></div>
+    </form>
+  `;
+  document.getElementById('addressForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const addr = {
+      label: document.getElementById('addrLabel').value.trim(),
+      name: document.getElementById('addrName').value.trim(),
+      line1: document.getElementById('addrLine1').value.trim(),
+      line2: document.getElementById('addrLine2').value.trim(),
+      city: document.getElementById('addrCity').value.trim(),
+      zip: document.getElementById('addrZip').value.trim(),
+      country: document.getElementById('addrCountry').value.trim(),
+      phone: document.getElementById('addrPhone').value.trim()
+    };
+    if (!addr.name || !addr.line1 || !addr.city) {
+      document.getElementById('addrResult').textContent = '필수 항목을 입력해주세요.';
+      document.getElementById('addrResult').className = 'save-result error';
+      return;
+    }
+    const user = await JoveAuth.getUser();
+    if (!user) return;
+    const addresses = user.user_metadata?.addresses || [];
+    if (existing?.index !== undefined) addresses[existing.index] = addr;
+    else addresses.push(addr);
+    const { error } = await JoveAuth.updateProfile({ addresses });
+    if (error) { document.getElementById('addrResult').textContent = error.message; document.getElementById('addrResult').className = 'save-result error'; }
+    else loadAddresses();
+  });
+}
+
+async function loadAddresses() {
+  const user = await JoveAuth.getUser();
+  if (!user) return;
+  const addresses = user.user_metadata?.addresses || [];
+  const container = document.getElementById('addressList');
+  if (addresses.length === 0) {
+    container.innerHTML = '<p>등록된 배송 주소가 없습니다.</p><button class="btn-add-address" onclick="showAddressForm()">주소 추가</button>';
+    return;
+  }
+  container.innerHTML = addresses.map((a, i) => `
+    <div style="border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div style="font-size:0.7rem;letter-spacing:0.1em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem">${a.label || '주소 ' + (i+1)}</div>
+        <div style="color:var(--fg);font-size:0.85rem">${a.name}</div>
+        <div style="font-size:0.8rem">${a.line1}${a.line2 ? ' ' + a.line2 : ''}</div>
+        <div style="font-size:0.8rem">${a.city} ${a.zip}</div>
+        <div style="font-size:0.8rem">${a.country}</div>
+        ${a.phone ? '<div style="font-size:0.8rem;margin-top:0.3rem">' + a.phone + '</div>' : ''}
+      </div>
+      <div style="display:flex;gap:0.5rem">
+        <button onclick="showAddressForm({...${JSON.stringify(a).replace(/"/g,'&quot;')}, index:${i}})" style="background:none;border:none;color:var(--muted);font-size:0.65rem;cursor:pointer;letter-spacing:0.1em">수정</button>
+        <button onclick="deleteAddress(${i})" style="background:none;border:none;color:hsl(0,55%,55%);font-size:0.65rem;cursor:pointer;letter-spacing:0.1em">삭제</button>
+      </div>
+    </div>
+  `).join('') + '<button class="btn-add-address" onclick="showAddressForm()">주소 추가</button>';
+}
+
+async function deleteAddress(index) {
+  const user = await JoveAuth.getUser();
+  if (!user) return;
+  const addresses = user.user_metadata?.addresses || [];
+  addresses.splice(index, 1);
+  await JoveAuth.updateProfile({ addresses });
+  loadAddresses();
+}
+
+window.showAddressForm = showAddressForm;
+window.loadAddresses = loadAddresses;
+window.deleteAddress = deleteAddress;
+
 // Logout
 document.getElementById('logoutBtn').addEventListener('click', async () => {
   await JoveAuth.signOut();
@@ -248,6 +344,7 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 });
 
 loadProfile();
+loadAddresses();
 </script>
 </body>
 </html>
