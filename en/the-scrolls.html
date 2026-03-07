@@ -95,7 +95,8 @@
   @media(min-width:600px) { .packaging-features { grid-template-columns: 1fr 1fr; } }
   .pkg-feature { background: var(--card); padding: 2rem; text-align: center; transition: all 0.5s; }
   .pkg-feature:hover { background: hsl(0,0%,10%); }
-  .pkg-icon { font-size: 1.5rem; margin-bottom: 1rem; filter: grayscale(0.3); }
+  .pkg-icon { margin-bottom: 1rem; }
+  .pkg-icon svg { width: 36px; height: 36px; }
   .pkg-feature h3 { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.5rem; }
   .pkg-feature p { font-size: 0.75rem; color: var(--muted); line-height: 1.7; }
 
@@ -245,22 +246,22 @@
 
     <div class="packaging-features">
       <div class="pkg-feature">
-        <div class="pkg-icon">🦁</div>
+        <div class="pkg-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 4C18 4 8 10 8 18c0 5 3 8 6 9.5M18 4c0 0 10 6 10 14 0 5-3 8-6 9.5M18 4v5M14 28.5c1.2.5 2.5.8 4 .8s2.8-.3 4-.8" stroke="hsl(43,35%,50%)" stroke-width="1" stroke-linecap="round"/><circle cx="18" cy="15" r="2.5" stroke="hsl(43,35%,50%)" stroke-width="1"/><path d="M15.5 18.5c0 0 1 2.5 2.5 2.5s2.5-2.5 2.5-2.5" stroke="hsl(43,35%,50%)" stroke-width="1" stroke-linecap="round"/><path d="M12 12l2 1M24 12l-2 1" stroke="hsl(43,35%,50%)" stroke-width="0.8" stroke-linecap="round"/></svg></div>
         <h3>Lion Illustration</h3>
         <p>Symbol of the Lion Collection.<br>A mark of the sacred and divine.</p>
       </div>
       <div class="pkg-feature">
-        <div class="pkg-icon">✦</div>
+        <div class="pkg-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6l2.5 8H29l-7 5 2.5 8L18 22l-6.5 5 2.5-8-7-5h8.5z" stroke="hsl(43,35%,50%)" stroke-width="1" stroke-linejoin="round"/><circle cx="18" cy="18" r="3" stroke="hsl(43,35%,50%)" stroke-width="0.8" stroke-dasharray="2 2"/></svg></div>
         <h3>First Experience</h3>
         <p>Your introduction to JOVE's<br>three scents of creation.</p>
       </div>
       <div class="pkg-feature">
-        <div class="pkg-icon">🪨</div>
+        <div class="pkg-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 24l5-6 3 2 4-5 4 3 4-4" stroke="hsl(43,35%,50%)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 26c2-1 5-2 8-2 4 0 6 1.5 8 1.5s4-.5 8-2" stroke="hsl(43,35%,50%)" stroke-width="1" stroke-linecap="round"/><circle cx="14" cy="14" r="1.5" stroke="hsl(43,35%,50%)" stroke-width="0.8"/><circle cx="22" cy="11" r="1" stroke="hsl(43,35%,50%)" stroke-width="0.8"/><path d="M10 20l2-1.5M20 16l1.5-2" stroke="hsl(43,35%,50%)" stroke-width="0.6" stroke-linecap="round"/></svg></div>
         <h3>Stone Texture</h3>
         <p>Volcanic stone finish for<br>a tactile experience.</p>
       </div>
       <div class="pkg-feature">
-        <div class="pkg-icon">📜</div>
+        <div class="pkg-icon"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="10" width="20" height="16" rx="1" stroke="hsl(43,35%,50%)" stroke-width="1"/><rect x="10" y="10" width="8" height="16" stroke="hsl(43,35%,50%)" stroke-width="0.8" stroke-dasharray="3 2"/><path d="M5 14h3M5 18h3M5 22h3" stroke="hsl(43,35%,50%)" stroke-width="0.8" stroke-linecap="round"/><path d="M22 16h3M22 20h3" stroke="hsl(43,35%,50%)" stroke-width="0.6" stroke-linecap="round"/></svg></div>
         <h3>Slide Open</h3>
         <p>A ritualistic unboxing,<br>like opening a scroll.</p>
       </div>
@@ -307,5 +308,6 @@
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 <script src="../js/cart.js"></script>
+<script src="../js/icons.js"></script>
 </body>
 </html>
