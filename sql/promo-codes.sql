@@ -129,7 +129,17 @@ BEGIN
 END;
 $$;
 
--- 6. Function to generate a promo code (for admin/backend use)
+-- 6. Scrolls promo limit tracking
+CREATE TABLE promo_settings (
+  key TEXT PRIMARY KEY,
+  value INTEGER NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Set limit: first 300 Scrolls purchases get promo codes
+INSERT INTO promo_settings (key, value) VALUES ('scrolls_promo_limit', 300);
+
+-- 7. Function to generate a promo code (with 300 limit)
 CREATE OR REPLACE FUNCTION generate_scrolls_promo(
   p_email TEXT DEFAULT NULL,
   p_order_id UUID DEFAULT NULL
@@ -140,7 +150,22 @@ SECURITY DEFINER
 AS $$
 DECLARE
   v_code TEXT;
+  v_issued INTEGER;
+  v_limit INTEGER;
 BEGIN
+  -- Check how many scrolls promos have been issued
+  SELECT COUNT(*) INTO v_issued
+  FROM promo_codes
+  WHERE source = 'scrolls_purchase';
+
+  SELECT value INTO v_limit
+  FROM promo_settings
+  WHERE key = 'scrolls_promo_limit';
+
+  IF v_issued >= COALESCE(v_limit, 300) THEN
+    RETURN NULL;  -- Limit reached, no code generated
+  END IF;
+
   -- Generate unique code: JOVE-XXXX (4 random alphanumeric)
   LOOP
     v_code := 'JOVE-' || UPPER(SUBSTRING(MD5(RANDOM()::TEXT) FROM 1 FOR 4));
