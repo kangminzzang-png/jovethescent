@@ -54,12 +54,17 @@
   .nav-logo { position: absolute; left: 50%; transform: translateX(-50%); }
   .nav-logo img { height: 24px; width: auto; filter: invert(1); opacity: 0.9; }
   @media(min-width:768px){ .nav-logo img { height: 28px; } }
-  .nav-right { display: flex; align-items: center; gap: 1.2rem; }
+  .nav-right { display: flex; align-items: center; gap: 0.6rem; }
+  @media(min-width:768px){ .nav-right { gap: 1.2rem; } }
   .nav-right a, .nav-right button {
-    font-size: 0.7rem; letter-spacing: 0.15em; color: var(--muted);
+    font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted);
     background: none; border: none; cursor: pointer; transition: color 0.3s; text-transform: uppercase;
   }
+  @media(min-width:768px){
+    .nav-right a, .nav-right button { font-size: 0.7rem; letter-spacing: 0.15em; }
+  }
   .nav-right a:hover, .nav-right button:hover { color: var(--fg); }
+  .nav-auth-link svg { width: 16px; height: 16px; vertical-align: middle; }
 
   /* HERO */
   .hero { position: relative; height: 100vh; width: 100%; overflow: hidden; background: var(--obsidian); }
@@ -366,9 +371,9 @@
   </button>
   <a href="./" class="nav-logo"><img src="../assets/lovable/logo-jove.png" alt="JOVE"></a>
   <div class="nav-right">
-    <a href="login.html" class="nav-auth-link">Sign In</a>
+    <a href="login.html" class="nav-auth-link"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
     <a href="../kr/">KR</a>
-    <button data-toggle-cart style="position:relative;cursor:pointer">Cart <span class="cart-count" style="display:none;position:absolute;top:-6px;right:-10px;background:var(--gold);color:var(--obsidian);font-size:0.5rem;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center">0</span></button>
+    <button data-toggle-cart style="position:relative;cursor:pointer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-count" style="display:none;position:absolute;top:-6px;right:-10px;background:var(--gold);color:var(--obsidian);font-size:0.5rem;width:16px;height:16px;border-radius:50%;align-items:center;justify-content:center">0</span></button>
   </div>
 </nav>
 
