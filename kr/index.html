@@ -70,12 +70,22 @@
   }
   .nav-drawer-links { display: flex; flex-direction: column; gap: 0; }
   .nav-drawer-links a {
-    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--muted); padding: 1rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    transition: color 0.3s;
+    font-family: var(--serif); font-size: 1rem; letter-spacing: 0.02em;
+    text-transform: none; color: var(--fg); padding: 0.7rem 0 0.7rem 1rem;
+    border-bottom: none; transition: color 0.3s;
   }
-  .nav-drawer-links a:hover { color: var(--fg); }
+  .nav-drawer-links a:hover { color: var(--gold); }
+  .nav-drawer-cat {
+    font-family: var(--sans); font-size: 0.55rem; letter-spacing: 0.4em;
+    text-transform: uppercase; padding: 1.5rem 0 0.5rem;
+  }
+  .nav-drawer-cat.lion { color: var(--gold); }
+  .nav-drawer-cat.serpent { color: hsl(0,50%,55%); }
+  .nav-drawer-divider { height: 1px; background: var(--border); margin: 1.2rem 0; }
+  .nav-drawer-links a.nav-drawer-page {
+    font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted); padding-left: 0;
+  }
   .nav-drawer-sub { margin-top: auto; padding-top: 2rem; border-top: 1px solid var(--border); }
   .nav-drawer-sub a {
     display: block; font-size: 0.65rem; letter-spacing: 0.15em;
@@ -407,17 +417,17 @@
   <div class="nav-drawer-panel">
     <button class="nav-drawer-close" onclick="document.getElementById('navDrawer').classList.remove('open')">✕</button>
     <div class="nav-drawer-links">
-      <div style="font-size:0.55rem;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;padding:0.5rem 0 0.3rem;margin-top:0.5rem;">Lion Collection</div>
+      <div class="nav-drawer-cat lion">Lion Collection</div>
       <a href="genesis-i.html">Genesis I</a>
       <a href="breath-of-eden.html">Breath of Eden</a>
       <a href="hawa.html">HAWA</a>
-      <a href="the-scrolls.html">The Scrolls — Discovery Set</a>
-      <div style="font-size:0.55rem;letter-spacing:0.4em;color:hsl(0,50%,55%);text-transform:uppercase;padding:1.2rem 0 0.3rem;">Serpent Collection</div>
-      <a href="#" style="color:rgba(255,255,255,0.2);pointer-events:none;">Coming Soon</a>
-      <div style="height:1px;background:var(--border);margin:1rem 0;"></div>
-      <a href="pages/philosophy.html">브랜드 철학</a>
-      <a href="pages/about.html">브랜드 소개</a>
-      <a href="login.html" class="nav-auth-link">로그인</a>
+      <a href="the-scrolls.html">The Scrolls</a>
+      <div class="nav-drawer-cat serpent">Serpent Collection</div>
+      <a href="#" style="color:rgba(255,255,255,0.2);pointer-events:none;font-style:italic;font-size:0.85rem;">Coming Soon</a>
+      <div class="nav-drawer-divider"></div>
+      <a href="pages/philosophy.html" class="nav-drawer-page">철학</a>
+      <a href="pages/about.html" class="nav-drawer-page">소개</a>
+      <a href="login.html" class="nav-drawer-page">로그인</a>
     </div>
     <div class="nav-drawer-sub">
       <a href="pages/shipping.html">배송 안내</a>
