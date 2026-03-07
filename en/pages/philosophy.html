@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — Philosophy</title>
+<meta name="description" content="JOVE explores the duality of existence through sacred scent. The tension between light and shadow, divine and temptation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #050505; --fg: #F5F5F0; --card: hsl(0,0%,8%);
+    --muted: #A0A0A0; --border: hsl(0,0%,18%);
+    --gold: hsl(43,35%,50%); --obsidian: #050505;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'Pretendard', -apple-system, system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--muted); font-family: var(--sans); font-weight: 300; -webkit-font-smoothing: antialiased; line-height: 1.8; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; background: transparent; transition: all 0.5s; }
+  @media(min-width:768px){ nav { padding: 1.25rem 3rem; } }
+  nav.scrolled { background: rgba(13,13,13,0.97); }
+  .nav-back { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-back:hover { color: var(--fg); }
+  .nav-logo { position: absolute; left: 50%; transform: translateX(-50%); }
+  .nav-logo img { height: 24px; filter: invert(1); opacity: 0.9; }
+  .nav-lang { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-lang:hover { color: var(--fg); }
+  .phil-hero { position: relative; height: 100vh; overflow: hidden; }
+  .phil-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .phil-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.1) 40%, rgba(5,5,5,0.9)); }
+  .phil-hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 4rem 1.5rem; text-align: center; }
+  @media(min-width:768px){ .phil-hero-content { padding: 6rem 3rem; } }
+  .phil-hero-label { font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .phil-hero-title { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 5vw, 3.5rem); color: var(--fg); line-height: 1.3; margin-bottom: 1rem; letter-spacing: 0.05em; }
+  .phil-hero-sub { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: rgba(221,218,213,0.5); letter-spacing: 0.05em; }
+  .phil-section { max-width: 720px; margin: 0 auto; padding: 6rem 1.5rem; }
+  @media(min-width:768px){ .phil-section { padding: 8rem 2rem; } }
+  .phil-label { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .phil-heading { font-family: var(--serif); font-weight: 300; font-size: clamp(1.5rem, 3.5vw, 2.2rem); color: var(--fg); line-height: 1.4; margin-bottom: 2rem; letter-spacing: 0.05em; }
+  .phil-text { font-size: 0.9rem; color: var(--muted); line-height: 2; margin-bottom: 1.5rem; }
+  .phil-quote { max-width: 800px; margin: 0 auto; padding: 5rem 1.5rem; text-align: center; border-top: 1px solid rgba(196,169,106,0.08); border-bottom: 1px solid rgba(196,169,106,0.08); }
+  .phil-quote blockquote { font-family: var(--serif); font-style: italic; font-size: clamp(1.3rem, 3vw, 1.8rem); color: rgba(221,218,213,0.6); line-height: 1.8; letter-spacing: 0.03em; }
+  .phil-quote cite { display: block; margin-top: 1.5rem; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-style: normal; }
+  .phil-fullimg { position: relative; height: 60vh; overflow: hidden; }
+  @media(min-width:768px){ .phil-fullimg { height: 70vh; } }
+  .phil-fullimg img { width: 100%; height: 100%; object-fit: cover; }
+  .phil-fullimg-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, var(--obsidian), transparent 20%, transparent 80%, var(--obsidian)); }
+  .phil-fullimg-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; }
+  .phil-fullimg-text h3 { font-family: var(--serif); font-weight: 300; font-size: clamp(1.5rem, 4vw, 2.5rem); color: var(--fg); letter-spacing: 0.05em; }
+  .phil-dual { display: grid; gap: 0; }
+  @media(min-width:768px){ .phil-dual { grid-template-columns: 1fr 1fr; } }
+  .phil-world { position: relative; min-height: 70vh; overflow: hidden; display: flex; align-items: flex-end; }
+  .phil-world img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: opacity 0.6s; }
+  .phil-world:hover img { opacity: 0.7; }
+  .phil-world-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
+  .phil-world-content { position: relative; z-index: 10; padding: 3rem 2rem; text-align: center; width: 100%; }
+  @media(min-width:768px){ .phil-world-content { padding: 4rem 3rem; } }
+  .world-label { font-size: 0.55rem; letter-spacing: 0.5em; text-transform: uppercase; margin-bottom: 1rem; }
+  .world-label.sacred { color: var(--gold); }
+  .world-label.temptation { color: hsl(0,50%,55%); }
+  .world-name { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--fg); margin-bottom: 0.8rem; }
+  .world-tagline { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+  .world-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.8; max-width: 20rem; margin: 0 auto; }
+  .world-notes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; }
+  .world-note { font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted); border: 1px solid var(--border); padding: 0.3rem 0.6rem; }
+  .phil-values { display: grid; gap: 1px; background: var(--border); }
+  @media(min-width:768px){ .phil-values { grid-template-columns: 1fr 1fr; } }
+  .phil-value { background: var(--bg); padding: 3rem 2rem; }
+  @media(min-width:768px){ .phil-value { padding: 4rem 3rem; } }
+  .phil-value-num { font-family: var(--serif); font-size: 2rem; color: rgba(196,169,106,0.15); margin-bottom: 1rem; }
+  .phil-value h3 { font-family: var(--serif); font-weight: 300; font-size: 1.2rem; color: var(--fg); margin-bottom: 1rem; letter-spacing: 0.05em; }
+  .phil-value p { font-size: 0.85rem; color: var(--muted); line-height: 1.9; }
+  .phil-emblem { text-align: center; padding: 5rem 1.5rem; }
+  .phil-emblem img { height: 120px; margin: 0 auto 2rem; opacity: 0.08; filter: invert(1); }
+  .phil-emblem p { font-family: var(--serif); font-style: italic; font-size: 0.9rem; color: rgba(221,218,213,0.3); letter-spacing: 0.05em; }
+  .phil-cta { text-align: center; padding: 5rem 1.5rem; border-top: 1px solid var(--border); }
+  .phil-cta h2 { font-family: var(--serif); font-weight: 300; font-size: 1.5rem; color: var(--fg); margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+  .phil-cta-btn { display: inline-block; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.9rem 2.5rem; background: var(--fg); color: var(--bg); border: 1px solid var(--fg); transition: all 0.5s; }
+  .phil-cta-btn:hover { background: var(--gold); border-color: var(--gold); }
+  .phil-footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; }
+  .phil-footer img { height: 18px; filter: invert(1); opacity: 0.3; }
+  .phil-footer span { font-size: 0.6rem; color: rgba(221,218,213,0.15); }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .noise { position: fixed; inset: 0; opacity: 0.02; pointer-events: none; z-index: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 256px; }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<nav>
+  <a href="../" class="nav-back">← Home</a>
+  <a href="../" class="nav-logo"><img src="../../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <a href="../../kr/pages/philosophy.html" class="nav-lang">KR</a>
+</nav>
+
+<section class="phil-hero">
+  <img src="../../assets/lovable/collection-trio.jpg" alt="JOVE Philosophy">
+  <div class="phil-hero-overlay"></div>
+  <div class="phil-hero-content">
+    <div class="phil-hero-label">Philosophy</div>
+    <h1 class="phil-hero-title">Scent is not simply<br>something we wear.</h1>
+    <div class="phil-hero-sub">It is a story we choose to leave behind.</div>
+  </div>
+</section>
+
+<div class="phil-section reveal">
+  <div class="phil-label">Origin</div>
+  <h2 class="phil-heading">From the beginning of time,<br>humanity has lived between two worlds.</h2>
+  <p class="phil-text">Light and darkness.<br>Purity and temptation.<br>Creation and fall.</p>
+  <p class="phil-text">Every life is shaped not by destiny,<br>but by the choices we make within these moments.</p>
+  <p class="phil-text">Jove believes that scent can hold those moments.</p>
+  <p class="phil-text">A fragrance is more than a beautiful aroma.<br>It is a memory, a decision, a trace of who we were.</p>
+</div>
+
+<div class="phil-quote reveal">
+  <blockquote>"Through scent, we ask a quiet question:<br>What story will you leave behind?"</blockquote>
+  <cite>JOVE</cite>
+</div>
+
+<div class="phil-section reveal">
+  <div class="phil-label">Worldview</div>
+  <h2 class="phil-heading">Human life unfolds through choices.</h2>
+  <p class="phil-text">Between purity and temptation.<br>Between creation and desire.</p>
+  <p class="phil-text">These moments shape who we become.</p>
+  <p class="phil-text">Jove captures those moments through scent.</p>
+  <p class="phil-text">Each fragrance is not merely a composition of notes,<br>but a fragment of a story.</p>
+  <p class="phil-text">A quiet reflection of the choices that define us.</p>
+</div>
+
+<div class="phil-dual reveal">
+  <div class="phil-world">
+    <img src="../../assets/lovable/lion-statue.jpg" alt="Lion — The Sacred">
+    <div class="phil-world-overlay"></div>
+    <div class="phil-world-content">
+      <div class="world-label sacred">The Sacred</div>
+      <h3 class="world-name">Lion</h3>
+      <p class="world-tagline">A World of Divine Light</p>
+      <p class="world-desc">The purity of intention. A quiet confidence born from knowing exactly who you are. The wonder felt at the first moment of creation.</p>
+      <div class="world-notes">
+        <span class="world-note">Divine</span>
+        <span class="world-note">Creation</span>
+        <span class="world-note">Purity</span>
+        <span class="world-note">Light</span>
+      </div>
+    </div>
+  </div>
+  <div class="phil-world">
+    <img src="../../assets/lovable/mood-two-worlds.png" alt="Serpent — The Temptation">
+    <div class="phil-world-overlay"></div>
+    <div class="phil-world-content">
+      <div class="world-label temptation">The Temptation</div>
+      <h3 class="world-name">Serpent</h3>
+      <p class="world-tagline">A World of Mystery & Allure</p>
+      <p class="world-desc">The allure of the unknown. Rich, complex layers that reveal themselves slowly. A dangerous beauty that glows in the darkness.</p>
+      <div class="world-notes">
+        <span class="world-note">Temptation</span>
+        <span class="world-note">Shadow</span>
+        <span class="world-note">Addiction</span>
+        <span class="world-note">Mystery</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="phil-fullimg reveal">
+  <img src="../../assets/lovable/ingredients-triptych.png" alt="JOVE Ingredients">
+  <div class="phil-fullimg-overlay"></div>
+  <div class="phil-fullimg-text">
+    <div class="phil-label" style="color:var(--gold);margin-bottom:1rem">Materials</div>
+    <h3>Nature's Rarest Elements</h3>
+  </div>
+</div>
+
+<div class="phil-section reveal">
+  <div class="phil-label">Craft</div>
+  <h2 class="phil-heading">Reverence for Materials</h2>
+  <p class="phil-text">Each JOVE fragrance is composed of nature's most rare and noble materials. Wood, resin, spice — ingredients used in sacred rituals for thousands of years.</p>
+  <p class="phil-text">We honor the depth inherent in each raw material, not excessive synthesis. Creating maximum resonance with minimal composition — that is JOVE's approach to perfumery.</p>
+</div>
+
+<div class="phil-fullimg reveal">
+  <img src="../../assets/lovable/leather-emboss.jpg" alt="JOVE Bottle Design">
+  <div class="phil-fullimg-overlay"></div>
+  <div class="phil-fullimg-text">
+    <div class="phil-label" style="color:var(--gold);margin-bottom:1rem">Object</div>
+    <h3>Like an Unearthed Artifact</h3>
+  </div>
+</div>
+
+<div class="phil-section reveal">
+  <div class="phil-label">Design</div>
+  <h2 class="phil-heading">An Eternal Object</h2>
+  <p class="phil-text">A 50ml cylindrical glass vessel wrapped in black leather with hot-stamped embossing. The irregular natural stone cap takes a unique form, like an artifact drawn from the earth.</p>
+  <p class="phil-text">A cord detail inspired by David's sling. The JOVE bottle is designed not to be discarded after use, but to be kept — an object worthy of collection.</p>
+</div>
+
+<div class="phil-values reveal">
+  <div class="phil-value">
+    <div class="phil-value-num">01</div>
+    <h3>Sacred Minimalism</h3>
+    <p>The divinity that comes from restraint, not excess. The depth created by space and silence. We choose quiet over noise.</p>
+  </div>
+  <div class="phil-value">
+    <div class="phil-value-num">02</div>
+    <h3>Tension of Duality</h3>
+    <p>Every creation exists between light and shadow. Not opposition but coexistence. Not conflict but harmony. The tension between is where beauty lives.</p>
+  </div>
+  <div class="phil-value">
+    <div class="phil-value-num">03</div>
+    <h3>Invisible Luxury</h3>
+    <p>True luxury exists where it cannot be seen. Scent is invisible, yet it is the sense that lingers deepest.</p>
+  </div>
+  <div class="phil-value">
+    <div class="phil-value-num">04</div>
+    <h3>Crystallized Emotion</h3>
+    <p>Each scent captures a moment of transformation. What you wear should speak not of who you were, but of who you are becoming.</p>
+  </div>
+</div>
+
+<div class="phil-emblem reveal">
+  <img src="../../assets/lovable/winged-lion-symbol.jpg" alt="JOVE Symbol">
+  <p>Est. MMXXVI · Seoul</p>
+</div>
+
+<div class="phil-cta reveal">
+  <p style="font-family:var(--serif);font-style:italic;font-size:1.1rem;color:rgba(221,218,213,0.5);margin-bottom:2rem;letter-spacing:0.05em;">Your scent is the story you leave behind.</p>
+  <h2>Experience the Scent of Creation</h2>
+  <a href="../#collection" class="phil-cta-btn">View Collection</a>
+</div>
+
+<div class="phil-footer">
+  <img src="../../assets/lovable/logo-jove.png" alt="JOVE">
+  <span>© 2026 JOVE. All rights reserved.</span>
+</div>
+
+<script>
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 80));
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

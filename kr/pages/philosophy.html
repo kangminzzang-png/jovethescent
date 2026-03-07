@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOVE — 철학</title>
+<meta name="description" content="JOVE는 존재의 이중성을 신성한 향으로 탐구합니다. 빛과 그림자, 신성과 유혹 사이의 긴장.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+KR:wght@200;300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #050505; --fg: #F5F5F0; --card: hsl(0,0%,8%);
+    --muted: #A0A0A0; --border: hsl(0,0%,18%);
+    --gold: hsl(43,35%,50%); --obsidian: #050505;
+    --serif: 'Cormorant Garamond', serif;
+    --serif-kr: 'Noto Serif KR', serif;
+    --sans: 'Pretendard', -apple-system, system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--muted); font-family: var(--sans); font-weight: 300; -webkit-font-smoothing: antialiased; line-height: 1.8; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background: transparent; transition: all 0.5s;
+  }
+  @media(min-width:768px){ nav { padding: 1.25rem 3rem; } }
+  nav.scrolled { background: rgba(13,13,13,0.97); }
+  .nav-back { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-back:hover { color: var(--fg); }
+  .nav-logo { position: absolute; left: 50%; transform: translateX(-50%); }
+  .nav-logo img { height: 24px; filter: invert(1); opacity: 0.9; }
+  .nav-lang { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; transition: color 0.3s; }
+  .nav-lang:hover { color: var(--fg); }
+
+  /* HERO */
+  .phil-hero {
+    position: relative; height: 100vh; overflow: hidden;
+  }
+  .phil-hero img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .phil-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(5,5,5,0.3), rgba(5,5,5,0.1) 40%, rgba(5,5,5,0.9));
+  }
+  .phil-hero-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  @media(min-width:768px){ .phil-hero-content { padding: 6rem 3rem; } }
+  .phil-hero-label {
+    font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .phil-hero-title {
+    font-family: var(--serif-kr); font-weight: 200;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--fg); line-height: 1.3; margin-bottom: 1rem;
+  }
+  .phil-hero-sub {
+    font-family: var(--serif); font-style: italic;
+    font-size: 1.1rem; color: rgba(221,218,213,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* SECTIONS */
+  .phil-section {
+    max-width: 720px; margin: 0 auto;
+    padding: 6rem 1.5rem;
+  }
+  @media(min-width:768px){ .phil-section { padding: 8rem 2rem; } }
+
+  .phil-label {
+    font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .phil-heading {
+    font-family: var(--serif-kr); font-weight: 200;
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    color: var(--fg); line-height: 1.4; margin-bottom: 2rem;
+  }
+  .phil-text {
+    font-size: 0.9rem; color: var(--muted); line-height: 2;
+    margin-bottom: 1.5rem;
+  }
+
+  /* QUOTE */
+  .phil-quote {
+    max-width: 800px; margin: 0 auto;
+    padding: 5rem 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(196,169,106,0.08);
+    border-bottom: 1px solid rgba(196,169,106,0.08);
+  }
+  .phil-quote blockquote {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    color: rgba(221,218,213,0.6); line-height: 1.8;
+    letter-spacing: 0.03em;
+  }
+  .phil-quote cite {
+    display: block; margin-top: 1.5rem;
+    font-size: 0.65rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    font-style: normal;
+  }
+
+  /* FULL IMAGE */
+  .phil-fullimg {
+    position: relative; height: 60vh; overflow: hidden;
+  }
+  @media(min-width:768px){ .phil-fullimg { height: 70vh; } }
+  .phil-fullimg img { width: 100%; height: 100%; object-fit: cover; }
+  .phil-fullimg-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, var(--obsidian), transparent 20%, transparent 80%, var(--obsidian));
+  }
+  .phil-fullimg-text {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 1.5rem;
+  }
+  .phil-fullimg-text h3 {
+    font-family: var(--serif-kr); font-weight: 200;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: var(--fg);
+  }
+
+  /* DUAL WORLD */
+  .phil-dual {
+    display: grid; gap: 0;
+  }
+  @media(min-width:768px){ .phil-dual { grid-template-columns: 1fr 1fr; } }
+  .phil-world {
+    position: relative; min-height: 70vh; overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+  .phil-world img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.5; transition: opacity 0.6s;
+  }
+  .phil-world:hover img { opacity: 0.7; }
+  .phil-world-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+  }
+  .phil-world-content {
+    position: relative; z-index: 10;
+    padding: 3rem 2rem; text-align: center; width: 100%;
+  }
+  @media(min-width:768px){ .phil-world-content { padding: 4rem 3rem; } }
+  .world-label {
+    font-size: 0.55rem; letter-spacing: 0.5em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .world-label.sacred { color: var(--gold); }
+  .world-label.temptation { color: hsl(0,50%,55%); }
+  .world-name {
+    font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--fg); margin-bottom: 0.8rem;
+  }
+  .world-tagline {
+    font-family: var(--serif); font-style: italic;
+    color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem;
+  }
+  .world-desc {
+    color: var(--muted); font-size: 0.8rem; line-height: 1.8;
+    max-width: 20rem; margin: 0 auto;
+  }
+  .world-notes {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0.5rem; margin-top: 1.5rem;
+  }
+  .world-note {
+    font-size: 0.6rem; letter-spacing: 0.1em; color: var(--muted);
+    border: 1px solid var(--border); padding: 0.3rem 0.6rem;
+  }
+
+  /* VALUES */
+  .phil-values {
+    display: grid; gap: 1px; background: var(--border);
+  }
+  @media(min-width:768px){ .phil-values { grid-template-columns: 1fr 1fr; } }
+  .phil-value {
+    background: var(--bg); padding: 3rem 2rem;
+  }
+  @media(min-width:768px){ .phil-value { padding: 4rem 3rem; } }
+  .phil-value-num {
+    font-family: var(--serif); font-size: 2rem; color: rgba(196,169,106,0.15);
+    margin-bottom: 1rem;
+  }
+  .phil-value h3 {
+    font-family: var(--serif-kr); font-weight: 200;
+    font-size: 1.2rem; color: var(--fg); margin-bottom: 1rem;
+  }
+  .phil-value p {
+    font-size: 0.85rem; color: var(--muted); line-height: 1.9;
+  }
+
+  /* EMBLEM */
+  .phil-emblem {
+    text-align: center; padding: 5rem 1.5rem;
+  }
+  .phil-emblem img {
+    height: 120px; margin: 0 auto 2rem; opacity: 0.08; filter: invert(1);
+  }
+  .phil-emblem p {
+    font-family: var(--serif); font-style: italic;
+    font-size: 0.9rem; color: rgba(221,218,213,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  /* CTA */
+  .phil-cta {
+    text-align: center; padding: 5rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .phil-cta h2 {
+    font-family: var(--serif-kr); font-weight: 200;
+    font-size: 1.5rem; color: var(--fg); margin-bottom: 1.5rem;
+  }
+  .phil-cta-btn {
+    display: inline-block; font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 0.9rem 2.5rem;
+    background: var(--fg); color: var(--bg); border: 1px solid var(--fg);
+    transition: all 0.5s;
+  }
+  .phil-cta-btn:hover { background: var(--gold); border-color: var(--gold); }
+
+  /* FOOTER */
+  .phil-footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 800px; margin: 0 auto;
+  }
+  .phil-footer img { height: 18px; filter: invert(1); opacity: 0.3; }
+  .phil-footer span { font-size: 0.6rem; color: rgba(221,218,213,0.15); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .noise {
+    position: fixed; inset: 0; opacity: 0.02; pointer-events: none; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="../" class="nav-back">← 홈</a>
+  <a href="../" class="nav-logo"><img src="../../assets/lovable/logo-jove.png" alt="JOVE"></a>
+  <a href="../../en/pages/philosophy.html" class="nav-lang">EN</a>
+</nav>
+
+<!-- HERO -->
+<section class="phil-hero">
+  <img src="../../assets/lovable/collection-trio.jpg" alt="JOVE Philosophy">
+  <div class="phil-hero-overlay"></div>
+  <div class="phil-hero-content">
+    <div class="phil-hero-label">Philosophy</div>
+    <h1 class="phil-hero-title">향은 단순히 입는 것이 아닙니다.<br>남기기로 선택한 이야기입니다.</h1>
+    <div class="phil-hero-sub">Scent is not simply something we wear.<br>It is a story we choose to leave behind.</div>
+  </div>
+</section>
+
+<!-- ORIGIN -->
+<div class="phil-section reveal">
+  <div class="phil-label">Origin</div>
+  <h2 class="phil-heading">시간의 시작부터,<br>인류는 두 세계 사이에 살아왔습니다</h2>
+  <p class="phil-text">빛과 어둠.<br>순수와 유혹.<br>창조와 타락.</p>
+  <p class="phil-text">모든 삶은 운명이 아닌, 그 순간들 속에서 우리가 내리는 선택에 의해 형성됩니다.</p>
+  <p class="phil-text">JOVE는 향이 그 순간을 담을 수 있다고 믿습니다.</p>
+  <p class="phil-text">향은 아름다운 향기 그 이상입니다.<br>기억이고, 결정이며, 우리가 누구였는지의 흔적입니다.</p>
+</div>
+
+<!-- QUOTE -->
+<div class="phil-quote reveal">
+  <blockquote>"향을 통해, 우리는 조용히 묻습니다:<br>당신은 어떤 이야기를 남기겠습니까?"</blockquote>
+  <cite>JOVE</cite>
+</div>
+
+<!-- WORLDVIEW -->
+<div class="phil-section reveal">
+  <div class="phil-label">Worldview</div>
+  <h2 class="phil-heading">인간의 삶은 선택을 통해 펼쳐집니다</h2>
+  <p class="phil-text">순수와 유혹 사이에서.<br>창조와 욕망 사이에서.</p>
+  <p class="phil-text">이 순간들이 우리가 되어가는 존재를 만들어갑니다.</p>
+  <p class="phil-text">JOVE는 그 순간들을 향으로 포착합니다.</p>
+  <p class="phil-text">각각의 향은 단순한 노트의 조합이 아닌,<br>이야기의 한 조각입니다.</p>
+  <p class="phil-text">우리를 정의하는 선택들에 대한 조용한 성찰.</p>
+</div>
+
+<!-- TWO WORLDS -->
+<div class="phil-dual reveal">
+  <div class="phil-world">
+    <img src="../../assets/lovable/lion-statue.jpg" alt="Lion — The Sacred">
+    <div class="phil-world-overlay"></div>
+    <div class="phil-world-content">
+      <div class="world-label sacred">The Sacred</div>
+      <h3 class="world-name">Lion</h3>
+      <p class="world-tagline">신성한 빛의 세계</p>
+      <p class="world-desc">의도의 순수함. 자신이 누구인지 정확히 아는 데서 오는 조용한 자신감. 창조의 첫 순간에서 느끼는 경이로움.</p>
+      <div class="world-notes">
+        <span class="world-note">신성</span>
+        <span class="world-note">창조</span>
+        <span class="world-note">순수</span>
+        <span class="world-note">빛</span>
+      </div>
+    </div>
+  </div>
+  <div class="phil-world">
+    <img src="../../assets/lovable/mood-two-worlds.png" alt="Serpent — The Temptation">
+    <div class="phil-world-overlay"></div>
+    <div class="phil-world-content">
+      <div class="world-label temptation">The Temptation</div>
+      <h3 class="world-name">Serpent</h3>
+      <p class="world-tagline">유혹과 신비의 세계</p>
+      <p class="world-desc">미지의 매력. 천천히 드러나는 풍부하고 복잡한 레이어들. 어둠 속에서 빛나는 위험한 아름다움.</p>
+      <div class="world-notes">
+        <span class="world-note">유혹</span>
+        <span class="world-note">어둠</span>
+        <span class="world-note">중독</span>
+        <span class="world-note">신비</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<div class="phil-fullimg reveal">
+  <img src="../../assets/lovable/ingredients-triptych.png" alt="JOVE Ingredients">
+  <div class="phil-fullimg-overlay"></div>
+  <div class="phil-fullimg-text">
+    <div class="phil-label" style="color:var(--gold);margin-bottom:1rem">Materials</div>
+    <h3>자연의 가장 귀한 재료들</h3>
+  </div>
+</div>
+
+<div class="phil-section reveal">
+  <div class="phil-label">Craft</div>
+  <h2 class="phil-heading">재료에 대한 경외</h2>
+  <p class="phil-text">JOVE의 각 향수는 자연에서 가장 희귀하고 고귀한 재료들로 구성됩니다. 우드, 레진, 스파이스 — 각각의 원료는 수천 년간 신성한 의식에 사용되어 온 것들입니다.</p>
+  <p class="phil-text">우리는 과도한 합성이 아닌, 원료 본연의 깊이를 존중합니다. 최소한의 구성으로 최대한의 울림을 만들어내는 것 — 그것이 JOVE의 조향 철학입니다.</p>
+</div>
+
+<!-- BOTTLE -->
+<div class="phil-fullimg reveal">
+  <img src="../../assets/lovable/leather-emboss.jpg" alt="JOVE Bottle Design">
+  <div class="phil-fullimg-overlay"></div>
+  <div class="phil-fullimg-text">
+    <div class="phil-label" style="color:var(--gold);margin-bottom:1rem">Object</div>
+    <h3>발굴된 유물처럼</h3>
+  </div>
+</div>
+
+<div class="phil-section reveal">
+  <div class="phil-label">Design</div>
+  <h2 class="phil-heading">영원한 오브제</h2>
+  <p class="phil-text">50ml 원통형 투명 유리에 블랙 레더 래핑. 핫스탬프 엠보싱으로 각인된 브랜드 마크. 비정형 천연석 캡은 자연에서 온 유물처럼 각각 다른 형태를 가집니다.</p>
+  <p class="phil-text">다윗의 물매에서 영감받은 코드 디테일. JOVE의 병은 사용 후에도 버리지 않는, 소장하고 싶은 오브제로 설계되었습니다.</p>
+</div>
+
+<!-- VALUES -->
+<div class="phil-values reveal">
+  <div class="phil-value">
+    <div class="phil-value-num">01</div>
+    <h3>Sacred Minimalism</h3>
+    <p>과잉이 아닌 절제에서 오는 신성함. 여백과 침묵이 만드는 깊이. 노이즈보다 고요함을 선택합니다.</p>
+  </div>
+  <div class="phil-value">
+    <div class="phil-value-num">02</div>
+    <h3>이중성의 긴장</h3>
+    <p>모든 창작물은 빛과 그림자 사이에 존재합니다. 대립이 아닌 공존. 갈등이 아닌 조화. 그 사이의 긴장이 아름다움을 만듭니다.</p>
+  </div>
+  <div class="phil-value">
+    <div class="phil-value-num">03</div>
+    <h3>보이지 않는 럭셔리</h3>
+    <p>진정한 럭셔리는 보이지 않는 곳에 존재합니다. 향은 눈에 보이지 않지만, 가장 깊이 남는 감각입니다.</p>
+  </div>
+  <div class="phil-value">
+    <div class="phil-value-num">04</div>
+    <h3>감정의 결정화</h3>
+    <p>각각의 향은 변화의 순간을 담고 있습니다. 당신이 입는 것은 당신이 누구였는지가 아닌, 당신이 되어가는 자를 말합니다.</p>
+  </div>
+</div>
+
+<!-- EMBLEM -->
+<div class="phil-emblem reveal">
+  <img src="../../assets/lovable/winged-lion-symbol.jpg" alt="JOVE Symbol">
+  <p>Est. MMXXVI · Seoul</p>
+</div>
+
+<!-- CTA -->
+<div class="phil-cta reveal">
+  <p style="font-family:var(--serif);font-style:italic;font-size:1.1rem;color:rgba(221,218,213,0.5);margin-bottom:2rem;letter-spacing:0.05em;">Your scent is the story you leave behind.</p>
+  <h2>창조의 향을 경험하세요</h2>
+  <a href="../#collection" class="phil-cta-btn">컬렉션 보기</a>
+</div>
+
+<!-- FOOTER -->
+<div class="phil-footer">
+  <img src="../../assets/lovable/logo-jove.png" alt="JOVE">
+  <span>© 2026 JOVE. All rights reserved.</span>
+</div>
+
+<script>
+// Nav scroll
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 80));
+
+// Reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
