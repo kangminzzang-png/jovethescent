@@ -118,11 +118,12 @@
   async function signInWithProvider(provider) {
     ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
+    const isKr = window.location.pathname.includes('/kr/');
+    const siteUrl = 'https://jovethescent.vercel.app';
+    const redirectTo = siteUrl + (isKr ? '/kr/' : '/en/');
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: {
-        redirectTo: window.location.origin + window.location.pathname
-      }
+      options: { redirectTo }
     });
     return { data, error };
   }
