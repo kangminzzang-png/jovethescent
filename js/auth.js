@@ -4,33 +4,29 @@
 
   let supabase = null;
 
-  function init() {
+  function ensureClient() {
+    if (supabase) return true;
     const cfg = window.JOVE_CONFIG;
-    if (!cfg || cfg.SUPABASE_URL === 'YOUR_SUPABASE_URL') {
-      console.warn('[JOVE Auth] Supabase not configured yet');
-      updateNavUI(null);
-      return;
-    }
+    if (!cfg || cfg.SUPABASE_URL === 'YOUR_SUPABASE_URL') return false;
 
-    // Try multiple ways to find createClient (CDN UMD exposes window.supabase)
-    let createClient = null;
-    if (window.supabase && typeof window.supabase.createClient === 'function') {
-      createClient = window.supabase.createClient;
-    } else if (typeof window.createClient === 'function') {
-      createClient = window.createClient;
-    }
-
-    if (!createClient) {
-      console.warn('[JOVE Auth] Supabase SDK not loaded. window.supabase =', typeof window.supabase);
-      updateNavUI(null);
-      return;
-    }
+    // Supabase UMD exposes window.supabase.createClient
+    const sb = window.supabase || window.Supabase;
+    if (!sb || typeof sb.createClient !== 'function') return false;
 
     try {
-      supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
-      console.log('[JOVE Auth] Supabase connected');
+      supabase = sb.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+      console.log('[JOVE Auth] Connected');
+      return true;
     } catch (err) {
-      console.error('[JOVE Auth] Failed to init:', err);
+      console.error('[JOVE Auth] Init error:', err);
+      return false;
+    }
+  }
+
+  function init() {
+    if (!ensureClient()) {
+      console.warn('[JOVE Auth] Not ready yet, will retry on demand');
+      updateNavUI(null);
       return;
     }
 
@@ -54,6 +50,7 @@
 
   /* ── Auth Functions ── */
   async function signUp(email, password, name) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -66,30 +63,35 @@
   }
 
   async function signIn(email, password) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     return { data, error };
   }
 
   async function signOut() {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const { error } = await supabase.auth.signOut();
     return { error };
   }
 
   async function getUser() {
+    ensureClient();
     if (!supabase) return null;
     const { data } = await supabase.auth.getUser();
     return data?.user || null;
   }
 
   async function getSession() {
+    ensureClient();
     if (!supabase) return null;
     const { data } = await supabase.auth.getSession();
     return data?.session || null;
   }
 
   async function updateProfile(updates) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const { data, error } = await supabase.auth.updateUser({
       data: updates
@@ -98,6 +100,7 @@
   }
 
   async function resetPassword(email) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const isKr = window.location.pathname.includes('/kr/');
     const redirectTo = window.location.origin + (isKr ? '/kr/reset-password.html' : '/en/reset-password.html');
@@ -106,12 +109,14 @@
   }
 
   async function updatePassword(newPassword) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const { data, error } = await supabase.auth.updateUser({ password: newPassword });
     return { data, error };
   }
 
   async function signInWithProvider(provider) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
@@ -124,6 +129,7 @@
 
   /* ── Profile Data (from profiles table) ── */
   async function getProfile() {
+    ensureClient();
     if (!supabase) return null;
     const user = await getUser();
     if (!user) return null;
@@ -132,6 +138,7 @@
   }
 
   async function updateProfileData(updates) {
+    ensureClient();
     if (!supabase) return { error: { message: 'Auth not configured' } };
     const user = await getUser();
     if (!user) return { error: { message: 'Not authenticated' } };
