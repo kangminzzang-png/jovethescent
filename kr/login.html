@@ -221,8 +221,16 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 });
 
 // Social login
-document.getElementById('googleBtn').addEventListener('click', () => JoveAuth.signInWithProvider('google'));
-document.getElementById('kakaoBtn').addEventListener('click', () => JoveAuth.signInWithProvider('kakao'));
+document.getElementById('googleBtn').addEventListener('click', async () => {
+  const msg = document.getElementById('authMessage');
+  const { error } = await JoveAuth.signInWithProvider('google');
+  if (error) { msg.textContent = error.message; msg.className = 'auth-message error visible'; }
+});
+document.getElementById('kakaoBtn').addEventListener('click', async () => {
+  const msg = document.getElementById('authMessage');
+  const { error } = await JoveAuth.signInWithProvider('kakao');
+  if (error) { msg.textContent = error.message; msg.className = 'auth-message error visible'; }
+});
 
 // Check if already logged in
 JoveAuth.getUser && JoveAuth.getUser().then(user => {

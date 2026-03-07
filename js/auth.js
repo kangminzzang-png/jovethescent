@@ -5,11 +5,6 @@
   let supabase = null;
 
   function init() {
-    if (typeof window.supabase === 'undefined' && typeof window.Supabase === 'undefined') {
-      console.warn('[JOVE Auth] Supabase SDK not loaded');
-      return;
-    }
-
     const cfg = window.JOVE_CONFIG;
     if (!cfg || cfg.SUPABASE_URL === 'YOUR_SUPABASE_URL') {
       console.warn('[JOVE Auth] Supabase not configured yet');
@@ -17,14 +12,27 @@
       return;
     }
 
-    const createClient = (window.supabase && window.supabase.createClient) || 
-                         (window.Supabase && window.Supabase.createClient);
+    // Try multiple ways to find createClient (CDN UMD exposes window.supabase)
+    let createClient = null;
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      createClient = window.supabase.createClient;
+    } else if (typeof window.createClient === 'function') {
+      createClient = window.createClient;
+    }
+
     if (!createClient) {
-      console.warn('[JOVE Auth] createClient not found');
+      console.warn('[JOVE Auth] Supabase SDK not loaded. window.supabase =', typeof window.supabase);
+      updateNavUI(null);
       return;
     }
 
-    supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+    try {
+      supabase = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+      console.log('[JOVE Auth] Supabase connected');
+    } catch (err) {
+      console.error('[JOVE Auth] Failed to init:', err);
+      return;
+    }
 
     // Listen for auth changes
     supabase.auth.onAuthStateChange((event, session) => {

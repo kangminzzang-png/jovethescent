@@ -118,7 +118,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const params = new URLSearchParams(window.location.search);
   window.location.href = params.get('redirect') || './';
 });
-document.getElementById('googleBtn').addEventListener('click', () => JoveAuth.signInWithProvider('google'));
+document.getElementById('googleBtn').addEventListener('click', async () => {
+  const msg = document.getElementById('authMessage');
+  const { error } = await JoveAuth.signInWithProvider('google');
+  if (error) { msg.textContent = error.message; msg.className = 'auth-message error visible'; }
+});
 JoveAuth.getUser && JoveAuth.getUser().then(user => { if (user) window.location.href = 'mypage.html'; });
 const urlMsg = new URLSearchParams(window.location.search).get('message');
 if (urlMsg) { const m = document.getElementById('authMessage'); m.textContent = decodeURIComponent(urlMsg); m.className = 'auth-message success visible'; }
