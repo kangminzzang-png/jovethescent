@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>JOVE — Admin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Noto+Sans+KR:wght@300;400;500;600&family=Noto+Serif+KR:wght@200;300;400;500;600&display=swap');
+
+  :root {
+    --bg: #060606;
+    --bg-card: #0e0e0e;
+    --bg-elevated: #141414;
+    --fg: #e8e4df;
+    --fg-dim: rgba(232,228,223,0.45);
+    --fg-subtle: rgba(232,228,223,0.08);
+    --gold: #c4a96a;
+    --gold-bright: #d4b97a;
+    --gold-dim: rgba(196,169,106,0.25);
+    --gold-glow: rgba(196,169,106,0.08);
+    --danger: #e57373;
+    --success: #81c784;
+    --sidebar-w: 240px;
+    --serif: 'Cormorant Garamond', serif;
+    --serif-kr: 'Noto Serif KR', serif;
+    --sans: 'Noto Sans KR', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.7; font-size: 14px; }
+
+  /* ── LOGIN ── */
+  .login-screen {
+    height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at 50% 30%, rgba(196,169,106,0.04) 0%, transparent 70%);
+  }
+  .login-logo { margin-bottom: 2.5rem; text-align: center; }
+  .login-logo .logo-mark {
+    font-family: var(--serif); font-size: 2rem; color: var(--gold);
+    letter-spacing: 0.3em; font-weight: 300;
+  }
+  .login-logo .logo-sub {
+    font-size: 0.55rem; color: var(--fg-dim); letter-spacing: 0.4em; margin-top: 0.4rem;
+    font-family: var(--serif); text-transform: uppercase;
+  }
+  .login-screen input {
+    padding: 0.8rem 1.5rem; width: 280px;
+    border: 1px solid rgba(196,169,106,0.15); background: rgba(255,255,255,0.03);
+    font-family: inherit; font-size: 0.85rem; text-align: center;
+    color: var(--fg); margin-bottom: 1rem; transition: border-color 0.3s;
+  }
+  .login-screen input::placeholder { color: var(--fg-dim); }
+  .login-screen input:focus { outline: none; border-color: var(--gold); }
+  .login-screen button {
+    padding: 0.8rem 2.5rem; background: transparent; color: var(--gold);
+    border: 1px solid var(--gold-dim); font-family: var(--serif);
+    font-size: 0.8rem; letter-spacing: 0.2em; cursor: pointer; transition: all 0.3s;
+  }
+  .login-screen button:hover { background: var(--gold); color: var(--bg); }
+  .login-error { color: var(--danger); font-size: 0.75rem; margin-top: 0.5rem; display: none; }
+
+  /* ── LAYOUT ── */
+  .app { display: none; }
+  .app.visible { display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w); background: var(--bg);
+    border-right: 1px solid var(--fg-subtle);
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+    display: flex; flex-direction: column; transition: transform 0.3s;
+  }
+  .sidebar-header {
+    padding: 2rem 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--fg-subtle);
+  }
+  .sidebar-header .s-logo {
+    font-family: var(--serif); font-size: 1.3rem; color: var(--gold);
+    letter-spacing: 0.2em; font-weight: 300;
+  }
+  .sidebar-header .s-sub {
+    font-size: 0.5rem; letter-spacing: 0.3em; color: var(--fg-dim); margin-top: 0.2rem;
+    font-family: var(--serif); text-transform: uppercase;
+  }
+
+  .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+  .nav-group-label {
+    font-size: 0.5rem; letter-spacing: 0.3em; color: rgba(196,169,106,0.4);
+    padding: 1.2rem 1.5rem 0.4rem; text-transform: uppercase;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.65rem 1.5rem; cursor: pointer; font-size: 0.78rem;
+    transition: all 0.2s; border-left: 2px solid transparent;
+    color: var(--fg-dim);
+  }
+  .nav-item:hover { background: var(--gold-glow); color: var(--fg); }
+  .nav-item.active {
+    background: var(--gold-glow); border-left-color: var(--gold);
+    color: var(--gold);
+  }
+  .nav-item .nav-icon { width: 18px; text-align: center; font-size: 0.85rem; }
+
+  .sidebar-footer {
+    padding: 1rem 1.5rem; border-top: 1px solid var(--fg-subtle);
+    font-size: 0.55rem; color: rgba(232,228,223,0.15);
+    font-family: var(--serif); letter-spacing: 0.1em;
+  }
+
+  /* MAIN CONTENT */
+  .main { flex: 1; margin-left: var(--sidebar-w); padding: 2.5rem 3rem 4rem; max-width: 920px; }
+
+  .page-header { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--fg-subtle); }
+  .page-header h1 { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; letter-spacing: 0.08em; color: var(--fg); }
+  .page-header p { font-size: 0.7rem; color: var(--fg-dim); margin-top: 0.3rem; }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 2rem; padding: 1.5rem;
+    background: var(--bg-card); border: 1px solid var(--fg-subtle);
+  }
+  .section h2 {
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem; font-weight: 400;
+    font-family: var(--serif);
+  }
+
+  /* BUTTONS */
+  .btn {
+    padding: 0.5rem 1rem; background: transparent; color: var(--gold);
+    border: 1px solid var(--gold-dim); font-family: inherit;
+    font-size: 0.72rem; cursor: pointer; letter-spacing: 0.05em; transition: all 0.3s;
+  }
+  .btn:hover { background: var(--gold); color: var(--bg); }
+  .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.68rem; }
+  .btn-danger { border-color: rgba(229,115,115,0.3); color: var(--danger); }
+  .btn-danger:hover { background: var(--danger); color: var(--bg); }
+
+  /* INPUTS */
+  input[type="text"], input[type="number"], input[type="date"], input[type="password"],
+  select, textarea {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--fg-subtle);
+    color: var(--fg); font-family: inherit; font-size: 0.8rem;
+    padding: 0.5rem 0.6rem; transition: border-color 0.3s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold-dim); }
+  select option { background: var(--bg-elevated); color: var(--fg); }
+
+  /* CARDS */
+  .dash-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+  .dash-card {
+    padding: 1.2rem; background: var(--bg-card); border: 1px solid var(--fg-subtle);
+    text-align: center; transition: border-color 0.3s;
+  }
+  .dash-card:hover { border-color: var(--gold-dim); }
+  .dash-label { font-size: 0.5rem; color: var(--fg-dim); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .dash-value { font-size: 1.4rem; font-weight: 300; color: var(--gold); font-family: var(--serif); }
+
+  /* PERIOD BUTTONS */
+  .dash-period { display: flex; gap: 0.3rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .period-btn {
+    padding: 0.3rem 0.7rem; border: 1px solid var(--fg-subtle);
+    background: transparent; color: var(--fg-dim);
+    font-family: inherit; font-size: 0.68rem; cursor: pointer; transition: all 0.2s;
+  }
+  .period-btn.active { background: var(--gold-glow); color: var(--gold); border-color: var(--gold-dim); }
+  .period-btn:hover { border-color: var(--gold-dim); color: var(--fg); }
+
+  /* BAR CHARTS */
+  .bar-row { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.3rem; }
+  .bar-label { width: 110px; font-size: 0.65rem; color: var(--fg-dim); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; height: 20px; background: var(--fg-subtle); }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); transition: width 0.5s; }
+  .bar-val { width: 55px; font-size: 0.65rem; color: var(--fg-dim); }
+
+  /* ORDER ROWS */
+  .order-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 0; border-bottom: 1px solid var(--fg-subtle); font-size: 0.72rem;
+  }
+  .order-row:last-child { border-bottom: none; }
+  .order-row .o-num { color: var(--gold); font-weight: 500; width: 80px; font-family: var(--serif); letter-spacing: 0.05em; }
+  .order-row .o-name { flex: 1; color: var(--fg); }
+  .order-row .o-amount { font-weight: 500; color: var(--gold-bright); }
+  .order-row .o-date { color: var(--fg-dim); width: 75px; text-align: right; font-size: 0.65rem; }
+
+  /* PRODUCT CARDS */
+  .product-card {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem; border: 1px solid var(--fg-subtle);
+    background: var(--bg-elevated); margin-bottom: 0.6rem;
+    transition: border-color 0.3s;
+  }
+  .product-card:hover { border-color: var(--gold-dim); }
+  .product-number { 
+    font-family: var(--serif); font-size: 1.8rem; font-weight: 300;
+    color: var(--gold-dim); width: 40px; text-align: center;
+  }
+  .product-info { flex: 1; }
+  .product-name { font-family: var(--serif); font-size: 1rem; letter-spacing: 0.1em; color: var(--fg); font-weight: 400; }
+  .product-latin { font-family: var(--serif); font-size: 0.65rem; font-style: italic; color: var(--fg-dim); letter-spacing: 0.1em; }
+  .product-notes { font-size: 0.6rem; color: var(--fg-dim); margin-top: 0.3rem; }
+  .product-price-wrap { text-align: right; }
+  .product-price-label { font-size: 0.5rem; color: var(--fg-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  .price-input {
+    width: 100px; padding: 0.35rem; text-align: right;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--fg-subtle);
+    color: var(--gold); font-family: var(--serif); font-size: 0.85rem;
+  }
+  .price-input:focus { border-color: var(--gold-dim); outline: none; }
+
+  /* PROMO CODES */
+  .promo-card {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.8rem 1rem; border: 1px solid var(--fg-subtle);
+    background: var(--bg-elevated); margin-bottom: 0.5rem;
+  }
+  .promo-code {
+    font-family: var(--serif); font-size: 0.9rem; letter-spacing: 0.15em;
+    color: var(--gold); font-weight: 500; min-width: 100px;
+  }
+  .promo-detail { flex: 1; font-size: 0.7rem; color: var(--fg-dim); }
+  .promo-status { font-size: 0.55rem; padding: 0.15rem 0.5rem; letter-spacing: 0.1em; }
+  .promo-active { background: rgba(129,199,132,0.15); color: var(--success); }
+  .promo-expired { background: rgba(229,115,115,0.15); color: var(--danger); }
+
+  /* TABLE */
+  .history-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+  .history-table th {
+    text-align: left; padding: 0.5rem 0.4rem;
+    border-bottom: 1px solid var(--gold-dim);
+    font-size: 0.55rem; letter-spacing: 0.15em; color: var(--gold);
+    font-weight: 400; text-transform: uppercase;
+  }
+  .history-table td { padding: 0.45rem 0.4rem; border-bottom: 1px solid var(--fg-subtle); color: var(--fg-dim); }
+  .history-table tr:hover td { background: var(--gold-glow); }
+
+  .history-stats { display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.72rem; color: var(--fg-dim); }
+  .history-stats strong { color: var(--gold); }
+
+  .history-filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+
+  .source-badge { display: inline-block; padding: 0.1rem 0.4rem; font-size: 0.5rem; letter-spacing: 0.08em; }
+  .source-badge.kr { background: rgba(196,169,106,0.15); color: var(--gold); }
+  .source-badge.en { background: rgba(129,199,132,0.15); color: var(--success); }
+
+  .page-nav { display: flex; gap: 0.3rem; margin-top: 1rem; justify-content: center; }
+  .page-nav button {
+    padding: 0.3rem 0.7rem; border: 1px solid var(--fg-subtle);
+    background: transparent; color: var(--fg-dim); font-family: inherit;
+    font-size: 0.68rem; cursor: pointer;
+  }
+  .page-nav button.active { background: var(--gold-glow); color: var(--gold); border-color: var(--gold-dim); }
+
+  /* HOME */
+  .home-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+  .home-card {
+    background: var(--bg-card); border: 1px solid var(--fg-subtle);
+    padding: 1.3rem; cursor: pointer; transition: all 0.3s;
+  }
+  .home-card:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+  .home-card .hc-icon { font-size: 1.3rem; margin-bottom: 0.5rem; opacity: 0.7; }
+  .home-card .hc-num { font-size: 1.6rem; font-weight: 300; color: var(--gold); font-family: var(--serif); }
+  .home-card .hc-label { font-size: 0.55rem; color: var(--fg-dim); letter-spacing: 0.15em; margin-top: 0.15rem; text-transform: uppercase; }
+  .home-greeting { font-family: var(--serif); font-size: 1.2rem; font-weight: 300; color: var(--fg); letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+  .home-date { font-size: 0.7rem; color: var(--fg-dim); margin-bottom: 1.5rem; }
+  .home-recent h3 { font-size: 0.6rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 0.6rem; text-transform: uppercase; }
+
+  /* CUSTOMERS */
+  .customer-card {
+    background: var(--bg-card); border: 1px solid var(--fg-subtle);
+    padding: 0.8rem 1rem; margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.8rem;
+    cursor: pointer; transition: border-color 0.3s;
+  }
+  .customer-card:hover { border-color: var(--gold-dim); }
+  .customer-rank {
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; font-weight: 500; color: var(--fg-dim);
+    border: 1px solid var(--fg-subtle); flex-shrink: 0;
+  }
+  .customer-rank.gold { border-color: var(--gold); color: var(--gold); }
+  .customer-rank.silver { border-color: #888; color: #aaa; }
+  .customer-rank.bronze { border-color: #8a6644; color: #a8855e; }
+  .customer-info { flex: 1; min-width: 0; }
+  .customer-name { font-weight: 500; font-size: 0.8rem; color: var(--fg); }
+  .customer-meta { font-size: 0.6rem; color: var(--fg-dim); margin-top: 0.15rem; }
+  .customer-stats { text-align: right; flex-shrink: 0; }
+  .customer-amount { font-weight: 400; font-size: 0.85rem; color: var(--gold); font-family: var(--serif); }
+  .customer-count { font-size: 0.6rem; color: var(--fg-dim); }
+  .vip-badge {
+    display: inline-block; font-size: 0.45rem; padding: 0.1rem 0.35rem;
+    background: var(--gold-dim); color: var(--gold); margin-left: 0.3rem;
+    letter-spacing: 0.1em; font-family: var(--serif);
+  }
+  .customer-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+  .cust-stat-card { background: var(--bg-card); border: 1px solid var(--fg-subtle); padding: 0.8rem; text-align: center; }
+  .cust-stat-num { font-size: 1.3rem; font-weight: 300; color: var(--gold); font-family: var(--serif); }
+  .cust-stat-label { font-size: 0.55rem; color: var(--fg-dim); margin-top: 0.2rem; letter-spacing: 0.1em; }
+
+  /* CUSTOMER DETAIL MODAL */
+  .cust-detail-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 300; display: none; align-items: center; justify-content: center; }
+  .cust-detail-overlay.show { display: flex; }
+  .cust-detail { background: var(--bg-elevated); border: 1px solid var(--fg-subtle); width: 92%; max-width: 560px; max-height: 85vh; overflow-y: auto; padding: 1.5rem; position: relative; }
+  .cust-detail-close { position: absolute; top: 0.8rem; right: 1rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--fg-dim); }
+  .cust-detail-name { font-family: var(--serif); font-size: 1.2rem; font-weight: 300; color: var(--fg); letter-spacing: 0.05em; }
+  .cust-detail-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin: 1rem 0; }
+  .cust-d-stat { background: var(--bg-card); padding: 0.6rem; text-align: center; border: 1px solid var(--fg-subtle); }
+  .cust-d-stat-num { font-size: 1rem; font-weight: 300; color: var(--gold); font-family: var(--serif); }
+  .cust-d-stat-label { font-size: 0.5rem; color: var(--fg-dim); margin-top: 0.15rem; letter-spacing: 0.1em; }
+  .cust-detail h3 { font-size: 0.6rem; color: var(--gold); letter-spacing: 0.15em; margin: 1rem 0 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--fg-subtle); text-transform: uppercase; }
+  .cust-order-item { padding: 0.6rem 0; border-bottom: 1px solid var(--fg-subtle); }
+  .cust-order-num { font-size: 0.65rem; color: var(--gold); font-weight: 500; }
+  .cust-order-date { font-size: 0.6rem; color: var(--fg-dim); margin-left: 0.5rem; }
+  .cust-order-products { font-size: 0.7rem; margin-top: 0.3rem; color: var(--fg-dim); }
+  .cust-order-amount { font-size: 0.75rem; font-weight: 400; float: right; color: var(--gold); font-family: var(--serif); }
+  .cust-product-breakdown { font-size: 0.7rem; }
+  .cust-product-row { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid var(--fg-subtle); color: var(--fg-dim); }
+  .cust-timeline { position: relative; padding-left: 1rem; }
+  .cust-timeline::before { content: ''; position: absolute; left: 3px; top: 0; bottom: 0; width: 1px; background: var(--gold-dim); }
+  .cust-timeline-dot { position: absolute; left: 0; width: 7px; height: 7px; background: var(--gold); border-radius: 50%; margin-top: 0.3rem; }
+
+  /* SAVE BAR */
+  .save-bar {
+    position: fixed; bottom: 0; left: var(--sidebar-w); right: 0;
+    padding: 0.8rem 2rem; background: var(--bg-elevated);
+    border-top: 1px solid var(--gold-dim);
+    display: none; z-index: 50;
+  }
+  .save-bar.visible { display: flex; align-items: center; justify-content: space-between; }
+  .save-bar .save-status { color: var(--gold); font-size: 0.7rem; font-family: var(--serif); letter-spacing: 0.1em; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; top: 1.5rem; right: 2rem;
+    padding: 0.6rem 1.5rem; background: var(--gold);
+    color: var(--bg); font-size: 0.72rem; z-index: 200;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    font-family: var(--serif); letter-spacing: 0.05em;
+  }
+  .toast.show { opacity: 1; }
+  .toast.error { background: var(--danger); }
+
+  /* MOBILE */
+  .sidebar-toggle {
+    display: none; position: fixed; top: 1rem; left: 1rem; z-index: 150;
+    background: var(--bg); color: var(--gold); border: 1px solid var(--fg-subtle);
+    width: 36px; height: 36px; font-size: 1rem; cursor: pointer;
+  }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-toggle { display: block; }
+    .main { margin-left: 0; padding: 3.5rem 1.2rem 4rem; }
+    .dash-cards { grid-template-columns: 1fr 1fr; }
+    .home-grid { grid-template-columns: 1fr 1fr; }
+    .save-bar { left: 0; }
+    .customer-summary { grid-template-columns: 1fr; }
+    .cust-detail-stats { grid-template-columns: 1fr; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-logo">
+    <div class="logo-mark">JOVE</div>
+    <div class="logo-sub">Parfumeur · Admin Console</div>
+  </div>
+  <input type="password" id="admin-pw" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+  <button onclick="login()">ENTER</button>
+  <label style="display:flex; align-items:center; gap:0.4rem; margin-top:0.8rem; font-size:0.65rem; color:var(--fg-dim); cursor:pointer;">
+    <input type="checkbox" id="remember-device" checked style="accent-color:var(--gold);"> 이 기기 기억하기
+  </label>
+  <div class="login-error" id="login-error">비밀번호가 틀렸습니다</div>
+</div>
+
+<!-- CUSTOMER DETAIL OVERLAY -->
+<div class="cust-detail-overlay" id="cust-overlay" onclick="if(event.target===this)closeCustDetail()">
+  <div class="cust-detail" id="cust-detail-content">
+    <button class="cust-detail-close" onclick="closeCustDetail()">✕</button>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div class="app" id="app">
+  <button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="s-logo">JOVE</div>
+      <div class="s-sub">Admin Console</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="switchTab('home',this)"><span class="nav-icon">◈</span> 홈</div>
+
+      <div class="nav-group-label">Commerce</div>
+      <div class="nav-item" onclick="switchTab('orders',this)"><span class="nav-icon">◆</span> 주문 현황</div>
+      <div class="nav-item" onclick="switchTab('history',this)"><span class="nav-icon">◇</span> 주문 이력</div>
+      <div class="nav-item" onclick="switchTab('customers',this)"><span class="nav-icon">◈</span> 고객 DB</div>
+
+      <div class="nav-group-label">Products</div>
+      <div class="nav-item" onclick="switchTab('products',this)"><span class="nav-icon">◆</span> 상품 · 가격</div>
+      <div class="nav-item" onclick="switchTab('promo',this)"><span class="nav-icon">◇</span> 프로모 코드</div>
+
+      <div class="nav-group-label">Analytics</div>
+      <div class="nav-item" onclick="switchTab('dashboard',this)"><span class="nav-icon">◆</span> 매출 대시보드</div>
+      <div class="nav-item" onclick="switchTab('product-analytics',this)"><span class="nav-icon">◇</span> 상품 분석</div>
+    </nav>
+    <div class="sidebar-footer">JOVE Admin v1.0 · © 2026</div>
+  </aside>
+
+  <div class="main">
+
+    <!-- HOME -->
+    <div class="tab-panel active" id="tab-home">
+      <div class="section">
+        <div class="home-greeting" id="home-greeting"></div>
+        <div class="home-date" id="home-date"></div>
+        <div class="home-grid" id="home-grid">
+          <div class="home-card" onclick="switchTabByName('orders')">
+            <div class="hc-icon">◆</div>
+            <div class="hc-num" id="hc-total-orders">—</div>
+            <div class="hc-label">Total Orders</div>
+          </div>
+          <div class="home-card" onclick="switchTabByName('dashboard')">
+            <div class="hc-icon">◈</div>
+            <div class="hc-num" id="hc-total-revenue">—</div>
+            <div class="hc-label">Revenue</div>
+          </div>
+          <div class="home-card" onclick="switchTabByName('customers')">
+            <div class="hc-icon">◇</div>
+            <div class="hc-num" id="hc-total-customers">—</div>
+            <div class="hc-label">Customers</div>
+          </div>
+          <div class="home-card" onclick="switchTabByName('orders')">
+            <div class="hc-icon">◆</div>
+            <div class="hc-num" id="hc-today">—</div>
+            <div class="hc-label">Today</div>
+          </div>
+        </div>
+        <div class="home-recent">
+          <h3>Recent Orders</h3>
+          <div id="home-recent-list"></div>
+        </div>
+        <div class="home-recent" style="margin-top:1.5rem;">
+          <h3>Top Customers</h3>
+          <div id="home-top-customers"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="tab-panel" id="tab-orders">
+      <div class="page-header"><h1>Orders</h1><p>실시간 주문 현황과 오늘 요약</p></div>
+      <div class="dash-cards" id="summary-cards">
+        <div class="dash-card"><div class="dash-label">Today</div><div class="dash-value" id="s-today">0</div></div>
+        <div class="dash-card"><div class="dash-label">Revenue</div><div class="dash-value" id="s-today-rev">₩0</div></div>
+        <div class="dash-card"><div class="dash-label">This Week</div><div class="dash-value" id="s-week">0</div></div>
+        <div class="dash-card"><div class="dash-label">This Month</div><div class="dash-value" id="s-month">0</div></div>
+      </div>
+      <div class="section">
+        <h2>Recent Orders</h2>
+        <div id="recent-orders"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="tab-panel" id="tab-history">
+      <div class="page-header"><h1>Order History</h1><p>전체 주문 내역 검색 및 조회</p></div>
+      <div class="section">
+        <div class="dash-period" id="hist-period-btns">
+          <button class="period-btn" onclick="setHistPeriod('this-week',this)">이번 주</button>
+          <button class="period-btn" onclick="setHistPeriod('this-month',this)">이번 달</button>
+          <button class="period-btn" onclick="setHistPeriod('last-month',this)">지난달</button>
+          <button class="period-btn" onclick="setHistPeriod('3-months',this)">최근 3개월</button>
+          <button class="period-btn active" onclick="setHistPeriod('all',this)">전체</button>
+        </div>
+        <div class="history-filters">
+          <input type="text" id="hist-search" placeholder="주문번호, 이름, 상품 검색" style="flex:2; min-width:180px;" oninput="renderHistory()">
+          <select id="hist-source" onchange="renderHistory()">
+            <option value="">전체</option>
+            <option value="kr">한국어</option>
+            <option value="en">English</option>
+          </select>
+          <input type="date" id="hist-from" onchange="renderHistory()">
+          <span style="font-size:0.7rem; color:var(--fg-dim); align-self:center;">—</span>
+          <input type="date" id="hist-to" onchange="renderHistory()">
+        </div>
+        <div class="history-stats" id="hist-stats"></div>
+        <div style="overflow-x:auto;">
+          <table class="history-table">
+            <thead><tr>
+              <th>Date</th><th>Order No.</th><th>Lang</th><th>Customer</th><th>Product</th><th>Qty</th><th>Amount</th><th>Note</th>
+            </tr></thead>
+            <tbody id="hist-body"></tbody>
+          </table>
+        </div>
+        <div class="page-nav" id="hist-pages"></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="tab-panel" id="tab-customers">
+      <div class="page-header"><h1>Customers</h1><p>주문 데이터 기반 고객 분석</p></div>
+      <div class="section">
+        <div class="customer-summary" id="cust-summary"></div>
+        <div class="history-filters" style="margin-bottom:1rem;">
+          <input type="text" id="cust-search" placeholder="고객명 검색" style="flex:1; min-width:150px;" oninput="renderCustomers()">
+          <select id="cust-sort" onchange="renderCustomers()">
+            <option value="amount">총 구매금액순</option>
+            <option value="count">주문 횟수순</option>
+            <option value="recent">최근 주문순</option>
+            <option value="name">이름순</option>
+          </select>
+        </div>
+        <div id="cust-list"></div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="tab-panel" id="tab-products">
+      <div class="page-header"><h1>Products & Pricing</h1><p>Creation Series — 가격 실시간 변경</p></div>
+      <div class="section">
+        <h2>Creation Series</h2>
+        <div id="product-list"></div>
+      </div>
+    </div>
+
+    <!-- PROMO -->
+    <div class="tab-panel" id="tab-promo">
+      <div class="page-header"><h1>Promo Codes</h1><p>할인 코드 생성 및 관리</p></div>
+      <div class="section">
+        <h2>Create New Code</h2>
+        <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap; align-items:center;">
+          <input type="text" id="promo-code-input" placeholder="코드 (예: WELCOME10)" style="width:140px; text-transform:uppercase;">
+          <select id="promo-type">
+            <option value="percent">% 할인</option>
+            <option value="fixed">₩ 고정 할인</option>
+          </select>
+          <input type="number" id="promo-value-input" placeholder="값" style="width:80px;">
+          <input type="date" id="promo-expiry">
+          <input type="number" id="promo-limit" placeholder="사용 제한" style="width:80px;">
+          <button class="btn" onclick="addPromo()">+ 추가</button>
+        </div>
+        <h2 style="margin-top:1.5rem;">Active Codes</h2>
+        <div id="promo-list"></div>
+        <div id="promo-empty" class="empty-msg" style="font-size:0.72rem; color:var(--fg-dim); font-style:italic;">등록된 프로모 코드가 없습니다</div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="tab-panel" id="tab-dashboard">
+      <div class="page-header"><h1>Revenue Dashboard</h1><p>기간별 매출과 주문 추이</p></div>
+      <div class="section">
+        <div class="dash-period">
+          <button class="period-btn" onclick="setDashPeriod('week',this)">이번 주</button>
+          <button class="period-btn" onclick="setDashPeriod('month',this)">이번 달</button>
+          <button class="period-btn active" onclick="setDashPeriod('all',this)">전체</button>
+        </div>
+        <div class="dash-cards">
+          <div class="dash-card"><div class="dash-label">Orders</div><div class="dash-value" id="d-total-orders">0</div></div>
+          <div class="dash-card"><div class="dash-label">Revenue</div><div class="dash-value" id="d-total-revenue">₩0</div></div>
+          <div class="dash-card"><div class="dash-label">Avg. Order</div><div class="dash-value" id="d-avg-order">₩0</div></div>
+          <div class="dash-card"><div class="dash-label">Today</div><div class="dash-value" id="d-today-orders">0</div></div>
+        </div>
+        <div style="margin-bottom:1.5rem;"><h3 style="font-family:var(--serif); font-size:0.7rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:0.8rem;">Monthly Orders</h3><canvas id="monthly-order-canvas" height="200"></canvas></div>
+        <div><h3 style="font-family:var(--serif); font-size:0.7rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:0.8rem;">Monthly Revenue</h3><canvas id="monthly-revenue-canvas" height="200"></canvas></div>
+      </div>
+    </div>
+
+    <!-- PRODUCT ANALYTICS -->
+    <div class="tab-panel" id="tab-product-analytics">
+      <div class="page-header"><h1>Product Analytics</h1><p>상품별 판매량과 매출 비중 분석</p></div>
+      <div class="section">
+        <div class="dash-period" id="analytics-period-btns">
+          <button class="period-btn" onclick="setAnalyticsPeriod('month',this)">이번 달</button>
+          <button class="period-btn" onclick="setAnalyticsPeriod('3-months',this)">최근 3개월</button>
+          <button class="period-btn active" onclick="setAnalyticsPeriod('all',this)">전체</button>
+        </div>
+        <div style="margin-bottom:1.5rem;"><h3 style="font-family:var(--serif); font-size:0.7rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:0.8rem;">Product Ranking</h3><div id="product-ranking"></div></div>
+        <div><h3 style="font-family:var(--serif); font-size:0.7rem; color:var(--gold); letter-spacing:0.1em; margin-bottom:0.8rem;">Revenue Share</h3><canvas id="product-pie-canvas" height="250"></canvas></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SAVE BAR -->
+<div class="save-bar" id="save-bar">
+  <div class="save-status">Unsaved changes</div>
+  <button class="btn" onclick="saveAll()" style="background:var(--gold); color:var(--bg); border:none;">Save Changes</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+// ── DATA ──
+const ADMIN_PW_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // 'admin'
+const DEVICE_KEY = 'jove_admin_device';
+
+const products = [
+  { id:'genesis-i', name:'Genesis I', latin:'Fiat Lux', number:'I', top:'Bergamot, White Tea', heart:'Frankincense, Iris', base:'White Musk, Ambergris', price_kr:340000, price_en:280, size:'50ml' },
+  { id:'breath-of-eden', name:'Breath of Eden', latin:'Ortus Paradisi', number:'II', top:'Green Apple, Aldehydes', heart:'Rose Absolute, Violet Leaf', base:'Sandalwood, Amber', price_kr:340000, price_en:280, size:'50ml' },
+  { id:'hawa', name:'Hawa', latin:'Primam Femina', number:'III', top:'Fig Leaf, Pink Pepper', heart:'Jasmine Sambac, Rose de Mai', base:'Oud, Vanilla Absolute', price_kr:340000, price_en:280, size:'50ml' }
+];
+
+// Sample orders (placeholder — connect to real data later)
+let allOrders = [
+  { orderNum:'JV-001', name:'김태현', items:[{name:'Genesis I', qty:1, unit:340000}], subtotal:340000, timestamp:'2026-03-08T14:30:00', source:'kr' },
+  { orderNum:'JV-002', name:'이서연', items:[{name:'Hawa', qty:1, unit:340000}], subtotal:340000, timestamp:'2026-03-07T10:15:00', source:'kr' },
+  { orderNum:'JV-003', name:'David Kim', items:[{name:'Breath of Eden', qty:1, unit:340000},{name:'Genesis I', qty:1, unit:340000}], subtotal:680000, timestamp:'2026-03-05T22:00:00', source:'en' }
+];
+
+let promoCodes = [];
+let hasChanges = false;
+let dashPeriod = 'all';
+let analyticsPeriod = 'all';
+let histPage = 0;
+const HIST_PER_PAGE = 20;
+
+// ── AUTH ──
+async function sha256(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function enterApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  init();
+}
+
+if (localStorage.getItem(DEVICE_KEY) === ADMIN_PW_HASH) enterApp();
+
+async function login() {
+  const pw = document.getElementById('admin-pw').value;
+  const hash = await sha256(pw);
+  if (hash === ADMIN_PW_HASH) {
+    if (document.getElementById('remember-device').checked) localStorage.setItem(DEVICE_KEY, ADMIN_PW_HASH);
+    enterApp();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+// ── INIT ──
+function init() {
+  renderHome();
+  renderSummary();
+  renderRecentOrders();
+  renderHistory();
+  renderProducts();
+  renderPromos();
+  renderDashboard();
+  renderCustomers();
+}
+
+// ── TAB ──
+function switchTab(id, el) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  if (id === 'home') renderHome();
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'product-analytics') renderDashboard();
+  if (id === 'history') renderHistory();
+  if (id === 'customers') renderCustomers();
+}
+function switchTabByName(id) {
+  const el = document.querySelector(`.nav-item[onclick*="'${id}'"]`);
+  if (el) switchTab(id, el);
+}
+
+// ── HOME ──
+function renderHome() {
+  const now = new Date();
+  const days = ['일','월','화','수','목','금','토'];
+  const h = now.getHours();
+  const greeting = h < 12 ? 'Good Morning' : h < 18 ? 'Good Afternoon' : 'Good Evening';
+  document.getElementById('home-greeting').textContent = greeting;
+  document.getElementById('home-date').textContent = `${now.getFullYear()}. ${now.getMonth()+1}. ${now.getDate()}. (${days[now.getDay()]})`;
+
+  const today = now.toISOString().slice(0,10);
+  const todayOrders = allOrders.filter(o => o.timestamp?.slice(0,10) === today);
+  const totalRevenue = allOrders.reduce((s,o) => s + (o.subtotal||0), 0);
+  const custSet = new Set(allOrders.map(o => o.name).filter(Boolean));
+
+  document.getElementById('hc-total-orders').textContent = allOrders.length;
+  document.getElementById('hc-total-revenue').textContent = '₩' + totalRevenue.toLocaleString();
+  document.getElementById('hc-total-customers').textContent = custSet.size;
+  document.getElementById('hc-today').textContent = todayOrders.length + '건';
+
+  const recent = [...allOrders].sort((a,b) => (b.timestamp||'').localeCompare(a.timestamp||'')).slice(0, 5);
+  document.getElementById('home-recent-list').innerHTML = recent.length
+    ? recent.map(o => `<div class="order-row"><span class="o-num">${o.orderNum}</span><span class="o-name">${o.name}</span><span class="o-amount">₩${(o.subtotal||0).toLocaleString()}</span><span class="o-date">${o.timestamp?.slice(5,10)||'—'}</span></div>`).join('')
+    : '<div style="font-size:0.7rem;color:var(--fg-dim);padding:1rem 0;">No orders yet</div>';
+
+  const custMap = {};
+  allOrders.forEach(o => { if (!o.name) return; if (!custMap[o.name]) custMap[o.name] = {total:0, count:0}; custMap[o.name].total += (o.subtotal||0); custMap[o.name].count++; });
+  const topCust = Object.entries(custMap).sort((a,b) => b[1].total - a[1].total).slice(0,3);
+  document.getElementById('home-top-customers').innerHTML = topCust.map(([name,d],i) => {
+    const medal = ['◈','◆','◇'][i] || '·';
+    return `<div class="order-row"><span class="o-num">${medal}</span><span class="o-name">${name}</span><span class="o-amount">₩${d.total.toLocaleString()}</span><span class="o-date">${d.count}건</span></div>`;
+  }).join('');
+}
+
+// ── SUMMARY ──
+function renderSummary() {
+  const now = new Date();
+  const today = now.toISOString().slice(0,10);
+  const weekAgo = new Date(now - 7*86400000);
+  const todayOrders = allOrders.filter(o => o.timestamp?.slice(0,10) === today);
+  const weekOrders = allOrders.filter(o => new Date(o.timestamp) >= weekAgo);
+  const monthOrders = allOrders.filter(o => { const d = new Date(o.timestamp); return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); });
+  document.getElementById('s-today').textContent = todayOrders.length;
+  document.getElementById('s-today-rev').textContent = '₩' + todayOrders.reduce((s,o)=>s+(o.subtotal||0),0).toLocaleString();
+  document.getElementById('s-week').textContent = weekOrders.length;
+  document.getElementById('s-month').textContent = monthOrders.length;
+}
+
+function renderRecentOrders() {
+  const recent = [...allOrders].sort((a,b)=>(b.timestamp||'').localeCompare(a.timestamp||'')).slice(0,15);
+  document.getElementById('recent-orders').innerHTML = recent.length
+    ? recent.map(o => `<div class="order-row"><span class="o-num">${o.orderNum}</span><span class="o-name">${o.name}</span><span class="o-amount">₩${(o.subtotal||0).toLocaleString()}</span><span class="o-date">${o.timestamp?.slice(5,10)||'—'}</span></div>`).join('')
+    : '<div style="color:var(--fg-dim);font-size:0.72rem;">No orders yet</div>';
+}
+
+// ── PRODUCTS ──
+function renderProducts() {
+  document.getElementById('product-list').innerHTML = products.map(p => `
+    <div class="product-card">
+      <div class="product-number">${p.number}</div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-latin">${p.latin}</div>
+        <div class="product-notes">T: ${p.top} · H: ${p.heart} · B: ${p.base}</div>
+      </div>
+      <div class="product-price-wrap">
+        <div class="product-price-label">KR</div>
+        <div style="display:flex;align-items:center;gap:0.2rem;justify-content:flex-end;">
+          <span style="font-size:0.7rem;color:var(--fg-dim);">₩</span>
+          <input type="number" class="price-input" data-id="${p.id}" data-currency="kr" value="${p.price_kr}" step="10000" oninput="markChanged()">
+        </div>
+        <div class="product-price-label" style="margin-top:0.4rem;">EN</div>
+        <div style="display:flex;align-items:center;gap:0.2rem;justify-content:flex-end;">
+          <span style="font-size:0.7rem;color:var(--fg-dim);">$</span>
+          <input type="number" class="price-input" data-id="${p.id}" data-currency="en" value="${p.price_en}" step="10" oninput="markChanged()">
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── PROMO CODES ──
+function addPromo() {
+  const code = document.getElementById('promo-code-input').value.trim().toUpperCase();
+  const type = document.getElementById('promo-type').value;
+  const value = parseInt(document.getElementById('promo-value-input').value);
+  const expiry = document.getElementById('promo-expiry').value;
+  const limit = parseInt(document.getElementById('promo-limit').value) || null;
+
+  if (!code || !value) { showToast('코드와 할인값을 입력하세요', true); return; }
+  if (promoCodes.find(p => p.code === code)) { showToast('이미 존재하는 코드입니다', true); return; }
+
+  promoCodes.push({ code, type, value, expiry: expiry || null, limit, used: 0, active: true });
+  document.getElementById('promo-code-input').value = '';
+  document.getElementById('promo-value-input').value = '';
+  document.getElementById('promo-expiry').value = '';
+  document.getElementById('promo-limit').value = '';
+  renderPromos();
+  markChanged();
+  showToast(`프로모 코드 "${code}" 추가됨`);
+}
+
+function togglePromo(code) {
+  const p = promoCodes.find(x => x.code === code);
+  if (p) { p.active = !p.active; renderPromos(); markChanged(); }
+}
+
+function removePromo(code) {
+  promoCodes = promoCodes.filter(p => p.code !== code);
+  renderPromos(); markChanged();
+}
+
+function renderPromos() {
+  const list = document.getElementById('promo-list');
+  const empty = document.getElementById('promo-empty');
+  if (!promoCodes.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = promoCodes.map(p => {
+    const desc = p.type === 'percent' ? `${p.value}% 할인` : `₩${p.value.toLocaleString()} 할인`;
+    const expLabel = p.expiry ? `~${p.expiry}` : '무기한';
+    const limitLabel = p.limit ? `${p.used}/${p.limit}회` : '무제한';
+    const statusClass = p.active ? 'promo-active' : 'promo-expired';
+    const statusText = p.active ? 'ACTIVE' : 'DISABLED';
+    return `<div class="promo-card">
+      <div class="promo-code">${p.code}</div>
+      <div class="promo-detail">${desc} · ${expLabel} · ${limitLabel}</div>
+      <span class="promo-status ${statusClass}">${statusText}</span>
+      <button class="btn btn-sm" onclick="togglePromo('${p.code}')" style="margin-left:0.3rem;">${p.active?'비활성':'활성'}</button>
+      <button class="btn btn-sm btn-danger" onclick="removePromo('${p.code}')">삭제</button>
+    </div>`;
+  }).join('');
+}
+
+// ── HISTORY ──
+function setHistPeriod(period, btn) {
+  document.querySelectorAll('#hist-period-btns .period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const now = new Date();
+  const fromEl = document.getElementById('hist-from');
+  const toEl = document.getElementById('hist-to');
+  toEl.value = now.toISOString().slice(0,10);
+  if (period === 'all') { fromEl.value = ''; toEl.value = ''; }
+  else if (period === 'this-week') { const d = new Date(now); d.setDate(d.getDate()-d.getDay()); fromEl.value = d.toISOString().slice(0,10); }
+  else if (period === 'this-month') { fromEl.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`; }
+  else if (period === 'last-month') { const lm = new Date(now.getFullYear(),now.getMonth()-1,1); const le = new Date(now.getFullYear(),now.getMonth(),0); fromEl.value = lm.toISOString().slice(0,10); toEl.value = le.toISOString().slice(0,10); }
+  else if (period === '3-months') { const d = new Date(now); d.setMonth(d.getMonth()-3); fromEl.value = d.toISOString().slice(0,10); }
+  histPage = 0;
+  renderHistory();
+}
+
+function renderHistory() {
+  const search = (document.getElementById('hist-search')?.value || '').toLowerCase();
+  const source = document.getElementById('hist-source')?.value || '';
+  const fromDate = document.getElementById('hist-from')?.value || '';
+  const toDate = document.getElementById('hist-to')?.value || '';
+
+  let filtered = [...allOrders];
+  if (source) filtered = filtered.filter(o => o.source === source);
+  if (fromDate) filtered = filtered.filter(o => o.timestamp?.slice(0,10) >= fromDate);
+  if (toDate) filtered = filtered.filter(o => o.timestamp?.slice(0,10) <= toDate);
+  if (search) filtered = filtered.filter(o => [o.orderNum,o.name,...(o.items||[]).map(i=>i.name)].join(' ').toLowerCase().includes(search));
+
+  filtered.sort((a,b) => (b.timestamp||'').localeCompare(a.timestamp||''));
+  const totalAmt = filtered.reduce((s,o)=>s+(o.subtotal||0),0);
+  document.getElementById('hist-stats').innerHTML = `검색 결과: <strong>${filtered.length}건</strong> · 합계: <strong>₩${totalAmt.toLocaleString()}</strong>`;
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / HIST_PER_PAGE));
+  if (histPage >= totalPages) histPage = totalPages - 1;
+  const pageItems = filtered.slice(histPage * HIST_PER_PAGE, (histPage+1) * HIST_PER_PAGE);
+
+  document.getElementById('hist-body').innerHTML = pageItems.length
+    ? pageItems.map(o => {
+      const srcClass = o.source === 'en' ? 'en' : 'kr';
+      const srcLabel = o.source === 'en' ? 'EN' : 'KR';
+      const items = (o.items||[]).map(i=>i.name).join(', ');
+      const qty = (o.items||[]).reduce((s,i)=>s+(i.qty||0),0);
+      return `<tr><td>${o.timestamp?.slice(0,10)||'—'}</td><td style="color:var(--gold);">${o.orderNum}</td><td><span class="source-badge ${srcClass}">${srcLabel}</span></td><td>${o.name}</td><td>${items}</td><td>${qty}</td><td style="color:var(--gold);">₩${(o.subtotal||0).toLocaleString()}</td><td style="font-size:0.6rem;color:var(--fg-dim);">${o.memo||''}</td></tr>`;
+    }).join('')
+    : '<tr><td colspan="8" style="text-align:center;color:var(--fg-dim);padding:2rem;">No orders found</td></tr>';
+
+  const pagesEl = document.getElementById('hist-pages');
+  if (totalPages <= 1) { pagesEl.innerHTML = ''; return; }
+  pagesEl.innerHTML = Array.from({length:totalPages}, (_,i) => `<button class="${i===histPage?'active':''}" onclick="histPage=${i};renderHistory()">${i+1}</button>`).join('');
+}
+
+// ── CUSTOMERS ──
+function buildCustomerDB() {
+  const customers = {};
+  allOrders.forEach(o => {
+    if (!o.name) return;
+    if (!customers[o.name]) customers[o.name] = { name:o.name, orderCount:0, totalSpent:0, items:new Set(), lastOrder:'', orderNums:new Set() };
+    const c = customers[o.name];
+    c.orderNums.add(o.orderNum);
+    c.totalSpent += (o.subtotal||0);
+    (o.items||[]).forEach(i => c.items.add(i.name));
+    if ((o.timestamp||'') > c.lastOrder) c.lastOrder = o.timestamp;
+  });
+  Object.values(customers).forEach(c => c.orderCount = c.orderNums.size);
+  return Object.values(customers);
+}
+
+function renderCustomers() {
+  const customers = buildCustomerDB();
+  const search = (document.getElementById('cust-search')?.value||'').toLowerCase();
+  const sort = document.getElementById('cust-sort')?.value||'amount';
+  let filtered = customers.filter(c => !search || c.name.toLowerCase().includes(search));
+  if (sort==='amount') filtered.sort((a,b)=>b.totalSpent-a.totalSpent);
+  else if (sort==='count') filtered.sort((a,b)=>b.orderCount-a.orderCount);
+  else if (sort==='recent') filtered.sort((a,b)=>(b.lastOrder||'').localeCompare(a.lastOrder||''));
+  else filtered.sort((a,b)=>a.name.localeCompare(b.name));
+
+  const totalRevenue = customers.reduce((s,c)=>s+c.totalSpent,0);
+  const repeatCount = customers.filter(c=>c.orderCount>1).length;
+  const avg = customers.length ? Math.round(totalRevenue/customers.length) : 0;
+
+  document.getElementById('cust-summary').innerHTML = `
+    <div class="cust-stat-card"><div class="cust-stat-num">${customers.length}</div><div class="cust-stat-label">Customers</div></div>
+    <div class="cust-stat-card"><div class="cust-stat-num">${repeatCount}</div><div class="cust-stat-label">Repeat</div></div>
+    <div class="cust-stat-card"><div class="cust-stat-num">₩${avg.toLocaleString()}</div><div class="cust-stat-label">Avg. Revenue</div></div>
+  `;
+
+  document.getElementById('cust-list').innerHTML = filtered.map((c,i) => {
+    const rankClass = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const vip = c.totalSpent >= 500000 ? '<span class="vip-badge">VIP</span>' : '';
+    const items = [...c.items];
+    return `<div class="customer-card" onclick="openCustDetail('${c.name.replace(/'/g,"\\'")}')">
+      <div class="customer-rank ${rankClass}">${i+1}</div>
+      <div class="customer-info"><div class="customer-name">${c.name}${vip}</div><div class="customer-meta">${c.lastOrder?.slice(0,10)||'—'} · ${items.join(', ')}</div></div>
+      <div class="customer-stats"><div class="customer-amount">₩${c.totalSpent.toLocaleString()}</div><div class="customer-count">${c.orderCount}건</div></div>
+    </div>`;
+  }).join('');
+}
+
+function openCustDetail(name) {
+  const orders = allOrders.filter(o => o.name === name);
+  if (!orders.length) return;
+  const grouped = {};
+  orders.forEach(o => {
+    if (!grouped[o.orderNum]) grouped[o.orderNum] = {orderNum:o.orderNum, timestamp:o.timestamp, items:[], totalAmount:0};
+    const g = grouped[o.orderNum];
+    (o.items||[]).forEach(i => g.items.push(i));
+    g.totalAmount += (o.subtotal||0);
+  });
+  const uniqueOrders = Object.values(grouped).sort((a,b)=>(b.timestamp||'').localeCompare(a.timestamp||''));
+  const totalSpent = uniqueOrders.reduce((s,o)=>s+o.totalAmount,0);
+  const avg = uniqueOrders.length ? Math.round(totalSpent/uniqueOrders.length) : 0;
+  const vip = totalSpent >= 500000 ? '<span class="vip-badge">VIP</span>' : '';
+
+  document.getElementById('cust-detail-content').innerHTML = `
+    <button class="cust-detail-close" onclick="closeCustDetail()">✕</button>
+    <div><div class="cust-detail-name">${name} ${vip}</div><div style="font-size:0.6rem;color:var(--fg-dim);margin-top:0.3rem;">${uniqueOrders.length}건 주문</div></div>
+    <div class="cust-detail-stats">
+      <div class="cust-d-stat"><div class="cust-d-stat-num">₩${totalSpent.toLocaleString()}</div><div class="cust-d-stat-label">Total</div></div>
+      <div class="cust-d-stat"><div class="cust-d-stat-num">${uniqueOrders.length}</div><div class="cust-d-stat-label">Orders</div></div>
+      <div class="cust-d-stat"><div class="cust-d-stat-num">₩${avg.toLocaleString()}</div><div class="cust-d-stat-label">Avg.</div></div>
+    </div>
+    <h3>Order History</h3>
+    <div class="cust-timeline">${uniqueOrders.map(o => `<div class="cust-order-item" style="position:relative;">
+      <div class="cust-timeline-dot"></div>
+      <div><span class="cust-order-num">${o.orderNum}</span><span class="cust-order-date">${o.timestamp?.slice(0,10)||'—'}</span><span class="cust-order-amount">₩${o.totalAmount.toLocaleString()}</span></div>
+      <div class="cust-order-products">${o.items.map(i=>`${i.name} ×${i.qty}`).join(', ')}</div>
+    </div>`).join('')}</div>
+  `;
+  document.getElementById('cust-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeCustDetail() {
+  document.getElementById('cust-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ── DASHBOARD ──
+function setDashPeriod(p, btn) {
+  dashPeriod = p;
+  document.querySelectorAll('.dash-period .period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard();
+}
+
+function setAnalyticsPeriod(p, btn) {
+  analyticsPeriod = p;
+  document.querySelectorAll('#analytics-period-btns .period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard();
+}
+
+function filterByDashPeriod(orders) {
+  const now = new Date();
+  if (dashPeriod==='week') return orders.filter(o=>new Date(o.timestamp)>=new Date(now-7*86400000));
+  if (dashPeriod==='month') return orders.filter(o=>{const d=new Date(o.timestamp); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  return orders;
+}
+
+function filterByAnalyticsPeriodFn(orders) {
+  const now = new Date();
+  if (analyticsPeriod==='month') return orders.filter(o=>{const d=new Date(o.timestamp); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  if (analyticsPeriod==='3-months') { const d=new Date(now); d.setMonth(d.getMonth()-3); return orders.filter(o=>new Date(o.timestamp)>=d); }
+  return orders;
+}
+
+function renderDashboard() {
+  const filtered = filterByDashPeriod(allOrders);
+  const today = new Date().toISOString().slice(0,10);
+  const todayOrders = allOrders.filter(o=>o.timestamp?.slice(0,10)===today);
+  const totalRevenue = filtered.reduce((s,o)=>s+(o.subtotal||0),0);
+  const avg = filtered.length ? Math.round(totalRevenue/filtered.length) : 0;
+
+  document.getElementById('d-total-orders').textContent = filtered.length;
+  document.getElementById('d-total-revenue').textContent = '₩'+totalRevenue.toLocaleString();
+  document.getElementById('d-avg-order').textContent = '₩'+avg.toLocaleString();
+  document.getElementById('d-today-orders').textContent = todayOrders.length;
+
+  // Product ranking
+  const aFiltered = filterByAnalyticsPeriodFn(allOrders);
+  const prodMap = {};
+  aFiltered.forEach(o=>(o.items||[]).forEach(i=>{prodMap[i.name]=(prodMap[i.name]||0)+i.qty;}));
+  const prodSorted = Object.entries(prodMap).sort((a,b)=>b[1]-a[1]);
+  const maxQty = prodSorted.length ? prodSorted[0][1] : 1;
+  document.getElementById('product-ranking').innerHTML = prodSorted.length
+    ? prodSorted.map(([n,q])=>`<div class="bar-row"><div class="bar-label">${n}</div><div class="bar-track"><div class="bar-fill" style="width:${q/maxQty*100}%"></div></div><div class="bar-val">${q}개</div></div>`).join('')
+    : '<div style="color:var(--fg-dim);font-size:0.72rem;">No data</div>';
+
+  // Charts
+  const goldRGB = '196,169,106';
+  const months = [];
+  const mOrders = {}, mRevenue = {};
+  for (let i=11;i>=0;i--) { const d=new Date(); d.setMonth(d.getMonth()-i); const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; months.push(k); mOrders[k]=0; mRevenue[k]=0; }
+  filtered.forEach(o=>{if(!o.timestamp)return; const k=o.timestamp.slice(0,7); if(mOrders[k]!==undefined){mOrders[k]++;mRevenue[k]+=(o.subtotal||0);}});
+
+  const labels = months.map(m=>`${m.split('-')[1]}월`);
+  const chartColors = { bg:var_='#060606', grid:`rgba(${goldRGB},0.08)`, bar:`rgba(${goldRGB},0.6)`, line:`rgba(${goldRGB},0.9)` };
+
+  if(window._oc) window._oc.destroy(); if(window._rc) window._rc.destroy(); if(window._pc) window._pc.destroy();
+
+  const chartOpts = (cb) => ({ responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:'rgba(232,228,223,0.3)',font:{size:10}}},y:{beginAtZero:true,grid:{color:chartColors.grid},ticks:{color:'rgba(232,228,223,0.3)',font:{size:10},callback:cb||undefined}}} });
+
+  const oc = document.getElementById('monthly-order-canvas');
+  if(oc) window._oc = new Chart(oc, {type:'bar', data:{labels, datasets:[{data:months.map(m=>mOrders[m]), backgroundColor:chartColors.bar, borderRadius:2}]}, options:chartOpts(v=>v%1===0?v:'')});
+
+  const rc = document.getElementById('monthly-revenue-canvas');
+  if(rc) window._rc = new Chart(rc, {type:'bar', data:{labels, datasets:[{data:months.map(m=>mRevenue[m]), backgroundColor:chartColors.bar, borderRadius:2}]}, options:chartOpts(v=>'₩'+v.toLocaleString())});
+
+  // Pie chart
+  const prodRevMap = {};
+  aFiltered.forEach(o=>(o.items||[]).forEach(i=>{prodRevMap[i.name]=(prodRevMap[i.name]||0)+(i.qty*i.unit);}));
+  const pieColors = ['rgba(196,169,106,0.9)','rgba(196,169,106,0.6)','rgba(196,169,106,0.35)','rgba(232,228,223,0.2)'];
+  const pc = document.getElementById('product-pie-canvas');
+  if(pc && Object.keys(prodRevMap).length) window._pc = new Chart(pc, {type:'doughnut', data:{labels:Object.keys(prodRevMap), datasets:[{data:Object.values(prodRevMap), backgroundColor:pieColors, borderWidth:1, borderColor:'#0e0e0e'}]}, options:{responsive:true, plugins:{legend:{position:'bottom',labels:{color:'rgba(232,228,223,0.5)',font:{size:11},padding:12}}, tooltip:{callbacks:{label:ctx=>`${ctx.label}: ₩${ctx.parsed.toLocaleString()}`}}}}});
+}
+
+// ── SAVE ──
+function markChanged() { hasChanges = true; document.getElementById('save-bar').classList.add('visible'); }
+
+function saveAll() {
+  // Collect prices from inputs
+  document.querySelectorAll('.price-input[data-id]').forEach(input => {
+    const p = products.find(x => x.id === input.dataset.id);
+    if (!p) return;
+    const val = parseInt(input.value);
+    if (isNaN(val)) return;
+    if (input.dataset.currency === 'kr') p.price_kr = val;
+    else p.price_en = val;
+  });
+  hasChanges = false;
+  document.getElementById('save-bar').classList.remove('visible');
+  showToast('Changes saved');
+  // TODO: Persist to backend
+}
+
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => document.getElementById('admin-pw')?.focus());
+</script>
+</body>
+</html>
