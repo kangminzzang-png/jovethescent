@@ -22,7 +22,8 @@
   .mypage { max-width: 800px; margin: 0 auto; padding: 6rem 1.5rem 4rem; }
   @media(min-width:768px) { .mypage { padding: 7rem 2rem 5rem; } }
   .mypage-header { text-align: center; margin-bottom: 3rem; }
-  .mypage-symbol { font-size: 0.7rem; letter-spacing: 0.5em; color: var(--gold); margin-bottom: 1rem; }
+  .mypage-symbol { margin-bottom: 1rem; }
+  .mypage-symbol img { height: 32px; opacity: 0.5; }
   .mypage-greeting { font-family: var(--serif); font-weight: 300; font-size: 1.8rem; color: var(--fg); margin-bottom: 0.5rem; letter-spacing: 0.05em; }
   .mypage-tier { display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(196,169,106,0.3); padding: 0.3rem 1rem; margin-top: 0.5rem; }
   .mypage-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; overflow-x: auto; }
@@ -47,7 +48,8 @@
   .save-result.success { color: var(--success); }
   .save-result.error { color: var(--danger); }
   .orders-empty { text-align: center; padding: 3rem 1rem; }
-  .orders-empty-icon { font-size: 2rem; margin-bottom: 1rem; opacity: 0.3; }
+  .orders-empty-icon { margin-bottom: 1rem; opacity: 0.3; }
+  .orders-empty-icon img { height: 40px; }
   .orders-empty-text { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
   .orders-empty-cta { display: inline-block; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.7rem 2rem; border: 1px solid var(--border); color: var(--muted); transition: all 0.3s; }
   .orders-empty-cta:hover { border-color: var(--gold); color: var(--gold); }
@@ -71,7 +73,7 @@
 </nav>
 <div class="mypage">
   <div class="mypage-header">
-    <div class="mypage-symbol">✦</div>
+    <div class="mypage-symbol"><img src="images/lion-emblem-white.png" alt="JOVE"></div>
     <h1 class="mypage-greeting" id="greeting">Welcome</h1>
     <div class="mypage-tier">Basic Member</div>
   </div>
@@ -110,7 +112,7 @@
     <div class="section-card">
       <div class="section-card-title">Order History</div>
       <div class="orders-empty">
-        <div class="orders-empty-icon">✦</div>
+        <div class="orders-empty-icon"><img src="images/lion-emblem-white.png" alt="JOVE"></div>
         <p class="orders-empty-text">No orders yet.<br>Discover your first JOVE fragrance.</p>
         <a href="./#collection" class="orders-empty-cta">View Collection</a>
       </div>
