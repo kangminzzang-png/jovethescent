@@ -244,7 +244,7 @@
     const subtotal = JoveCart.getCartSubtotal('usd');
     const promo = JoveCart.getAppliedPromo();
     const total = JoveCart.getCartTotal('usd');
-    const shipping = subtotal >= 80 ? 0 : 15;
+    const shipping = subtotal >= 300 ? 0 : 30;
     const finalTotal = total + shipping;
 
     let html = `
@@ -260,7 +260,7 @@
     html += `
       <div class="summary-line">
         <span style="color:var(--muted)">Shipping</span>
-        <span>${shipping === 0 ? 'Free' : JoveCart.formatUSD(shipping)}</span>
+        <span>${shipping === 0 ? 'Complimentary' : JoveCart.formatUSD(shipping)}</span>
       </div>
       <div class="summary-line total"><span>Total</span><span>${JoveCart.formatUSD(finalTotal)}</span></div>
     `;
