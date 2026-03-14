@@ -367,6 +367,10 @@
     .cust-detail-stats { grid-template-columns: 1fr; }
   }
 
+  /* Image cards */
+  .img-card:hover { border-color: var(--gold-dim) !important; }
+  .img-card.drag-over { border-color: var(--gold) !important; background: var(--gold-glow); }
+
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -416,6 +420,13 @@
       <div class="nav-group-label">Products</div>
       <div class="nav-item" onclick="switchTab('products',this)"><span class="nav-icon">◆</span> 상품 · 가격</div>
       <div class="nav-item" onclick="switchTab('promo',this)"><span class="nav-icon">◇</span> 프로모 코드</div>
+
+      <div class="nav-group-label">Site Management</div>
+      <div class="nav-item" onclick="switchTab('popups',this)"><span class="nav-icon">◆</span> 팝업 관리</div>
+      <div class="nav-item" onclick="switchTab('images',this)"><span class="nav-icon">◇</span> 이미지 관리</div>
+
+      <div class="nav-group-label">Members</div>
+      <div class="nav-item" onclick="switchTab('members',this)"><span class="nav-icon">◈</span> 회원 관리</div>
 
       <div class="nav-group-label">Analytics</div>
       <div class="nav-item" onclick="switchTab('dashboard',this)"><span class="nav-icon">◆</span> 매출 대시보드</div>
@@ -597,6 +608,109 @@
       </div>
     </div>
 
+    <!-- POPUPS -->
+    <div class="tab-panel" id="tab-popups">
+      <div class="page-header"><h1>팝업 관리</h1><p>홈페이지 팝업 및 배너 생성 · 관리</p></div>
+      <div class="section">
+        <h2>새 팝업 만들기</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;">
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">제목</label><input type="text" id="popup-title" style="width:100%;margin-top:0.3rem;" placeholder="팝업 제목"></div>
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">위치</label><select id="popup-position" style="width:100%;margin-top:0.3rem;"><option value="center">중앙 모달</option><option value="top">상단 배너</option><option value="bottom">하단 배너</option></select></div>
+        </div>
+        <div style="margin-bottom:0.8rem;"><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">내용 (HTML 가능)</label><textarea id="popup-body" rows="3" style="width:100%;margin-top:0.3rem;resize:vertical;" placeholder="팝업 본문 내용"></textarea></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:0.8rem;">
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">이미지 URL (선택)</label><input type="text" id="popup-image" style="width:100%;margin-top:0.3rem;" placeholder="https://..."></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;">
+            <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">버튼 텍스트</label><input type="text" id="popup-cta-text" style="width:100%;margin-top:0.3rem;" placeholder="자세히 보기"></div>
+            <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">버튼 링크</label><input type="text" id="popup-cta-link" style="width:100%;margin-top:0.3rem;" placeholder="/en/#collection"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1rem;">
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">시작일</label><input type="date" id="popup-start" style="width:100%;margin-top:0.3rem;"></div>
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">종료일</label><input type="date" id="popup-end" style="width:100%;margin-top:0.3rem;"></div>
+          <div style="display:flex;align-items:flex-end;"><button class="btn" onclick="savePopup()">+ 팝업 추가</button></div>
+        </div>
+      </div>
+      <div class="section">
+        <h2>등록된 팝업</h2>
+        <div id="popup-list"><div style="color:var(--fg-dim);font-size:0.72rem;font-style:italic;">Supabase 연결 후 팝업이 표시됩니다</div></div>
+      </div>
+      <div class="section">
+        <h2>미리보기</h2>
+        <div id="popup-preview" style="min-height:200px;background:var(--bg);border:1px solid var(--fg-subtle);padding:1.5rem;position:relative;overflow:hidden;">
+          <div style="color:var(--fg-dim);font-size:0.72rem;text-align:center;padding:2rem;">팝업을 만들면 여기서 미리볼 수 있습니다</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGES -->
+    <div class="tab-panel" id="tab-images">
+      <div class="page-header"><h1>이미지 관리</h1><p>사이트 이미지 업로드 · 정렬 · 관리</p></div>
+      <div class="section">
+        <h2>이미지 업로드</h2>
+        <div style="display:flex;gap:0.8rem;align-items:flex-end;flex-wrap:wrap;">
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">섹션</label><select id="img-section" style="width:100%;margin-top:0.3rem;"><option value="hero">히어로</option><option value="gallery">갤러리</option><option value="product">상품</option><option value="about">소개</option><option value="other">기타</option></select></div>
+          <div><label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">ALT 텍스트</label><input type="text" id="img-alt" style="width:100%;margin-top:0.3rem;" placeholder="이미지 설명"></div>
+          <div>
+            <label style="font-size:0.6rem;color:var(--fg-dim);letter-spacing:0.1em;">파일 선택</label>
+            <input type="file" id="img-file" accept="image/*" style="margin-top:0.3rem;font-size:0.7rem;color:var(--fg-dim);">
+          </div>
+          <button class="btn" onclick="uploadImage()">업로드</button>
+        </div>
+        <div id="upload-status" style="margin-top:0.5rem;font-size:0.7rem;color:var(--success);display:none;"></div>
+      </div>
+      <div class="section">
+        <h2>이미지 갤러리</h2>
+        <div style="margin-bottom:0.8rem;">
+          <select id="img-filter-section" onchange="renderImages()" style="font-size:0.72rem;">
+            <option value="">전체 섹션</option><option value="hero">히어로</option><option value="gallery">갤러리</option><option value="product">상품</option><option value="about">소개</option><option value="other">기타</option>
+          </select>
+        </div>
+        <div id="image-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.8rem;">
+          <div style="color:var(--fg-dim);font-size:0.72rem;font-style:italic;grid-column:1/-1;">Supabase Storage 연결 후 이미지가 표시됩니다</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMBERS -->
+    <div class="tab-panel" id="tab-members">
+      <div class="page-header"><h1>회원 관리</h1><p>가입 회원 조회 · 분석</p></div>
+      <div class="section">
+        <div class="customer-summary" id="member-summary">
+          <div class="cust-stat-card"><div class="cust-stat-num" id="mem-total">—</div><div class="cust-stat-label">총 회원</div></div>
+          <div class="cust-stat-card"><div class="cust-stat-num" id="mem-this-month">—</div><div class="cust-stat-label">이번 달 가입</div></div>
+          <div class="cust-stat-card"><div class="cust-stat-num" id="mem-active">—</div><div class="cust-stat-label">최근 30일 활동</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <h2>회원 목록</h2>
+        <div class="history-filters" style="margin-bottom:1rem;">
+          <input type="text" id="member-search" placeholder="이름 또는 이메일 검색" style="flex:1;min-width:200px;" oninput="renderMembers()">
+          <select id="member-sort" onchange="renderMembers()">
+            <option value="recent">최근 가입순</option>
+            <option value="name">이름순</option>
+            <option value="login">최근 로그인순</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="history-table">
+            <thead><tr>
+              <th>가입일</th><th>이름</th><th>이메일</th><th>최근 로그인</th><th>주문</th><th>총 구매</th>
+            </tr></thead>
+            <tbody id="member-body"></tbody>
+          </table>
+        </div>
+        <div class="page-nav" id="member-pages"></div>
+      </div>
+    </div>
+
+    <!-- MEMBER DETAIL OVERLAY -->
+    <div class="cust-detail-overlay" id="member-overlay" onclick="if(event.target===this)closeMemberDetail()">
+      <div class="cust-detail" id="member-detail-content">
+        <button class="cust-detail-close" onclick="closeMemberDetail()">✕</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -607,6 +721,7 @@
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
 // ── DATA ──
@@ -682,6 +797,9 @@ function switchTab(id, el) {
   if (id === 'product-analytics') renderDashboard();
   if (id === 'history') renderHistory();
   if (id === 'customers') renderCustomers();
+  if (id === 'popups') loadPopups();
+  if (id === 'images') loadImages();
+  if (id === 'members') loadMembers();
 }
 function switchTabByName(id) {
   const el = document.querySelector(`.nav-item[onclick*="'${id}'"]`);
@@ -1062,6 +1180,388 @@ function showToast(msg, isError) {
   t.className = 'toast show' + (isError ? ' error' : '');
   setTimeout(() => t.className = 'toast', 3000);
 }
+
+// ── SUPABASE CLIENT FOR ADMIN ──
+let adminSB = null;
+function getAdminSB() {
+  if (adminSB) return adminSB;
+  const cfg = { SUPABASE_URL: 'https://fffrhxpqafnkoecnuapq.supabase.co', SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmZnJoeHBxYWZua29lY251YXBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NTIxOTIsImV4cCI6MjA4ODQyODE5Mn0.FplBjW3Bvvc_IgaHbEFJMT8gifuNsmlNe_Z6pOOWiyE' };
+  const sb = window.supabase || window.Supabase;
+  if (sb && typeof sb.createClient === 'function') {
+    try { adminSB = sb.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY); } catch(e) { console.warn('Supabase init failed', e); }
+  }
+  return adminSB;
+}
+
+// ── POPUP MANAGEMENT ──
+let sitePopups = [];
+
+async function loadPopups() {
+  const sb = getAdminSB();
+  if (!sb) { renderPopupList(); return; }
+  try {
+    const { data, error } = await sb.from('site_popups').select('*').order('created_at', { ascending: false });
+    if (!error && data) { sitePopups = data; renderPopupList(); }
+  } catch(e) { console.warn('Failed to load popups:', e); renderPopupList(); }
+}
+
+async function savePopup(editId) {
+  const title = document.getElementById('popup-title').value.trim();
+  const body = document.getElementById('popup-body').value.trim();
+  const position = document.getElementById('popup-position').value;
+  const image_url = document.getElementById('popup-image').value.trim() || null;
+  const cta_text = document.getElementById('popup-cta-text').value.trim() || null;
+  const cta_link = document.getElementById('popup-cta-link').value.trim() || null;
+  const start_date = document.getElementById('popup-start').value || null;
+  const end_date = document.getElementById('popup-end').value || null;
+
+  if (!title) { showToast('제목을 입력하세요', true); return; }
+
+  const sb = getAdminSB();
+  if (!sb) {
+    // Offline mode - store locally
+    sitePopups.unshift({ id: Date.now().toString(), title, body, position, image_url, cta_text, cta_link, start_date, end_date, is_active: false, created_at: new Date().toISOString() });
+    renderPopupList();
+    clearPopupForm();
+    showToast('팝업 추가됨 (로컬 — Supabase 연결 시 동기화 필요)');
+    return;
+  }
+
+  const payload = { title, body, position, image_url, cta_text, cta_link, start_date, end_date, is_active: false };
+  try {
+    if (editId) {
+      await sb.from('site_popups').update(payload).eq('id', editId);
+    } else {
+      await sb.from('site_popups').insert(payload);
+    }
+    clearPopupForm();
+    await loadPopups();
+    showToast(editId ? '팝업 수정됨' : '팝업 추가됨');
+  } catch(e) { showToast('저장 실패: ' + e.message, true); }
+}
+
+async function togglePopup(id) {
+  const popup = sitePopups.find(p => p.id === id);
+  if (!popup) return;
+  const sb = getAdminSB();
+  if (sb) {
+    await sb.from('site_popups').update({ is_active: !popup.is_active, updated_at: new Date().toISOString() }).eq('id', id);
+    await loadPopups();
+  } else {
+    popup.is_active = !popup.is_active;
+    renderPopupList();
+  }
+  showToast(popup.is_active ? '팝업 비활성화됨' : '팝업 활성화됨');
+}
+
+async function deletePopup(id) {
+  if (!confirm('이 팝업을 삭제하시겠습니까?')) return;
+  const sb = getAdminSB();
+  if (sb) {
+    await sb.from('site_popups').delete().eq('id', id);
+    await loadPopups();
+  } else {
+    sitePopups = sitePopups.filter(p => p.id !== id);
+    renderPopupList();
+  }
+  showToast('팝업 삭제됨');
+}
+
+function clearPopupForm() {
+  ['popup-title','popup-body','popup-image','popup-cta-text','popup-cta-link','popup-start','popup-end'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('popup-position').value = 'center';
+}
+
+function renderPopupList() {
+  const container = document.getElementById('popup-list');
+  if (!sitePopups.length) { container.innerHTML = '<div style="color:var(--fg-dim);font-size:0.72rem;font-style:italic;padding:1rem 0;">등록된 팝업이 없습니다</div>'; return; }
+  container.innerHTML = sitePopups.map(p => {
+    const posLabel = {center:'중앙 모달', top:'상단 배너', bottom:'하단 배너'}[p.position] || p.position;
+    const statusClass = p.is_active ? 'promo-active' : 'promo-expired';
+    const statusText = p.is_active ? 'ACTIVE' : 'INACTIVE';
+    const dates = [p.start_date?.slice(0,10), p.end_date?.slice(0,10)].filter(Boolean).join(' ~ ') || '기간 제한 없음';
+    return `<div class="promo-card" style="flex-wrap:wrap;">
+      <div style="min-width:120px;"><div style="font-family:var(--serif);font-size:0.9rem;color:var(--gold);letter-spacing:0.05em;">${p.title}</div><div style="font-size:0.6rem;color:var(--fg-dim);margin-top:0.2rem;">${posLabel} · ${dates}</div></div>
+      <div class="promo-detail" style="flex:1;min-width:100px;">${(p.body||'').substring(0,60)}${(p.body||'').length>60?'...':''}</div>
+      <span class="promo-status ${statusClass}">${statusText}</span>
+      <button class="btn btn-sm" onclick="togglePopup('${p.id}')">${p.is_active?'비활성':'활성'}</button>
+      <button class="btn btn-sm" onclick="previewPopup('${p.id}')">미리보기</button>
+      <button class="btn btn-sm btn-danger" onclick="deletePopup('${p.id}')">삭제</button>
+    </div>`;
+  }).join('');
+}
+
+function previewPopup(id) {
+  const p = sitePopups.find(x => x.id === id);
+  if (!p) return;
+  const container = document.getElementById('popup-preview');
+  if (p.position === 'center') {
+    container.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;min-height:200px;">
+        <div style="background:#0e0e0e;border:1px solid rgba(196,169,106,0.15);max-width:400px;width:100%;padding:2rem;text-align:center;position:relative;">
+          <button onclick="document.getElementById('popup-preview').innerHTML='<div style=\\'color:var(--fg-dim);font-size:0.72rem;text-align:center;padding:2rem;\\'>미리보기 닫힘</div>'" style="position:absolute;top:0.5rem;right:0.8rem;background:none;border:none;color:rgba(232,228,223,0.4);font-size:1rem;cursor:pointer;">✕</button>
+          ${p.image_url ? `<img src="${p.image_url}" style="max-width:100%;margin-bottom:1rem;border:1px solid rgba(196,169,106,0.08);">` : ''}
+          <h3 style="font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--fg);letter-spacing:0.08em;margin-bottom:0.8rem;">${p.title}</h3>
+          <div style="font-size:0.75rem;color:rgba(232,228,223,0.5);line-height:1.8;margin-bottom:1rem;">${p.body||''}</div>
+          ${p.cta_text ? `<a href="#" onclick="return false" style="display:inline-block;padding:0.5rem 1.5rem;border:1px solid rgba(196,169,106,0.3);color:var(--gold);text-decoration:none;font-size:0.65rem;letter-spacing:0.12em;">${p.cta_text}</a>` : ''}
+        </div>
+      </div>`;
+  } else {
+    const pos = p.position === 'top' ? 'top:0;' : 'bottom:0;';
+    container.innerHTML = `
+      <div style="position:absolute;${pos}left:0;right:0;background:rgba(14,14,14,0.95);border-${p.position==='top'?'bottom':'top'}:1px solid rgba(196,169,106,0.15);padding:0.6rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:0.8rem;">
+        <span style="font-size:0.72rem;color:rgba(232,228,223,0.7);font-family:var(--serif);letter-spacing:0.05em;">${p.title}${p.body ? ' — '+p.body : ''}</span>
+        ${p.cta_text ? `<a href="#" onclick="return false" style="padding:0.25rem 0.8rem;border:1px solid rgba(196,169,106,0.3);color:var(--gold);text-decoration:none;font-size:0.55rem;letter-spacing:0.1em;white-space:nowrap;">${p.cta_text}</a>` : ''}
+        <button onclick="document.getElementById('popup-preview').innerHTML=''" style="background:none;border:none;color:rgba(232,228,223,0.3);font-size:0.9rem;cursor:pointer;">✕</button>
+      </div>
+      <div style="min-height:200px;"></div>`;
+  }
+}
+
+// ── IMAGE MANAGEMENT ──
+let siteImages = [];
+
+async function loadImages() {
+  const sb = getAdminSB();
+  if (!sb) { renderImages(); return; }
+  try {
+    const { data, error } = await sb.from('site_images').select('*').order('section').order('position');
+    if (!error && data) { siteImages = data; renderImages(); }
+  } catch(e) { console.warn('Failed to load images:', e); renderImages(); }
+}
+
+async function uploadImage() {
+  const file = document.getElementById('img-file').files[0];
+  const section = document.getElementById('img-section').value;
+  const altText = document.getElementById('img-alt').value.trim();
+  const statusEl = document.getElementById('upload-status');
+
+  if (!file) { showToast('파일을 선택하세요', true); return; }
+
+  const sb = getAdminSB();
+  if (!sb) { showToast('Supabase 연결이 필요합니다', true); return; }
+
+  statusEl.textContent = '업로드 중...';
+  statusEl.style.display = 'block';
+  statusEl.style.color = 'var(--fg-dim)';
+
+  try {
+    const fileName = `${section}/${Date.now()}-${file.name}`;
+    const { data: uploadData, error: uploadError } = await sb.storage.from('site-images').upload(fileName, file, { contentType: file.type });
+
+    if (uploadError) throw uploadError;
+
+    const { data: urlData } = sb.storage.from('site-images').getPublicUrl(fileName);
+    const url = urlData.publicUrl;
+
+    const maxPos = siteImages.filter(i => i.section === section).reduce((m, i) => Math.max(m, i.position || 0), 0);
+    await sb.from('site_images').insert({ section, url, alt_text: altText || file.name, position: maxPos + 1 });
+
+    statusEl.textContent = '✓ 업로드 완료!';
+    statusEl.style.color = 'var(--success)';
+    document.getElementById('img-file').value = '';
+    document.getElementById('img-alt').value = '';
+    setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+
+    await loadImages();
+  } catch(e) {
+    statusEl.textContent = '✕ 업로드 실패: ' + e.message;
+    statusEl.style.color = 'var(--danger)';
+  }
+}
+
+async function deleteImage(id) {
+  if (!confirm('이 이미지를 삭제하시겠습니까?')) return;
+  const sb = getAdminSB();
+  if (!sb) return;
+  await sb.from('site_images').delete().eq('id', id);
+  await loadImages();
+  showToast('이미지 삭제됨');
+}
+
+function renderImages() {
+  const container = document.getElementById('image-grid');
+  const filterSection = document.getElementById('img-filter-section')?.value || '';
+  let filtered = filterSection ? siteImages.filter(i => i.section === filterSection) : siteImages;
+
+  if (!filtered.length) {
+    container.innerHTML = '<div style="color:var(--fg-dim);font-size:0.72rem;font-style:italic;grid-column:1/-1;padding:1rem 0;">이미지가 없습니다</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(img => `
+    <div class="img-card" draggable="true" data-id="${img.id}" data-section="${img.section}" data-pos="${img.position}"
+      ondragstart="dragImg(event)" ondragover="event.preventDefault()" ondrop="dropImg(event)"
+      style="border:1px solid var(--fg-subtle);background:var(--bg-elevated);overflow:hidden;transition:border-color .3s;cursor:grab;">
+      <div style="height:120px;overflow:hidden;background:#111;">
+        <img src="${img.url}" alt="${img.alt_text||''}" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div style="padding:0.5rem;">
+        <div style="font-size:0.6rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.2rem;">${img.section}</div>
+        <div style="font-size:0.65rem;color:var(--fg-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${img.alt_text||'—'}</div>
+        <div style="display:flex;gap:0.3rem;margin-top:0.4rem;">
+          <button class="btn btn-sm btn-danger" onclick="deleteImage('${img.id}')" style="font-size:0.55rem;">삭제</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Drag & Drop
+let draggedImgId = null;
+function dragImg(e) { draggedImgId = e.target.closest('.img-card').dataset.id; e.dataTransfer.effectAllowed = 'move'; }
+async function dropImg(e) {
+  e.preventDefault();
+  const targetCard = e.target.closest('.img-card');
+  if (!targetCard || !draggedImgId) return;
+  const targetId = targetCard.dataset.id;
+  if (draggedImgId === targetId) return;
+
+  const dragIdx = siteImages.findIndex(i => i.id === draggedImgId);
+  const dropIdx = siteImages.findIndex(i => i.id === targetId);
+  if (dragIdx < 0 || dropIdx < 0) return;
+
+  // Swap positions
+  const [moved] = siteImages.splice(dragIdx, 1);
+  siteImages.splice(dropIdx, 0, moved);
+
+  // Update positions
+  const sb = getAdminSB();
+  if (sb) {
+    const updates = siteImages.map((img, i) => ({ id: img.id, position: i }));
+    for (const u of updates) { await sb.from('site_images').update({ position: u.position }).eq('id', u.id); }
+  }
+  siteImages.forEach((img, i) => img.position = i);
+  renderImages();
+  showToast('순서 변경됨');
+  draggedImgId = null;
+}
+
+// ── MEMBER MANAGEMENT ──
+let allMembers = [];
+let memberPage = 0;
+const MEMBER_PER_PAGE = 20;
+
+async function loadMembers() {
+  const sb = getAdminSB();
+  if (!sb) { renderMembers(); return; }
+  try {
+    const { data, error } = await sb.rpc('get_all_users');
+    if (!error && data) {
+      allMembers = data.map(u => ({
+        id: u.id,
+        email: u.email,
+        name: u.full_name || u.raw_user_meta_data?.full_name || '—',
+        created_at: u.created_at,
+        last_sign_in: u.last_sign_in_at,
+        meta: u.raw_user_meta_data || {}
+      }));
+      renderMembers();
+      renderMemberSummary();
+    }
+  } catch(e) { console.warn('Failed to load members:', e); renderMembers(); }
+}
+
+function renderMemberSummary() {
+  const now = new Date();
+  const thisMonth = allMembers.filter(m => { const d = new Date(m.created_at); return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); });
+  const thirtyDaysAgo = new Date(now - 30*86400000);
+  const active = allMembers.filter(m => m.last_sign_in && new Date(m.last_sign_in) >= thirtyDaysAgo);
+
+  document.getElementById('mem-total').textContent = allMembers.length;
+  document.getElementById('mem-this-month').textContent = thisMonth.length;
+  document.getElementById('mem-active').textContent = active.length;
+}
+
+function renderMembers() {
+  const search = (document.getElementById('member-search')?.value || '').toLowerCase();
+  const sort = document.getElementById('member-sort')?.value || 'recent';
+
+  let filtered = allMembers.filter(m => !search || m.name.toLowerCase().includes(search) || m.email.toLowerCase().includes(search));
+
+  if (sort === 'recent') filtered.sort((a,b) => (b.created_at||'').localeCompare(a.created_at||''));
+  else if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+  else if (sort === 'login') filtered.sort((a,b) => (b.last_sign_in||'').localeCompare(a.last_sign_in||''));
+
+  // Cross-reference with orders
+  const custMap = {};
+  allOrders.forEach(o => { if (!o.name) return; if (!custMap[o.name]) custMap[o.name] = { count:0, total:0 }; custMap[o.name].count++; custMap[o.name].total += (o.subtotal||0); });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / MEMBER_PER_PAGE));
+  if (memberPage >= totalPages) memberPage = totalPages - 1;
+  const pageItems = filtered.slice(memberPage * MEMBER_PER_PAGE, (memberPage+1) * MEMBER_PER_PAGE);
+
+  document.getElementById('member-body').innerHTML = pageItems.length
+    ? pageItems.map(m => {
+      const cust = custMap[m.name] || { count:0, total:0 };
+      return `<tr onclick="openMemberDetail('${m.id}')" style="cursor:pointer;">
+        <td>${m.created_at?.slice(0,10)||'—'}</td>
+        <td style="color:var(--fg);">${m.name}</td>
+        <td>${m.email}</td>
+        <td>${m.last_sign_in?.slice(0,10)||'—'}</td>
+        <td>${cust.count}건</td>
+        <td style="color:var(--gold);">₩${cust.total.toLocaleString()}</td>
+      </tr>`;
+    }).join('')
+    : '<tr><td colspan="6" style="text-align:center;color:var(--fg-dim);padding:2rem;">회원 데이터가 없습니다</td></tr>';
+
+  const pagesEl = document.getElementById('member-pages');
+  if (totalPages <= 1) { pagesEl.innerHTML = ''; return; }
+  pagesEl.innerHTML = Array.from({length:totalPages}, (_,i) => `<button class="${i===memberPage?'active':''}" onclick="memberPage=${i};renderMembers()">${i+1}</button>`).join('');
+}
+
+function openMemberDetail(id) {
+  const m = allMembers.find(x => x.id === id);
+  if (!m) return;
+
+  const memberOrders = allOrders.filter(o => o.name === m.name);
+  const totalSpent = memberOrders.reduce((s,o)=>s+(o.subtotal||0),0);
+
+  document.getElementById('member-detail-content').innerHTML = `
+    <button class="cust-detail-close" onclick="closeMemberDetail()">✕</button>
+    <div>
+      <div class="cust-detail-name">${m.name}</div>
+      <div style="font-size:0.65rem;color:var(--fg-dim);margin-top:0.3rem;">${m.email}</div>
+    </div>
+    <div class="cust-detail-stats">
+      <div class="cust-d-stat"><div class="cust-d-stat-num">${memberOrders.length}</div><div class="cust-d-stat-label">주문</div></div>
+      <div class="cust-d-stat"><div class="cust-d-stat-num">₩${totalSpent.toLocaleString()}</div><div class="cust-d-stat-label">총 구매</div></div>
+      <div class="cust-d-stat"><div class="cust-d-stat-num">${m.created_at?.slice(0,10)||'—'}</div><div class="cust-d-stat-label">가입일</div></div>
+    </div>
+    <h3>가입 정보</h3>
+    <div style="font-size:0.72rem;color:var(--fg-dim);line-height:2;">
+      <div>이메일: ${m.email}</div>
+      <div>이름: ${m.name}</div>
+      <div>가입일: ${m.created_at?.slice(0,19).replace('T',' ')||'—'}</div>
+      <div>최근 로그인: ${m.last_sign_in?.slice(0,19).replace('T',' ')||'—'}</div>
+    </div>
+    ${memberOrders.length ? `
+      <h3>주문 내역</h3>
+      <div class="cust-timeline">${memberOrders.sort((a,b)=>(b.timestamp||'').localeCompare(a.timestamp||'')).map(o => `
+        <div class="cust-order-item" style="position:relative;">
+          <div class="cust-timeline-dot"></div>
+          <div><span class="cust-order-num">${o.orderNum}</span><span class="cust-order-date">${o.timestamp?.slice(0,10)||'—'}</span><span class="cust-order-amount">₩${(o.subtotal||0).toLocaleString()}</span></div>
+          <div class="cust-order-products">${(o.items||[]).map(i=>i.name+' ×'+i.qty).join(', ')}</div>
+        </div>`).join('')}</div>
+    ` : '<h3>주문 내역</h3><div style="font-size:0.72rem;color:var(--fg-dim);">주문 내역이 없습니다</div>'}
+  `;
+  document.getElementById('member-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMemberDetail() {
+  document.getElementById('member-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ── INIT UPDATES ──
+const _origInit = init;
+init = function() {
+  _origInit();
+  loadPopups();
+  loadImages();
+  loadMembers();
+};
 
 document.addEventListener('DOMContentLoaded', () => document.getElementById('admin-pw')?.focus());
 </script>
